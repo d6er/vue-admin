@@ -5,13 +5,14 @@ const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const TwitterStrategy = require('passport-twitter').Strategy;
 
 passport.serializeUser(function(user, done) {
-  console.log('serializeUser')
+  console.log('[serializeUser]')
   console.dir(user)
   done(null, user.name)
 })
 
 passport.deserializeUser(function(id, done) {
-  console.log('deserializeUser: ' + id)
+  console.log('[deserializeUser]')
+  console.dir(id)
   done(null, { name: 'foo-user' })
 })
 

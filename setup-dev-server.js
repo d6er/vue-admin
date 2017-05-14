@@ -5,8 +5,10 @@ const clientConfig = require('./webpack.client.development.config')
 const serverConfig = require('./webpack.server.config')
 
 module.exports = function setupDevServer (app, callback) {
+  
   let serverBundle, clientManifest
   let resolve
+  
   const readyPromise = new Promise(r => { resolve = r })
   const ready = (serverBundle, clientManifest) => {
     resolve()

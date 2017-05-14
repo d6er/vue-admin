@@ -8,11 +8,11 @@
     <router-link to="/login">Login</router-link>
     <a href="/logout">Logout</a>
     <hr/>
-    token: {{ $store.state.token }}
+    sid: {{ $store.state.sid }}
     <hr/>
     
     <router-view></router-view>
-
+    
   </div>
 </template>
 
