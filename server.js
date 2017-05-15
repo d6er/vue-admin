@@ -72,6 +72,16 @@ MongoClient.connect('mongodb://localhost:27017/vue-admin').then(function(db) {
             res.redirect('/?google-callback-success');
           })
 
+  app.get('/auth/auth0',
+          passport.authenticate('auth0'))
+  
+  app.get('/auth/auth0/callback',
+          passport.authenticate('auth0', { failureRedirect: '/?auth0-callback-failure' }),
+          function(req, res) {
+            console.dir(req.user)
+            res.redirect('/?auth0-callback-success');
+          })
+  
   app.get('*', (req, res) => {
 
     if (req.url == '/favicon.ico') {
@@ -82,7 +92,7 @@ MongoClient.connect('mongodb://localhost:27017/vue-admin').then(function(db) {
     console.log('URL: ' + req.url)
     
     const context = {
-      title: 'Vue-SUI-Dashboard',
+      title: 'vue-admin',
       url: req.url
     }
 
