@@ -5,6 +5,7 @@
     <router-link to="/list">List</router-link>
     <router-link to="/detail">Detail</router-link>
     |
+    <router-link to="/signup">Sign up</router-link>
     <router-link to="/login">Login</router-link>
     <a href="/logout">Logout</a>
     <hr/>
@@ -27,15 +28,6 @@ export default {
   created () {
     if (typeof window !== 'undefined') {
       this.ws = new WebSocket(`ws://localhost:8181`)
-    }
-  },
-  methods: {
-    login() {
-      auth.authorize({
-        scope: 'read:order write:order',
-        responseType: 'token',
-        redirectUri: 'http://localhost:8181/callback'
-      });
     }
   }
 }

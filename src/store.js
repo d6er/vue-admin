@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import api from './api'
 
 Vue.use(Vuex)
 
@@ -16,12 +17,19 @@ export default new Vuex.Store({
       }
     ]
   },
+  actions: {
+    signUp ({ commit }) {
+      api.signUp(function() {
+        
+      })
+    }
+  },
   strict: true,
   mutations: {
-    login(state) {
+    login (state) {
       state.token = 'foo'
     },
-    logout(state) {
+    logout (state) {
       state.token = ''
     }
   }
