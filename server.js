@@ -174,6 +174,7 @@ MongoClient.connect('mongodb://localhost:27017/vue-admin').then(function(db) {
       const session = ws.upgradeReq.session
 
       // Here we can now use session parameters.
+      console.dir(session)
       console.log(`WS message ${message} from user ${session.userId}`)
     })
   })
