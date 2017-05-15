@@ -27,7 +27,7 @@ export default {
   },
   created () {
     if (typeof window !== 'undefined') {
-      this.ws = new WebSocket(`ws://localhost:8181`)
+      //this.ws = new WebSocket(`ws://localhost:8181`)
     }
   }
 }
