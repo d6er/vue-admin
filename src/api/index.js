@@ -6,7 +6,16 @@ if (typeof window !== 'undefined') {
 export default {
   signUp (cb) {
     console.log('api:signUp()')
-    ws.send('send test')
+    
+    //ws.send('message from signUp()')
+    
+    let obj = {
+      username: 'd6er@qq.com',
+      password: 'pA$$wOrD'
+    }
+    
+    ws.send(JSON.stringify(obj))
+    
     cb()
   }
 }
