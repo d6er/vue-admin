@@ -175,7 +175,7 @@ MongoClient.connect('mongodb://localhost:27017/vue-admin').then(function(db) {
 
       // Here we can now use session parameters.
       console.dir(session)
-      console.log(`WS message ${message} from user ${session.userId}`)
+      console.dir(JSON.parse(message))
     })
   })
   
