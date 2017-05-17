@@ -8,6 +8,7 @@ Vue.use(Router)
 // https://medium.com/@bradfmd/vue-js-setting-up-auth0-6eb26cbbc48a
 function requireAuth(to, from, next) {
   
+
   console.log('requireAuth token: ' + store.state.token)
   
   if (!store.state.token) {
