@@ -1,6 +1,6 @@
 <template>
   <div>
-    Sign up
+    <h3>Sign up</h3>
     
     <div>
       <form @submit.prevent="signup">
@@ -25,8 +25,15 @@ export default {
     }
   },
   methods: {
+    // http://stackoverflow.com/questions/40165766/returning-promises-from-vuex-actions
     signup () {
-      this.$store.dispatch('signUp', { username: this.username, password: this.password })
+      this.$store.dispatch('signup', { username: this.username, password: this.password })
+        .then(response => {
+          console.log('in Signup.vue then()')
+          console.dir(response)
+        }, error => {
+          
+        })
     }
   }
 }

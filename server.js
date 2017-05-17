@@ -162,20 +162,29 @@ MongoClient.connect('mongodb://localhost:27017/vue-admin').then(function(db) {
         console.dir('WebSocket info.req.session')
         console.dir(info.req.session)
         
-        // We can reject the connection by returning false to done().
-        done(true)
-      });
+        if (info.req.session.passport) {
+          done(true)
+        } else {
+          done(false)
+        }
+      })
     },
     server
   })
   
   wss.on('connection', (ws) => {
     ws.on('message', (message) => {
+      
       const session = ws.upgradeReq.session
-
-      // Here we can now use session parameters.
-      console.dir(session)
-      console.dir(JSON.parse(message))
+      const data = JSON.parse(message)
+      
+      console.log('ws from: ' + session.passport.user)
+      console.dir(data)
+      
+      ws.send(JSON.stringify({
+        jobid: data.jobid,
+        message: { msg: 'response from server' }
+      }))
     })
   })
   
