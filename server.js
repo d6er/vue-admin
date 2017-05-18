@@ -1,3 +1,4 @@
+const api = require('./api')
 const fs = require('fs')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
@@ -14,6 +15,8 @@ const { createBundleRenderer } = require('vue-server-renderer')
 const template = fs.readFileSync('./src/index.template.html', 'utf-8')
 
 MongoClient.connect('mongodb://localhost:27017/vue-admin').then(function(db) {
+  
+  api.db = db
   
   // development
   let serverBundle, clientManifest, renderer
@@ -181,9 +184,13 @@ MongoClient.connect('mongodb://localhost:27017/vue-admin').then(function(db) {
       console.log('ws from: ' + session.passport.user)
       console.dir(data)
       
+      if (api[data.action]) {
+        api[data.action](data.payload)
+      }
+      
       ws.send(JSON.stringify({
         jobid: data.jobid,
-        message: { msg: 'response from server' }
+        payload: { message: 'response from server' }
       }))
     })
   })

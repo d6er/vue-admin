@@ -7,7 +7,7 @@ if (typeof window !== 'undefined') {
   ws = new WebSocket(`ws://localhost:8181`)
   ws.onmessage = function(event) {
     const data = JSON.parse(event.data)
-    jobs[data.jobid](data.message)
+    jobs[data.jobid](data.payload)
     // todo: delete completed job func
   }
 }
@@ -17,9 +17,11 @@ export default {
     
     jobid++
     
-    console.log('api jobid:' + jobid + ' action:' + action)
-    
-    ws.send(JSON.stringify({ jobid: jobid, message: data }))
+    ws.send(JSON.stringify({
+      jobid: jobid,
+      action: action,
+      payload: data
+    }))
     
     return new Promise((resolve, reject) => {
       jobs[jobid] = resolve
