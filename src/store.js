@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import api from './api'
+import ws from './websocket'
 
 Vue.use(Vuex)
 
@@ -14,7 +14,7 @@ export default new Vuex.Store({
   actions: {
     signup ({ commit }, data) {
       return new Promise((resolve, reject) => {
-        api.send('signup', data).then(response => {
+        ws.send('signup', data).then(response => {
           // update state
           resolve(response)
         }, error => {

@@ -29,8 +29,7 @@ export default {
     signup () {
       this.$store.dispatch('signup', { username: this.username, password: this.password })
         .then(response => {
-          console.log('in Signup.vue then()')
-          console.dir(response)
+          console.log('Signup.vue signup(): ' + response.message)
         }, error => {
           
         })
