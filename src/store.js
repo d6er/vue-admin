@@ -12,9 +12,9 @@ export default new Vuex.Store({
     ]
   },
   actions: {
-    signup ({ commit }, data) {
+    create_account ({ commit }, data) {
       return new Promise((resolve, reject) => {
-        ws.send('signup', data).then(response => {
+        ws.send('create_account', data).then(response => {
           // update state
           resolve(response)
         }, error => {

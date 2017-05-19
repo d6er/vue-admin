@@ -1,3 +1,4 @@
+const db_connect = require('./db')
 const passport = require('passport')
 
 const LocalStrategy = require('passport-local').Strategy
@@ -8,19 +9,28 @@ const Auth0Strategy = require('passport-auth0').Strategy;
 passport.serializeUser(function(user, done) {
   console.log('[serializeUser]')
   console.dir(user)
-  done(null, user.name)
+  done(null, user._id)
 })
 
 passport.deserializeUser(function(id, done) {
-  console.log('[deserializeUser]')
-  console.dir(id)
-  done(null, { name: 'foo-user' })
+  db_connect.then(db => {
+    db.collection('users').findOne({ _id: id }).then(doc => {
+      return done(null, doc)
+    })
+  })
 })
 
 // Local
 passport.use(new LocalStrategy(
   function(username, password, done) {
-    return done(null, { name: username })
+    db_connect.then(db => {
+      db.collection('users').findOne({
+        username: username,
+        password: password
+      }).then(doc => {
+        return done(null, doc)
+      })
+    })
   }
 ))
 

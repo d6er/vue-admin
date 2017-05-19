@@ -2,11 +2,19 @@ const actions = {
   db: null // will be set in server.js
 }
 
-actions.signup = function(payload) {
+actions.create_account = function(payload) {
+  const user = payload
+  // todo:
+  // increment user_id
+  // encrypt password
+  return this.db.collection('users').insertOne(user) // returns promise
+}
+
+actions.update_account = function(payload) {
   
-  let user = payload
-  
-  this.db.collection('users').insert(user)
+}
+
+actions.delete_account = function(payload) {
   
 }
 
