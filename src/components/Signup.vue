@@ -27,12 +27,16 @@ export default {
   methods: {
     // http://stackoverflow.com/questions/40165766/returning-promises-from-vuex-actions
     signup () {
-      this.$store.dispatch('signup', { username: this.username, password: this.password })
-        .then(response => {
-          console.log('Signup.vue signup(): ' + response.message)
-        }, error => {
-          
-        })
+      this.$store.dispatch('create_account', { username: this.username, password: this.password })
+        .then(
+          response => {
+            console.dir(response)
+            // todo: auto login
+          },
+          error => {
+            console.log('signup: ' + error.message)
+          }
+        )
     }
   }
 }

@@ -1,4 +1,5 @@
 const api = require('./api')
+const db_connect = require('./db')
 const fs = require('fs')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
@@ -14,7 +15,8 @@ const { createBundleRenderer } = require('vue-server-renderer')
 
 const template = fs.readFileSync('./src/index.template.html', 'utf-8')
 
-MongoClient.connect('mongodb://localhost:27017/vue-admin').then(function(db) {
+//MongoClient.connect('mongodb://localhost:27017/vue-admin').then(function(db) {
+db_connect.then(db => {
   
   api.db = db
   
@@ -64,6 +66,15 @@ MongoClient.connect('mongodb://localhost:27017/vue-admin').then(function(db) {
                                                       failureRedirect: '/login?ng',
                                                       failureFlash: false }))
 
+  // http://stackoverflow.com/questions/33112299/how-to-delete-cookie-on-logout-in-express-passport-js
+  app.get('/logout', (req, res) => {
+    //req.logout()
+    res.clearCookie('connect.sid')
+    req.session.destroy(function (err) {
+      res.redirect('/')
+    })
+  })
+  
   app.get('/auth/google',
           passport.authenticate('google',
                                 { scope: 'https://www.googleapis.com/auth/userinfo.profile' }))
@@ -98,53 +109,8 @@ MongoClient.connect('mongodb://localhost:27017/vue-admin').then(function(db) {
       title: 'vue-admin',
       url: req.url
     }
-
-    if (req.url == '/logout') {
-      res.clearCookie('token');
-      res.redirect('/')
-      return
-    }
     
     // https://forum.vuejs.org/t/accessing-current-request-context-through-vue-instance-for-server-side-rendering-to-be-able-to-access-cookies-for-initial-user-authentication/48/11
-    
-    // "/callback?code=****" request
-    if (req.query.code) {
-      
-      var postdata = {
-        client_id: 'FJJtRAN2B45f6SigcjeyiNF_0TX-Qjav',
-        redirect_uri: 'http://localhost:8181/callback',
-        client_secret: 'f8Fw4LAuZBGLJ344ROLJJQHFNEbXU7tdjS02HKZIQfEiDUcsGtVRB9rW2zCIP5_7',
-        code: req.query.code,
-        grant_type: 'authorization_code'
-      }
-      
-      var axios = require('axios')
-      axios.post('https://d6er.auth0.com/oauth/token', postdata)
-        .then(function (response) {
-          
-          axios.get('https://d6er.auth0.com/userinfo/?access_token=' + response.data.access_token)
-            .then(function(response) {
-              
-              context.token = response.data.name
-              res.cookie('token', response.data.name)
-              res.redirect('/list')
-
-            }).catch(function (error) {
-              console.dir(error);
-            });
-          
-        }).catch(function (error) {
-          console.dir(error);
-        })
-      
-      return
-    }
-    
-    console.log('cookies:')
-    console.dir(req.cookies)
-    
-    console.log('req.user:')
-    console.dir(req.user)
     
     if (req.cookies['connect.sid']) {
       context.sid = req.cookies['connect.sid']
@@ -162,9 +128,6 @@ MongoClient.connect('mongodb://localhost:27017/vue-admin').then(function(db) {
   const wss = new ws.Server({
     verifyClient: (info, done) => {
       sessionParser(info.req, {}, () => {
-        console.dir('WebSocket info.req.session')
-        console.dir(info.req.session)
-        
         if (info.req.session.passport) {
           done(true)
         } else {
@@ -184,14 +147,25 @@ MongoClient.connect('mongodb://localhost:27017/vue-admin').then(function(db) {
       console.log('ws from: ' + session.passport.user)
       console.dir(data)
       
-      if (api[data.action]) {
-        api[data.action](data.payload)
+      if (!api[data.action]) {
+        return
       }
       
-      ws.send(JSON.stringify({
-        jobid: data.jobid,
-        payload: { message: 'response from server' }
-      }))
+      api[data.action](data.payload).then(
+        function(r) {
+          ws.send(JSON.stringify({
+            jobid: data.jobid,
+            resolve: { result: r.result }
+          }))
+        },
+        function(r) {
+          ws.send(JSON.stringify({
+            jobid: data.jobid,
+            reject: { message: r.message }
+          }))
+        }
+      )
+      
     })
   })
   
@@ -199,6 +173,6 @@ MongoClient.connect('mongodb://localhost:27017/vue-admin').then(function(db) {
     console.log('Listening on %d', server.address().port);
   })
 
-}).catch(function(err) {
+}).catch(err => {
   console.log(err.message)
 })
