@@ -7,14 +7,13 @@ Vue.use(Router)
 
 // https://medium.com/@bradfmd/vue-js-setting-up-auth0-6eb26cbbc48a
 function requireAuth(to, from, next) {
-  if (!store.state.user) {
+  if (store.state.isAuthenticated) {
+    next()
+  } else {
     next({
       path: '/login',
       query: { redirect: to.fullPath }
     })
-  } else {
-    console.dir('=> ' + to.fullPath)
-    next()
   }
 }
 
@@ -39,6 +38,7 @@ const router = new Router({
     {
       path: '/signup',
       component: () => import('./components/Signup.vue'),
+      // todo: check logged out
     }
   ]
 })
