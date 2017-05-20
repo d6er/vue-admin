@@ -1,3 +1,5 @@
+'use strict'
+
 const api = require('./api')
 const mongo = require('./mongo')
 
@@ -6,14 +8,13 @@ const ws = require('ws')
 const url = require('url')
 const http = require('http')
 
+const bodyParser = require('body-parser')
 const express = require('express')
 const session = require('express-session')
-const bodyParser = require('body-parser')
+const passport = require('./passport')
 
 const MongoStore = require('connect-mongo')(session)
 const ObjectID = require('mongodb').ObjectID;
-
-const passport = require('./passport')
 
 const { createBundleRenderer } = require('vue-server-renderer')
 
@@ -66,9 +67,14 @@ mongo.connect().then(db => {
   
   app.use('/dist', express.static('dist'))
   
+  app.post('/login', passport.authenticate('local', { successRedirect: '/',
+                                                      failureRedirect: '/login',
+                                                      failureFlash: true }))
+  /*
   app.post('/login', passport.authenticate('local'), (req, res) => {
     res.redirect('/?u=' + req.user.username)
   })
+  */
   
   // http://stackoverflow.com/questions/33112299/how-to-delete-cookie-on-logout-in-express-passport-js
   app.get('/logout', (req, res) => {
@@ -126,27 +132,25 @@ mongo.connect().then(db => {
   })
 
   const server = http.createServer(app);
-
+  
+  // https://github.com/websockets/ws/blob/master/examples/express-session-parse/index.js
   const wss = new ws.Server({
     verifyClient: (info, done) => {
       sessionParser(info.req, {}, () => {
-        if (info.req.session.passport) {
-          done(true)
-        } else {
-          done(false)
-        }
+        done(true)
       })
     },
     server
   })
   
-  wss.on('connection', (ws) => {
+  wss.on('connection', (ws, req) => {
     ws.on('message', (message) => {
       
-      const session = ws.upgradeReq.session
+      console.log('[WebSocket]')
+      console.dir(req.session)
+      
       const data = JSON.parse(message)
       
-      console.log('ws from: ' + session.passport.user)
       console.dir(data)
       
       if (!api[data.action]) {
@@ -154,13 +158,17 @@ mongo.connect().then(db => {
       }
       
       api[data.action](data.payload).then(
-        function(r) {
+        r => {
+          console.log('[SUCCESS]')
+          console.dir(r.ops)
           ws.send(JSON.stringify({
             jobid: data.jobid,
             resolve: { result: r.result }
           }))
         },
-        function(r) {
+        r => {
+          console.log('[FAILED]')
+          console.dir(r)
           ws.send(JSON.stringify({
             jobid: data.jobid,
             reject: { message: r.message }
