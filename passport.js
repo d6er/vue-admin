@@ -22,7 +22,7 @@ passport.deserializeUser(function(id, done) {
 // Local
 passport.use(new LocalStrategy(
   function(username, password, done) {
-    db_connect.then(db => {
+    mongo.connect().then(db => {
       db.collection('users').findOne({
         username: username,
         password: password
