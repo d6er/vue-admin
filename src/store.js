@@ -6,6 +6,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    isAuthenticated: false,
     items: [
       { id: 1, title: 'item foo' },
       { id: 2, title: 'item bar' }

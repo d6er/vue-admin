@@ -8,6 +8,8 @@ export default context => {
   
   if (context.user) {
     store.state.user = context.user
+  } else {
+    delete store.state.user
   }
   
   router.push(context.url)

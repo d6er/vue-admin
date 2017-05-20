@@ -122,6 +122,8 @@ mongo.connect().then(db => {
     
     if (req.isAuthenticated()) {
       context.user = req.user
+    } else {
+      delete context.user
     }
     
     promise.then(() => {
