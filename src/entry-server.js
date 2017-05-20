@@ -4,8 +4,8 @@ export default context => {
   
   const { app, router, store } = createApp()
   
-  if (context.sid) {
-    store.state.sid = context.sid
+  if (context.user) {
+    store.state.user = context.user
   }
   
   router.push(context.url)

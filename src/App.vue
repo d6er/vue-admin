@@ -9,7 +9,7 @@
     <router-link to="/login">Login</router-link>
     <a href="/logout">Logout</a>
     <hr/>
-    sid: {{ $store.state.sid }}
+    {{ $store.state.user ? $store.state.user.username : '' }}
     <hr/>
     
     <router-view></router-view>
