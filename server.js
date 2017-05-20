@@ -116,11 +116,11 @@ mongo.connect().then(db => {
     
     const context = {
       title: 'vue-admin',
-      url: req.url
+      url: req.url,
+      isAuthenticated: req.isAuthenticated()
     }
     
-    
-    if (req.user) {
+    if (req.isAuthenticated()) {
       context.user = req.user
     }
     
