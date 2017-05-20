@@ -7,11 +7,7 @@ Vue.use(Router)
 
 // https://medium.com/@bradfmd/vue-js-setting-up-auth0-6eb26cbbc48a
 function requireAuth(to, from, next) {
-  
-  console.log('requireAuth sid: ' + store.state.sid)
-  
-  if (!store.state.sid) {
-    console.log('=> login')
+  if (!store.state.user) {
     next({
       path: '/login',
       query: { redirect: to.fullPath }

@@ -1,22 +1,25 @@
 const api = require('./api')
-const db_connect = require('./db')
+const mongo = require('./mongo')
+
 const fs = require('fs')
-const bodyParser = require('body-parser')
-const cookieParser = require('cookie-parser')
-const express = require('express')
-const http = require('http')
-const url = require('url')
 const ws = require('ws')
+const url = require('url')
+const http = require('http')
+
+const express = require('express')
 const session = require('express-session')
-const MongoClient = require('mongodb').MongoClient
+const bodyParser = require('body-parser')
+
 const MongoStore = require('connect-mongo')(session)
+const ObjectID = require('mongodb').ObjectID;
+
 const passport = require('./passport')
+
 const { createBundleRenderer } = require('vue-server-renderer')
 
 const template = fs.readFileSync('./src/index.template.html', 'utf-8')
 
-//MongoClient.connect('mongodb://localhost:27017/vue-admin').then(function(db) {
-db_connect.then(db => {
+mongo.connect().then(db => {
   
   api.db = db
   
@@ -47,32 +50,30 @@ db_connect.then(db => {
       })
     })
   }
-
+  
   const sessionParser = session({
-    saveUninitialized: true,
-    secret: '$eCuRiTy',
     store: new MongoStore({ db: db }),
-    resave: true
+    secret: '$eCuRiTy',
+    resave: true,
+    saveUninitialized: true
   })
   
-  app.use(bodyParser.urlencoded({ extended: false }))
-  app.use(cookieParser())
   app.use(sessionParser)
   app.use(passport.initialize())
   app.use(passport.session())
+  app.use(bodyParser.urlencoded({ extended: false }))
+  
+  
   app.use('/dist', express.static('dist'))
-
-  app.post('/login', passport.authenticate('local', { successRedirect: '/?ok',
-                                                      failureRedirect: '/login?ng',
-                                                      failureFlash: false }))
-
+  
+  app.post('/login', passport.authenticate('local'), (req, res) => {
+    res.redirect('/?u=' + req.user.username)
+  })
+  
   // http://stackoverflow.com/questions/33112299/how-to-delete-cookie-on-logout-in-express-passport-js
   app.get('/logout', (req, res) => {
-    //req.logout()
-    res.clearCookie('connect.sid')
-    req.session.destroy(function (err) {
-      res.redirect('/')
-    })
+    req.logout()
+    res.redirect('/?logged-out')
   })
   
   app.get('/auth/google',
@@ -96,24 +97,25 @@ db_connect.then(db => {
             res.redirect('/?auth0-callback-success');
           })
   
+  app.get('/favicon.ico', (req, res) => {
+    res.end()
+  })
+  
+  // https://forum.vuejs.org/t/accessing-current-request-context-through-vue-instance-for-server-side-rendering-to-be-able-to-access-cookies-for-initial-user-authentication/48/11
   app.get('*', (req, res) => {
-
-    if (req.url == '/favicon.ico') {
-      res.end()
-      return
-    }
     
+    console.log('=========================')
     console.log('URL: ' + req.url)
+    console.log('AUTH[' + req.isAuthenticated() + ']')
     
     const context = {
       title: 'vue-admin',
       url: req.url
     }
     
-    // https://forum.vuejs.org/t/accessing-current-request-context-through-vue-instance-for-server-side-rendering-to-be-able-to-access-cookies-for-initial-user-authentication/48/11
     
-    if (req.cookies['connect.sid']) {
-      context.sid = req.cookies['connect.sid']
+    if (req.user) {
+      context.user = req.user
     }
     
     promise.then(() => {

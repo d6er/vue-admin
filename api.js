@@ -1,13 +1,23 @@
-const actions = {
-  db: null // will be set in server.js
-}
+const mongo = require('./mongo')
+const actions = {}
 
 actions.create_account = function(payload) {
-  const user = payload
   // todo:
   // increment user_id
   // encrypt password
-  return this.db.collection('users').insertOne(user) // returns promise
+  mongo.connect().then(db => {
+    console.log('connnn')
+    return mongo.getNextId('users')
+  }).then(r => {
+    console.dir(r)
+    const new_user = payload
+    new_user._id = r.value.seq
+    
+    console.log('[NEW USER]')
+    console.dir(new_user)
+    
+    return this.db.collection('users').insertOne(new_user)
+  })
 }
 
 actions.update_account = function(payload) {

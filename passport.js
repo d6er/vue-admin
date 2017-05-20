@@ -1,5 +1,6 @@
-const db_connect = require('./db')
+const mongo = require('./mongo')
 const passport = require('passport')
+const ObjectID = require('mongodb').ObjectID;
 
 const LocalStrategy = require('passport-local').Strategy
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
@@ -7,14 +8,12 @@ const TwitterStrategy = require('passport-twitter').Strategy;
 const Auth0Strategy = require('passport-auth0').Strategy;
 
 passport.serializeUser(function(user, done) {
-  console.log('[serializeUser]')
-  console.dir(user)
-  done(null, user._id)
+  done(null, user._id.toString())
 })
 
 passport.deserializeUser(function(id, done) {
-  db_connect.then(db => {
-    db.collection('users').findOne({ _id: id }).then(doc => {
+  mongo.connect().then(db => {
+    db.collection('users').findOne({ _id: new ObjectID(id) }).then(doc => {
       return done(null, doc)
     })
   })
@@ -28,6 +27,7 @@ passport.use(new LocalStrategy(
         username: username,
         password: password
       }).then(doc => {
+        console.dir(doc)
         return done(null, doc)
       })
     })
