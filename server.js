@@ -67,14 +67,18 @@ mongo.connect().then(db => {
   
   app.use('/dist', express.static('dist'))
   
+  /*
   app.post('/login', passport.authenticate('local', { successRedirect: '/',
                                                       failureRedirect: '/login',
                                                       failureFlash: true }))
-  /*
-  app.post('/login', passport.authenticate('local'), (req, res) => {
-    res.redirect('/?u=' + req.user.username)
-  })
   */
+  app.post('/login', passport.authenticate('local'), (req, res) => {
+    if (req.body.redirect) {
+      res.redirect(req.body.redirect)
+    } else {
+      res.redirect('/')
+    }
+  })
   
   // http://stackoverflow.com/questions/33112299/how-to-delete-cookie-on-logout-in-express-passport-js
   app.get('/logout', (req, res) => {

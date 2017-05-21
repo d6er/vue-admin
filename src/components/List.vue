@@ -1,10 +1,17 @@
 <template>
   <div id="list">
-    {{ $route.hash }}
-    List!
-    <div v-for="item in items">
-      {{ item.id }}: {{ item.title }}
-    </div>
+    <table class="table">
+      <thead>
+        <th>ID</th>
+        <th>Title</th>
+      </thead>
+      <tbody>
+        <tr v-for="item in items">
+          <td>{{ item.id }}</td>
+          <td>{{ item.title }}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </template>
 

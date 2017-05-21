@@ -1,12 +1,19 @@
 <template>
   <div>
-    Login
+    <h3>Login</h3>
     
     <div>
       <form method="post" action="/login">
-        <label><input placeholder="username" type="text" name="username"></label>
-        <label><input placeholder="password" type="password" name="password"></label>
-        <button type="submit">Login with Express</button>
+        <input type="text" name="redirect" :value="$route.query.redirect">
+        <label>
+          Username:
+          <input placeholder="username" type="text" name="username">
+        </label>
+        <label>
+          Password:
+          <input placeholder="password" type="password" name="password">
+        </label>
+        <button type="submit">Login</button>
       </form>
     </div>
     
