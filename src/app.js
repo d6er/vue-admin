@@ -22,12 +22,16 @@ const router = new Router({
   mode: 'history',
   routes: [
     {
+      path: '/',
+      component: () => import('./components/Home.vue')
+    },
+    {
       path: '/list',
       component: () => import('./components/List.vue'),
       beforeEnter: requireAuth
     },
     {
-      path: '/detail',
+      path: '/item/:id',
       component: () => import('./components/Detail.vue'),
       beforeEnter: requireAuth
     },

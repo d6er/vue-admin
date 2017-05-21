@@ -1,28 +1,19 @@
 <template>
   <aside class="menu">
+    <p class="menu-label">
+      LISTINGS
+    </p>
     <ul class="menu-list">
       <li>
-        <a>
+        <router-link to="/list">
           Active
           <span class="tag">123</span>
-        </a>
+        </router-link>
       </li>
-      <li><a>Sold</a></li>
       <li><a>Unsold</a></li>
+      <li><a>Drafts</a></li>
+      <li><a>Scheduled</a></li>
+      <li><a>Ended</a></li>
     </ul>
-    <p class="menu-label">
-      Listings
-    </p>
-    <ul class="menu-list">
-      <li><a>Active</a></li>
-      <li><a>Sold</a></li>
-      <li><a>Unsold</a></li>
-    </ul>
-    <p class="menu-label">
-      Orders
-    </p>
-    <p class="menu-label">
-      Messages
-    </p>
   </aside>
 </template>
