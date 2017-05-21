@@ -5,9 +5,9 @@
         <nav-bar></nav-bar>
       </div>
     </div>
-    <div class="container">
+    <div class="container is-fluid">
       <div class="columns">
-        <div class="column is-2" v-if="$store.state.user">
+        <div class="column is-narrow" v-if="$store.state.user">
           <side-menu></side-menu>
         </div>
         <div class="column">

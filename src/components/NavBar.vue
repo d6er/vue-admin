@@ -1,11 +1,9 @@
 <template>
   <nav class="nav has-shadow">
-    <div class="container">
       <div class="nav-left" v-if="!$store.state.user">
         <router-link class="nav-item is-tab" to="/">Home</router-link>
       </div>
       <div class="nav-left" v-if="$store.state.user">
-        <router-link class="nav-item is-tab" to="/">Home</router-link>
         <router-link class="nav-item is-tab" to="/">Overview</router-link>
         <router-link class="nav-item is-tab" to="/list">Orders</router-link>
         <router-link class="nav-item is-tab" to="/list">Listings</router-link>
@@ -25,23 +23,22 @@
           {{ $store.state.user.username }}
         </div>
         <div class="nav-item" v-if="$store.state.user">
-          <a class="button" href="/logout">Logout</a>
+          <a class="button is-small" href="/logout">Logout</a>
         </div>
         <div class="nav-item" v-if="!$store.state.user">
           <div class="field is-grouped">
             <p class="control">
-              <router-link class="button" to="/login">
+              <router-link class="button is-small" to="/login">
                 Login
               </router-link>
             </p>
             <p class="control">
-              <router-link class="button is-info" to="/signup">
+              <router-link class="button is-small is-info" to="/signup">
                 Sign up
               </router-link>
             </p>
           </div>
         </div>
-      </div>
     </div>
   </nav>
 </template>
