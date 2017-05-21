@@ -4,11 +4,19 @@
       <thead>
         <th>ID</th>
         <th>Title</th>
+        <th>Status</th>
+        <th>Updated</th>
       </thead>
       <tbody>
         <tr v-for="item in items">
           <td>{{ item.id }}</td>
-          <td>{{ item.title }}</td>
+          <td>
+            <router-link :to="'/item/' + item.id">{{ item.title }}</router-link>
+          </td>
+          <td>
+          </td>
+          <td>
+          </td>
         </tr>
       </tbody>
     </table>

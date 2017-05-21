@@ -6,10 +6,15 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    user: null,
     isAuthenticated: false,
     items: [
       { id: 1, title: 'item foo' },
-      { id: 2, title: 'item bar' }
+      { id: 2, title: 'item bar' },
+      { id: 101, title: 'item title title' },
+      { id: 110, title: 'item bird foo' },
+      { id: 123, title: 'item foo boo' },
+      { id: 234, title: 'item boost boost' }
     ]
   },
   actions: {

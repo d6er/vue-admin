@@ -1,18 +1,46 @@
 <template>
   <nav class="nav has-shadow">
     <div class="container">
-      <div class="nav-left">
-        <router-link class="nav-item" to="/">Home</router-link>
-        <router-link class="nav-item" to="/list">List</router-link>
-        <router-link class="nav-item" to="/detail">Detail</router-link>
+      <div class="nav-left" v-if="!$store.state.user">
+        <router-link class="nav-item is-tab" to="/">Home</router-link>
       </div>
-      <div class="nav-right">
-        <div class="nav-item">
-          {{ $store.state.user ? $store.state.user.username : '' }}
+      <div class="nav-left" v-if="$store.state.user">
+        <router-link class="nav-item is-tab" to="/">Home</router-link>
+        <router-link class="nav-item is-tab" to="/">Overview</router-link>
+        <router-link class="nav-item is-tab" to="/list">Orders</router-link>
+        <router-link class="nav-item is-tab" to="/list">Listings</router-link>
+        <router-link class="nav-item is-tab" to="/list">Messages</router-link>
+      </div>
+      <div class="nav-right nav-menu">
+        <a class="nav-item">
+          Features
+        </a>
+        <a class="nav-item">
+          Blog
+        </a>
+        <a class="nav-item">
+          Help
+        </a>
+        <div class="nav-item" v-if="$store.state.user">
+          {{ $store.state.user.username }}
         </div>
-        <router-link class="nav-item" to="/login">Login</router-link>
-        <router-link class="nav-item" to="/signup">Sign up</router-link>
-        <a class="nav-item" href="/logout">Logout</a>
+        <div class="nav-item" v-if="$store.state.user">
+          <a class="button" href="/logout">Logout</a>
+        </div>
+        <div class="nav-item" v-if="!$store.state.user">
+          <div class="field is-grouped">
+            <p class="control">
+              <router-link class="button" to="/login">
+                Login
+              </router-link>
+            </p>
+            <p class="control">
+              <router-link class="button is-info" to="/signup">
+                Sign up
+              </router-link>
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   </nav>

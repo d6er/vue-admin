@@ -7,13 +7,13 @@
     </div>
     <div class="container">
       <div class="columns">
-      <div class="column is-2">
-        <side-menu></side-menu>
+        <div class="column is-2" v-if="$store.state.user">
+          <side-menu></side-menu>
+        </div>
+        <div class="column">
+          <router-view></router-view>
+        </div>
       </div>
-      <div class="column">
-        <router-view></router-view>
-      </div>
-    </div>
     </div>
   </section>
 </template>
@@ -23,15 +23,9 @@ import NavBar from './components/NavBar.vue'
 import SideMenu from './components/SideMenu.vue'
 
 export default {
-  name: 'app',
   data () {
     return {
-      ws: null
-    }
-  },
-  created () {
-    if (typeof window !== 'undefined') {
-      //this.ws = new WebSocket(`ws://localhost:8181`)
+      loggedIn: this.$store.state.user
     }
   },
   components: {
@@ -40,9 +34,3 @@ export default {
   }
 }
 </script>
-
-<style>
-#app {
-  font-face: verdana;
-}
-</style>
