@@ -1,23 +1,27 @@
 <template>
-  <div id="app">
-    <router-link to="/">Home</router-link>
-    |
-    <router-link to="/list">List</router-link>
-    <router-link to="/detail">Detail</router-link>
-    |
-    <router-link to="/signup">Sign up</router-link>
-    <router-link to="/login">Login</router-link>
-    <a href="/logout">Logout</a>
-    <hr/>
-    {{ $store.state.user ? $store.state.user.username : '' }}
-    <hr/>
-    
-    <router-view></router-view>
-    
-  </div>
+  <section id="app">
+    <div class="columns">
+      <div class="column">
+        <nav-bar></nav-bar>
+      </div>
+    </div>
+    <div class="container">
+      <div class="columns">
+      <div class="column is-2">
+        <side-menu></side-menu>
+      </div>
+      <div class="column">
+        <router-view></router-view>
+      </div>
+    </div>
+    </div>
+  </section>
 </template>
 
 <script>
+import NavBar from './components/NavBar.vue'
+import SideMenu from './components/SideMenu.vue'
+
 export default {
   name: 'app',
   data () {
@@ -29,6 +33,10 @@ export default {
     if (typeof window !== 'undefined') {
       //this.ws = new WebSocket(`ws://localhost:8181`)
     }
+  },
+  components: {
+    NavBar,
+    SideMenu
   }
 }
 </script>
