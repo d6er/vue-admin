@@ -7,14 +7,11 @@ const fs = require('fs')
 const ws = require('ws')
 const url = require('url')
 const http = require('http')
-
-const bodyParser = require('body-parser')
 const express = require('express')
 const session = require('express-session')
 const passport = require('./passport')
-
+const bodyParser = require('body-parser')
 const MongoStore = require('connect-mongo')(session)
-const ObjectID = require('mongodb').ObjectID;
 
 const { createBundleRenderer } = require('vue-server-renderer')
 
@@ -76,14 +73,14 @@ mongo.connect().then(db => {
     if (req.body.redirect) {
       res.redirect(req.body.redirect)
     } else {
-      res.redirect('/')
+      res.redirect('/list')
     }
   })
   
   // http://stackoverflow.com/questions/33112299/how-to-delete-cookie-on-logout-in-express-passport-js
   app.get('/logout', (req, res) => {
     req.logout()
-    res.redirect('/?logged-out')
+    res.redirect('/')
   })
   
   app.get('/auth/google',
@@ -114,9 +111,7 @@ mongo.connect().then(db => {
   // https://forum.vuejs.org/t/accessing-current-request-context-through-vue-instance-for-server-side-rendering-to-be-able-to-access-cookies-for-initial-user-authentication/48/11
   app.get('*', (req, res) => {
     
-    console.log('=========================')
-    console.log('URL: ' + req.url)
-    console.log('AUTH[' + req.isAuthenticated() + ']')
+    console.log(req.url)
     
     const context = {
       title: 'vue-admin',

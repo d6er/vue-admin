@@ -1,17 +1,30 @@
 <template>
-  <div>
-    <h3>Sign up</h3>
-    
-    <div>
-      <form @submit.prevent="signup">
-        <label>
-          <input v-model="username" placeholder="email" type="text" name="username">
-        </label>
-        <label>
-          <input v-model="password" placeholder="password" type="password" name="password">
-        </label>
-        <button type="submit">Sign up</button>
-      </form>
+  <div class="columns is-vcentered">
+    <div class="column is-4 is-offset-4">
+      <div class="box">
+        <form @submit.prevent="signup">
+          <div class="field">
+            <label class="label">Username:</label>
+            <p class="control">
+              <input class="input" placeholder="Username" type="text" name="username" v-model="username">
+            </p>
+          </div>
+          <div class="field">
+            <label class="label">Password:</label>
+            <p class="control">
+              <input class="input" placeholder="Password" type="password" name="password" v-mode="password">
+            </p>
+          </div>
+          <div class="field is-grouped">
+            <p class="control">
+              <button type="submit" class="button is-primary">Sign up</button>
+            </p>
+            <p class="control">
+              <router-link to="/" class="button">Cancel</router-link>
+            </p>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 </template>

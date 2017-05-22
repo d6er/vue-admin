@@ -1,8 +1,5 @@
 <template>
   <aside class="menu">
-    <p class="menu-label">
-      LISTINGS
-    </p>
     <ul class="menu-list">
       <li>
         <router-link to="/list">

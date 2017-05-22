@@ -7,7 +7,7 @@ Vue.use(Router)
 
 // https://medium.com/@bradfmd/vue-js-setting-up-auth0-6eb26cbbc48a
 function requireAuth(to, from, next) {
-  if (store.state.isAuthenticated) {
+  if (store.state.user) {
     next()
   } else {
     next({
@@ -23,26 +23,52 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      component: () => import('./components/Home.vue')
-    },
-    {
-      path: '/list',
-      component: () => import('./components/List.vue'),
-      beforeEnter: requireAuth
-    },
-    {
-      path: '/item/:id',
-      component: () => import('./components/Detail.vue'),
-      beforeEnter: requireAuth
+      components: {
+        default: () => import('./components/Home.vue'),
+        nav: () => import('./components/GuestNav.vue')
+      }
     },
     {
       path: '/login',
-      component: () => import('./components/Login.vue'),
+      components: {
+        default: () => import('./components/Login.vue'),
+        nav: () => import('./components/GuestNav.vue')
+      }
     },
     {
-      path: '/signup',
-      component: () => import('./components/Signup.vue'),
       // todo: check logged out
+      path: '/signup',
+      components: {
+        default: () => import('./components/Signup.vue'),
+        nav: () => import('./components/GuestNav.vue')
+      }
+    },
+    {
+      path: '/list',
+      beforeEnter: requireAuth,
+      components: {
+        default: () => import('./components/List.vue'),
+        nav: () => import('./components/MemberNav.vue'),
+        menu: () => import('./components/SideMenu.vue')
+      }
+    },
+    {
+      path: '/item/new',
+      beforeEnter: requireAuth,
+      components: {
+        default: () => import('./components/Detail.vue'),
+        nav: () => import('./components/MemberNav.vue'),
+        menu: () => import('./components/SideMenu.vue')
+      }
+    },
+    {
+      path: '/item/:id',
+      beforeEnter: requireAuth,
+      components: {
+        default: () => import('./components/Detail.vue'),
+        nav: () => import('./components/MemberNav.vue'),
+        menu: () => import('./components/SideMenu.vue')
+      }
     }
   ]
 })

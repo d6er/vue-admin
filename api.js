@@ -44,4 +44,15 @@ actions.delete_account = function(payload) {
   
 }
 
+actions.save_item = function(payload) {
+  return mongo.connect().then(dbobj => {
+    db = dbobj
+    return mongo.getNextId('items')
+  }).then(r => {
+    const new_item = payload
+    new_item._id = r.value.seq
+    return db.collection('items').insertOne(new_item)
+  })
+}
+
 module.exports = actions

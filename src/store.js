@@ -27,6 +27,16 @@ export default new Vuex.Store({
           reject(error)
         })
       })
+    },
+    save_item ({ commit }, data) {
+      return new Promise((resolve, reject) => {
+        ws.send('save_item', data).then(response => {
+          // update state
+          resolve(response)
+        }, error => {
+          reject(error)
+        })
+      })
     }
   },
   strict: true,
