@@ -1,6 +1,21 @@
 <template>
-  <div id="detail">
-    
+  <div>
+    <nav class="level">
+      <div class="level-left">
+        <div class="level-item">
+          <router-link to="/list" class="button is-small">
+            <span class="icon">
+              <i class="fa fa-angle-left" aria-hidden="true"></i>
+            </span>
+          </router-link>
+        </div>
+        <div class="level-item">
+          <button @click="save" class="button is-primary is-small">
+            Save
+          </button>
+        </div>
+      </div>
+    </nav>
     <div class="tabs">
       <ul>
         <li class="is-active">
@@ -13,7 +28,6 @@
         <li><a>Shipping</a></li>
       </ul>
     </div>
-    
     <form @submit.prevent="save">
       <div class="field is-horizontal">
         <div class="field-label">
@@ -56,27 +70,6 @@
           </div>
         </div>
       </div>
-
-      <div class="field is-grouped">
-        <div class="field-label">
-          <!-- Left empty for spacing -->
-        </div>
-        <div class="field-body">
-          <div class="field">
-            <p class="control">
-              <button type="submit" class="button is-primary">
-                Save
-              </button>
-            </p>
-            <p class="control">
-              <a class="button">
-                Cancel
-              </a>
-            </p>
-          </div>
-        </div>
-      </div>
-      
     </form>
     
   </div>
@@ -92,7 +85,7 @@ export default {
   },
   methods: {
     save () {
-      this.$store.dispatch('save', { title: this.title }).then(
+      this.$store.dispatch('save_item', { title: this.title }).then(
         r => {
           
         },

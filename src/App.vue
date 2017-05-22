@@ -2,13 +2,13 @@
   <section id="app">
     <div class="columns">
       <div class="column">
-        <nav-bar></nav-bar>
+        <router-view name="nav"></router-view>
       </div>
     </div>
     <div class="container is-fluid">
       <div class="columns">
-        <div class="column is-narrow" v-if="$store.state.user">
-          <side-menu></side-menu>
+        <div class="column is-narrow">
+          <router-view name="menu"></router-view>
         </div>
         <div class="column">
           <router-view></router-view>
@@ -17,20 +17,3 @@
     </div>
   </section>
 </template>
-
-<script>
-import NavBar from './components/NavBar.vue'
-import SideMenu from './components/SideMenu.vue'
-
-export default {
-  data () {
-    return {
-      loggedIn: this.$store.state.user
-    }
-  },
-  components: {
-    NavBar,
-    SideMenu
-  }
-}
-</script>
