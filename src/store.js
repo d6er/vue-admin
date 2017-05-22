@@ -18,6 +18,7 @@ export default new Vuex.Store({
     ]
   },
   actions: {
+    
     create_account ({ commit }, data) {
       return new Promise((resolve, reject) => {
         ws.send('create_account', data).then(response => {
@@ -28,6 +29,7 @@ export default new Vuex.Store({
         })
       })
     },
+    
     save_item ({ commit }, data) {
       return new Promise((resolve, reject) => {
         ws.send('save_item', data).then(response => {
@@ -37,15 +39,20 @@ export default new Vuex.Store({
           reject(error)
         })
       })
+    },
+    
+    fetch_items ({ commit }, data) {
+      //return api.fetchItems(data).then(r => {
+      // console.dir(r)
+      //})
+      console.log('store.js fetch_items')
+      return ws.send('fetch_items', data).then(r => {
+        console.dir(r)
+      })
     }
   },
   strict: true,
   mutations: {
-    login (state) {
-      state.token = 'foo'
-    },
-    logout (state) {
-      state.token = ''
-    }
+    
   }
 })

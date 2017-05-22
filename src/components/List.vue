@@ -68,6 +68,9 @@
 
 <script>
 export default {
+  asyncData ({ store, route }) {
+    return store.dispatch('fetch_items', { status: 'draft' })
+  },
   computed: {
     items() {
       return this.$store.state.items

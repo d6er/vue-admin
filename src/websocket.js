@@ -4,6 +4,7 @@ let jobid = 0
 let jobs = []
 let ws
 
+// Client
 if (typeof window !== 'undefined') {
   
   // todo: auto reconnect
