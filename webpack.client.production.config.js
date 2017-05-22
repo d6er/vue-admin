@@ -4,6 +4,11 @@ const VueSSRClientPlugin = require('vue-server-renderer/client-plugin')
 
 const config = merge(baseConfig, {
   entry: './src/entry-client.js',
+  resolve: {
+    alias: {
+      'api': './websocket.js'
+    }
+  },
   plugins: [
     new VueSSRClientPlugin() 
   ]

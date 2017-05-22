@@ -24,7 +24,7 @@ if (typeof window !== 'undefined') {
 }
 
 export default {
-  send (action, payload) {
+  call (action, payload) {
     
     jobid++
     

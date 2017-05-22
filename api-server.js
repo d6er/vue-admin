@@ -4,7 +4,11 @@ let db
 
 // todo: encrypt password
 
-actions.create_account = function(payload) {
+actions.call = function(callname, payload) {
+  return actions[callname](payload)
+}
+
+actions.createAccount = function(payload) {
   
   // https://developers.google.com/web/fundamentals/getting-started/primers/promises
   return mongo.connect().then(dbobj => {
@@ -36,15 +40,15 @@ actions.create_account = function(payload) {
   })
 }
 
-actions.update_account = function(payload) {
+actions.updateAccount = function(payload) {
   
 }
 
-actions.delete_account = function(payload) {
+actions.deleteAccount = function(payload) {
   
 }
 
-actions.save_item = function(payload) {
+actions.saveItem = function(payload) {
   return mongo.connect().then(dbobj => {
     db = dbobj
     return mongo.getNextId('items')
@@ -55,7 +59,7 @@ actions.save_item = function(payload) {
   })
 }
 
-actions.fetch_items = function(payload) {
+actions.fetchItems = function(payload) {
   return mongo.connect().then(dbobj => {
     db = dbobj
     return db.collection('items').find({}).skip(0).limit(100).toArray()

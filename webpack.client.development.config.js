@@ -8,6 +8,11 @@ const config = merge(baseConfig, {
     'webpack-hot-middleware/client',
     './src/entry-client.js'
   ],
+  resolve: {
+    alias: {
+      'api': './websocket.js'
+    }
+  },
   output: {
     filename: '[name].js'
   },

@@ -85,7 +85,7 @@ export default {
   },
   methods: {
     save () {
-      this.$store.dispatch('save_item', { title: this.title }).then(
+      this.$store.dispatch('saveItem', { title: this.title }).then(
         r => {
           
         },

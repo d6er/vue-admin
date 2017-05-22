@@ -51,7 +51,7 @@
             </figure>
           </td>
           <td>
-            <router-link :to="'/item/' + item.id">{{ item.title }}</router-link>
+            <router-link :to="'/item/' + item._id">{{ item.title }}</router-link>
             <span class="tag is-dark">active</span>
           </td>
           <td>
@@ -69,7 +69,7 @@
 <script>
 export default {
   asyncData ({ store, route }) {
-    return store.dispatch('fetch_items', { status: 'draft' })
+    return store.dispatch('fetchItems', { status: 'draft' })
   },
   computed: {
     items() {

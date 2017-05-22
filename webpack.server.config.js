@@ -9,6 +9,11 @@ const config = merge(baseConfig, {
   output: {
     libraryTarget: 'commonjs2'
   },
+  resolve: {
+    alias: {
+      'api': '../api-server.js'
+    }
+  },
   externals: nodeExternals({
     whiltelist: /\.css$/
   }),
