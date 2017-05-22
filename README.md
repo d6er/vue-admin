@@ -1,12 +1,14 @@
 # vue-admin
 Vue Admin Example
 
-This repository is still under development, doesn't work.
+This repository is still under development.
 
-- Vue.js
+- Vue
+- Bulma
 - Express
-- Passport
+- NodeJS
 - MongoDB
+
+- Passport
 - SSR
 - WebSocket
-- Semantic UI
