@@ -55,4 +55,11 @@ actions.save_item = function(payload) {
   })
 }
 
+actions.fetch_items = function(payload) {
+  return mongo.connect().then(dbobj => {
+    db = dbobj
+    return db.collection('items').find({}).skip(0).limit(100).toArray()
+  })
+}
+
 module.exports = actions
