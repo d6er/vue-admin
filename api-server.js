@@ -51,18 +51,28 @@ actions.deleteAccount = function(payload) {
 actions.saveItem = function(payload) {
   return mongo.connect().then(dbobj => {
     db = dbobj
-    return mongo.getNextId('items')
-  }).then(r => {
-    const new_item = payload
-    new_item._id = r.value.seq
-    return db.collection('items').insertOne(new_item)
+    
+    if (payload._id) {
+      // existing item
+      console.log('existing item')
+      //db.collection('items').updateOne(payload)
+    } else {
+      // new item
+      console.log('new item')
+      /*
+      return mongo.getNextId('items').then(r => {
+        payload._id = r.value.seq
+        db.collection('items').insertOne(payload)
+      })
+      */
+    }
   })
 }
 
 actions.fetchItems = function(payload) {
-  return mongo.connect().then(dbobj => {
-    db = dbobj
-    return db.collection('items').find({}).skip(0).limit(100).toArray()
+  console.dir(payload)
+  return mongo.connect().then(db => {
+    return db.collection('items').find(payload).skip(0).limit(100).toArray()
   })
 }
 

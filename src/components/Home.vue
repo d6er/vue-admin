@@ -17,57 +17,5 @@
         </div>
       </div>
     </div>
-    <div class="modal" v-bind:class="{ 'is-active': loginModal }">
-      <div class="modal-background" @click="cancelLogin"></div>
-      <div class="modal-content">
-        <div class="box">
-          <form method="post" action="/login">
-            <div class="field">
-              <label class="label">Username:</label>
-              <p class="control">
-                <input class="input" placeholder="Username" type="text" name="username">
-              </p>
-            </div>
-            <div class="field">
-              <label class="label">Password:</label>
-              <p class="control">
-                <input class="input" placeholder="Password" type="password" name="password">
-              </p>
-            </div>
-            <div class="field is-grouped">
-              <p class="control">
-                <button type="submit" class="button is-primary">Login</button>
-              </p>
-              <p class="control">
-                <a class="button is-link" @click="cancelLogin">Cancel</a>
-              </p>
-            </div>
-          </form>
-        </div>
-      </div>
-      <button class="modal-close" @click="cancelLogin"></button>
-    </div>
   </div>
 </template>
-
-<script>
-export default {
-  data () {
-    return {
-      loginModal: false,
-      toggleActive: false
-    }
-  },
-  methods: {
-    login () {
-      this.loginModal = true
-    },
-    cancelLogin () {
-      this.loginModal = false
-    },
-    toggle () {
-      this.toggleActive = !this.toggleActive
-    }
-  }
-}
-</script>

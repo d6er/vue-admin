@@ -28,49 +28,47 @@
         <li><a>Shipping</a></li>
       </ul>
     </div>
-    <form @submit.prevent="save">
-      <div class="field is-horizontal">
-        <div class="field-label">
-          <label class="label">Title</label>
+    <div class="field is-horizontal">
+      <div class="field-label">
+        <label class="label">Title</label>
+      </div>
+      <div class="field-body">
+        <div class="field">
+          <p class="control">
+            <input v-model="item.title" type="text" name="title" class="input">
+          </p>
         </div>
-        <div class="field-body">
-          <div class="field">
-            <p class="control">
-              <input v-model="title" type="text" name="title" class="input">
-            </p>
+      </div>
+    </div>
+    
+    <div class="field is-horizontal">
+      <div class="field-label">
+        <label class="label">No padding</label>
+      </div>
+      <div class="field-body">
+        <div class="field">
+          <div class="control">
+            <label class="checkbox">
+              <input type="checkbox">
+              Checkbox
+            </label>
           </div>
         </div>
       </div>
-      
-      <div class="field is-horizontal">
-        <div class="field-label">
-          <label class="label">No padding</label>
-        </div>
-        <div class="field-body">
-          <div class="field">
-            <div class="control">
-              <label class="checkbox">
-                <input type="checkbox">
-                Checkbox
-              </label>
-            </div>
+    </div>
+    
+    <div class="field is-horizontal">
+      <div class="field-label is-normal">
+        <label class="label">Question</label>
+      </div>
+      <div class="field-body">
+        <div class="field">
+          <div class="control">
+            <textarea class="textarea" placeholder="Explain how we can help you"></textarea>
           </div>
         </div>
       </div>
-      
-      <div class="field is-horizontal">
-        <div class="field-label is-normal">
-          <label class="label">Question</label>
-        </div>
-        <div class="field-body">
-          <div class="field">
-            <div class="control">
-              <textarea class="textarea" placeholder="Explain how we can help you"></textarea>
-            </div>
-          </div>
-        </div>
-      </div>
-    </form>
+    </div>
     
   </div>
 </template>
@@ -80,12 +78,19 @@ export default {
   name: 'detail',
   data () {
     return {
-      title: ''
     }
+  },
+  computed: {
+    item() {
+      return this.$store.state.items[this.$route.params.id]
+    }
+  },
+  asyncData ({ store, route: { params: { id } } }) {
+    return store.dispatch('fetchItems', { _id: parseInt(id) })
   },
   methods: {
     save () {
-      this.$store.dispatch('saveItem', { title: this.title }).then(
+      this.$store.dispatch('saveItem', this.item).then(
         r => {
           
         },
