@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import App from './App.vue'
 import store from './store'
+//import { sync } from 'vuex-router-sync'
 
 Vue.use(Router)
 
@@ -52,6 +53,7 @@ const router = new Router({
         menu: () => import('./components/SideMenu.vue')
       }
     },
+    /*
     {
       path: '/item/new',
       beforeEnter: requireAuth,
@@ -61,6 +63,7 @@ const router = new Router({
         menu: () => import('./components/SideMenu.vue')
       }
     },
+    */
     {
       path: '/item/:id',
       beforeEnter: requireAuth,
@@ -75,10 +78,15 @@ const router = new Router({
 
 export function createApp () {
   
+  //sync(store, router)
+  
   // moved from entry-client.js for testing
   if (typeof window !== 'undefined') {
     if (window.__INITIAL_STATE__) {
       store.replaceState(window.__INITIAL_STATE__)
+      
+      // https://github.com/vuejs/vue/issues/4501#issuecomment-269089269
+      //router.history.updateRoute(router.resolve(store.state.route.fullPath).resolved)
     }
   }
   

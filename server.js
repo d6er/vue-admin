@@ -160,19 +160,15 @@ mongo.connect().then(db => {
       
       api[data.action](data.payload).then(
         r => {
-          console.log('[SUCCESS]')
-          console.dir(r.ops)
           ws.send(JSON.stringify({
             jobid: data.jobid,
-            resolve: { result: r.result }
+            resolve: r
           }))
         },
-        r => {
-          console.log('[FAILED]')
-          console.dir(r)
+        e => {
           ws.send(JSON.stringify({
             jobid: data.jobid,
-            reject: { message: r.message }
+            reject: e
           }))
         }
       )

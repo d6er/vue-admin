@@ -8,7 +8,7 @@
       <span></span>
       <span></span>
     </span>
-    <div class="nav-right nav-menu" v-bind:class="{ 'is-active': toggleActive }">
+    <div class="nav-right nav-menu">
       <a class="nav-item">Features</a>
       <a class="nav-item">Blog</a>
       <a class="nav-item">Help</a>

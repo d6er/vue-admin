@@ -6,9 +6,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    user: null,
-    isAuthenticated: false,
-    items: []
+    items: {}
   },
   actions: {
     
@@ -36,7 +34,6 @@ export default new Vuex.Store({
     
     fetchItems ({ commit }, data) {
       return api.call('fetchItems', data).then(items => {
-        console.dir(items)
         commit('setItems', items)
       })
     }
@@ -45,9 +42,9 @@ export default new Vuex.Store({
   mutations: {
     // todo: use constant for function names. https://vuex.vuejs.org/en/mutations.html
     setItems (state, items) {
-      console.log('setItems')
-      console.dir(items)
-      state.items = items
+      items.forEach(item => {
+        Vue.set(state.items, item._id, item)
+      })
     }
   }
 })

@@ -3,14 +3,10 @@
     <nav class="level">
       <div class="level-left">
         <div class="level-item">
-          <router-link to="/item/new" class="button is-small">
-            Action
-          </router-link>
+          <router-link to="/list" class="button is-small">Action</router-link>
         </div>
         <div class="level-item">
-          <router-link to="/item/new" class="button is-small">
-            Create listing
-          </router-link>
+          <router-link to="/item/new" class="button is-small">Create listing</router-link>
         </div>
         <div class="level-item">
           <div class="field has-addons">
@@ -34,8 +30,8 @@
     
     <table class="table is-narrow">
       <thead>
-        <th><input type="checkbox"></th>
-        <th></th>
+        <th>a</th>
+        <th>b</th>
         <th>Title</th>
         <th>Status</th>
         <th>Updated</th>
@@ -69,7 +65,7 @@
 <script>
 export default {
   asyncData ({ store, route }) {
-    return store.dispatch('fetchItems', { status: 'draft' })
+    return store.dispatch('fetchItems', {})
   },
   computed: {
     items() {
