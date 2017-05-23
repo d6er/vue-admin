@@ -3,10 +3,28 @@
     <nav class="level">
       <div class="level-left">
         <div class="level-item">
-          <router-link to="/list" class="button is-small">Action</router-link>
+          <button class="button is-small">
+            <span class="icon is-small">
+              <i class="fa fa-files-o" aria-hidden="true"></i>
+            </span>
+            <span>Copy</span>
+          </button>
         </div>
         <div class="level-item">
-          <router-link to="/item/new" class="button is-small">Create listing</router-link>
+          <button class="button is-small">
+            <span class="icon is-small">
+              <i class="fa fa-times" aria-hidden="true"></i>
+            </span>
+            <span>Delete</span>
+          </button>
+        </div>
+        <div class="level-item">
+          <router-link to="/item/new" class="button is-small">
+            <span class="icon is-small">
+              <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+            </span>
+            <span>Create</span>
+          </router-link>
         </div>
         <div class="level-item">
           <div class="field has-addons">
@@ -23,15 +41,20 @@
       </div>
       <div class="level-right">
         <p class="level-item">
-          <a class="button is-small">Customize</a>
+          <a class="button is-small">
+            <span class="icon is-small">
+              <i class="fa fa-cogs" aria-hidden="true"></i>
+            </span>
+            <span>Customize</span>
+          </a>
         </p>
       </div>
     </nav>
     
     <table class="table is-narrow">
       <thead>
-        <th>a</th>
-        <th>b</th>
+        <th><input type="checkbox"></th>
+        <th></th>
         <th>Title</th>
         <th>Status</th>
         <th>Updated</th>

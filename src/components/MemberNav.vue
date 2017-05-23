@@ -14,10 +14,20 @@
       </span>
       <div class="nav-right nav-menu" v-bind:class="{ 'is-active': toggleActive }">
         <div class="nav-item">
-          {{ $store.state.user.username }}
+          <a class="button is-small">
+            <span class="icon is-small">
+              <i class="fa fa-user" aria-hidden="true"></i>
+            </span>
+            <span>{{ $store.state.user.username }}</span>
+          </a>
         </div>
         <div class="nav-item">
-          <a class="button is-small" href="/logout">Logout</a>
+          <a class="button is-small" href="/logout">
+            <span class="icon is-small">
+              <i class="fa fa-sign-out" aria-hidden="true"></i>
+            </span>
+            <span>Logout</span>
+          </a>
         </div>
       </div>
     </div>
