@@ -8,6 +8,8 @@ export default new Vuex.Store({
   state: {
     items: {}
   },
+  // https://vuex.vuejs.org/en/strict.html
+  strict: process.env.NODE_ENV !== 'production',
   actions: {
     
     create_account ({ commit }, data) {
@@ -19,6 +21,12 @@ export default new Vuex.Store({
           reject(error)
         })
       })
+    },
+    
+    update_account ({ commit }, data) {
+    },
+    
+    delete_account ({ commit }, data) {
     },
     
     saveItem ({ commit }, data) {
@@ -36,9 +44,12 @@ export default new Vuex.Store({
       return api.call('fetchItems', data).then(items => {
         commit('setItems', items)
       })
+    },
+    
+    deleteItem({ commit }, data) {
     }
+    
   },
-  strict: true,
   mutations: {
     // todo: use constant for function names. https://vuex.vuejs.org/en/mutations.html
     setItems (state, items) {
