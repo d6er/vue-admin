@@ -2,7 +2,7 @@
   <div>
     <nav class="level">
       <div class="level-left">
-        <div class="level-item">
+        <div class="level-item" v-if="checkedItems.length">
           <button class="button is-small">
             <span class="icon is-small">
               <i class="fa fa-files-o" aria-hidden="true"></i>
@@ -10,7 +10,7 @@
             <span>Copy</span>
           </button>
         </div>
-        <div class="level-item">
+        <div class="level-item" v-if="checkedItems.length">
           <button class="button is-small">
             <span class="icon is-small">
               <i class="fa fa-times" aria-hidden="true"></i>
@@ -18,7 +18,7 @@
             <span>Delete</span>
           </button>
         </div>
-        <div class="level-item">
+        <div class="level-item" v-if="!checkedItems.length">
           <router-link to="/item/new" class="button is-small">
             <span class="icon is-small">
               <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
@@ -62,7 +62,7 @@
       <tbody>
         <tr v-for="item in items">
           <td>
-            <input type="checkbox">
+            <input type="checkbox" :value="item._id" v-model="checkedItems">
           </td>
           <td>
             <figure class="image is-32x32">
@@ -86,6 +86,11 @@
 
 <script>
 export default {
+  data () {
+    return {
+      checkedItems: []
+    }
+  },
   asyncData ({ store, route }) {
     return store.dispatch('fetchItems', {})
   },

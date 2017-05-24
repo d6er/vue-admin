@@ -132,10 +132,10 @@ export default {
     save () {
       this.$store.dispatch('saveItem', this.item).then(
         r => {
-          
+          this.$router.push('/list')
         },
         e => {
-          
+          console.dir(e)
         }
       )
     }

@@ -27,7 +27,7 @@
     "webpack-merge": "^4.1.0",
     "webpack-node-externals": "^1.6.0",
     "webpack-dev-middleware": "*",
-    "webpack-hot-middleware": "*",
+    "webpack-hot-middleware": "*"
   },
   "scripts": {
     "dev": "NODE_ENV=development node server",
