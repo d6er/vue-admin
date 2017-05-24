@@ -55,12 +55,12 @@ actions.saveItem = function(payload) {
     
     if (payload._id) {
       // existing item
-      db.collection('items').updateOne({ _id: payload._id }, payload)
+      return db.collection('items').updateOne({ _id: payload._id }, payload)
     } else {
       // new item
       return mongo.getNextId('items').then(r => {
         payload._id = r.value.seq
-        db.collection('items').insertOne(payload)
+        return db.collection('items').insertOne(payload)
       })
     }
   })

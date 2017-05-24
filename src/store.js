@@ -30,14 +30,7 @@ export default new Vuex.Store({
     },
     
     saveItem ({ commit }, data) {
-      return new Promise((resolve, reject) => {
-        api.call('saveItem', data).then(response => {
-          // update state
-          resolve(response)
-        }, error => {
-          reject(error)
-        })
-      })
+      return api.call('saveItem', data)
     },
     
     fetchItems ({ commit }, data) {
