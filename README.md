@@ -3,12 +3,14 @@ Vue Admin Example
 
 This repository is still under development.
 
-- Vue
+- Vue (with Vuex, Router, SSR)
 - Bulma
-- Express
+- Express (with Passport)
 - NodeJS
-- MongoDB
+- MongoDB (with NodeJS native driver)
 
-- Passport
-- SSR
-- WebSocket
+- WebSocket (instead of XHR, with Promise)
+
+References
+
+- vue-hackernews-2.0
