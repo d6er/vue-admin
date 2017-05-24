@@ -40,7 +40,7 @@ mongo.connect().then(db => {
   // Development
   let promise
   if (process.env.NODE_ENV === 'development') {
-    promise = require('./setup-dev-server')(app, (serverBundle, clientManifest) => {
+    promise = require('./build/setup-dev-server')(app, (serverBundle, clientManifest) => {
       renderer = createBundleRenderer(serverBundle, {
         runInNewContext: false,
         template,
