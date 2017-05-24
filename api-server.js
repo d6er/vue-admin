@@ -49,22 +49,19 @@ actions.deleteAccount = function(payload) {
 }
 
 actions.saveItem = function(payload) {
-  return mongo.connect().then(dbobj => {
-    db = dbobj
+  return mongo.connect().then(db => {
+    
+    payload.updated = new Date()
     
     if (payload._id) {
       // existing item
-      console.log('existing item')
-      //db.collection('items').updateOne(payload)
+      db.collection('items').updateOne({ _id: payload._id }, payload)
     } else {
       // new item
-      console.log('new item')
-      /*
       return mongo.getNextId('items').then(r => {
         payload._id = r.value.seq
         db.collection('items').insertOne(payload)
       })
-      */
     }
   })
 }

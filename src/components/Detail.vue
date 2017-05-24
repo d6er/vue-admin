@@ -42,6 +42,25 @@
     </div>
     
     <div class="field is-horizontal">
+      <div class="field-label is-normal">
+        <label class="label">Status</label>
+      </div>
+      <div class="field-body">
+        <div class="field is-narrow">
+          <div class="control">
+            <div class="select is-fullwidth">
+              <select v-model="item.status">
+                <option>Draft</option>
+                <option>Published</option>
+                <option>Unpublished</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="field is-horizontal">
       <div class="field-label">
         <label class="label">No padding</label>
       </div>
@@ -59,12 +78,12 @@
     
     <div class="field is-horizontal">
       <div class="field-label is-normal">
-        <label class="label">Question</label>
+        <label class="label">Description</label>
       </div>
       <div class="field-body">
         <div class="field">
           <div class="control">
-            <textarea class="textarea" placeholder="Explain how we can help you"></textarea>
+            <textarea v-model="item.description" class="textarea" placeholder="Description"></textarea>
           </div>
         </div>
       </div>
@@ -75,14 +94,16 @@
 
 <script>
 export default {
-  name: 'detail',
-  data () {
-    return {
-    }
-  },
+  // https://github.com/vuejs/vue/issues/1056
+  // https://forum.vuejs.org/t/vuex-v-model-on-property-in-nested-object/6242/2
   computed: {
-    item() {
-      return this.$store.state.items[this.$route.params.id]
+    item () {
+      if (this.$route.params.id == 'new') {
+        return {}
+      } else {
+        // POINT: disconnect item from vuex
+        return Object.assign({}, this.$store.state.items[this.$route.params.id])
+      }
     }
   },
   asyncData ({ store, route: { params: { id } } }) {
