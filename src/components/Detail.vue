@@ -10,8 +10,27 @@
           </router-link>
         </div>
         <div class="level-item">
-          <button @click="save" class="button is-primary is-small">
-            Save
+          <button @click="save" class="button is-info is-small">
+            <span class="icon is-small">
+              <i class="fa fa-save" aria-hidden="true"></i>
+            </span>
+            <span>Save</span>
+          </button>
+        </div>
+        <div class="level-item">
+          <button class="button is-small">
+            <span class="icon is-small">
+              <i class="fa fa-files-o" aria-hidden="true"></i>
+            </span>
+            <span>Copy</span>
+          </button>
+        </div>
+        <div class="level-item">
+          <button class="button is-small">
+            <span class="icon is-small">
+              <i class="fa fa-times" aria-hidden="true"></i>
+            </span>
+            <span>Delete</span>
           </button>
         </div>
       </div>

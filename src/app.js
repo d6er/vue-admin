@@ -53,17 +53,6 @@ const router = new Router({
         menu: () => import('./components/SideMenu.vue')
       }
     },
-    /*
-    {
-      path: '/item/new',
-      beforeEnter: requireAuth,
-      components: {
-        default: () => import('./components/Detail.vue'),
-        nav: () => import('./components/MemberNav.vue'),
-        menu: () => import('./components/SideMenu.vue')
-      }
-    },
-    */
     {
       path: '/item/:id',
       beforeEnter: requireAuth,
