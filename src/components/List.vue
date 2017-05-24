@@ -71,13 +71,12 @@
           </td>
           <td>
             <router-link :to="'/item/' + item._id">{{ item.title }}</router-link>
-            <span class="tag is-dark">active</span>
           </td>
           <td>
-            Active
+            {{ item.status }}
           </td>
           <td>
-            May 20
+            {{ item.updated }}
           </td>
         </tr>
       </tbody>
