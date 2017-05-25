@@ -18,7 +18,7 @@
             <span class="icon is-small">
               <i class="fa fa-user" aria-hidden="true"></i>
             </span>
-            <span>{{ $store.state.user.username }}</span>
+            <span>{{ username }}</span>
           </a>
         </div>
         <div class="nav-item">
@@ -39,6 +39,15 @@ export default {
   data () {
     return {
       toggleActive: false
+    }
+  },
+  computed: {
+    username () {
+      if (this.$store.state.user.google) {
+        return this.$store.state.user.google.displayName
+      } else {
+        return this.$store.state.user.username
+      }
     }
   },
   methods: {
