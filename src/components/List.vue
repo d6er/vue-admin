@@ -26,6 +26,8 @@
             <span>Create</span>
           </router-link>
         </div>
+      </div>
+      <div class="level-right">
         <div class="level-item">
           <div class="field has-addons">
             <p class="control">
@@ -38,8 +40,6 @@
             </p>
           </div>
         </div>
-      </div>
-      <div class="level-right">
         <p class="level-item">
           <a class="button is-small">
             <span class="icon is-small">
