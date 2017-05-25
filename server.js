@@ -20,8 +20,6 @@ const template = fs.readFileSync('./src/index.template.html', 'utf-8')
 
 mongo.connect().then(db => {
   
-  api.db = db
-  
   // development
   let serverBundle, clientManifest, renderer
 
@@ -61,33 +59,26 @@ mongo.connect().then(db => {
   app.use(passport.initialize())
   app.use(passport.session())
   app.use(bodyParser.urlencoded({ extended: false }))
-  
-  
   app.use('/dist', express.static('dist'))
   
-  /*
-  app.post('/login', passport.authenticate('local', { successRedirect: '/',
-                                                      failureRedirect: '/login',
-                                                      failureFlash: true }))
-  */
-  app.post('/login', passport.authenticate('local'), (req, res) => {
-    if (req.body.redirect) {
-      res.redirect(req.body.redirect)
-    } else {
-      res.redirect('/list')
-    }
+  app.get('/favicon.ico', (req, res) => {
+    res.end()
   })
   
-  // http://stackoverflow.com/questions/33112299/how-to-delete-cookie-on-logout-in-express-passport-js
+  // Username/Password
+  app.post('/login', passport.authenticate('local'), (req, res) => {
+    const path = req.body.redirect ? req.body.redirect : '/list'
+    res.redirect(path)
+  })
   app.get('/logout', (req, res) => {
     req.logout()
     res.redirect('/')
   })
   
+  // Google
   app.get('/auth/google',
           passport.authenticate('google',
                                 { scope: 'https://www.googleapis.com/auth/userinfo.profile' }))
-
   app.get('/auth/google/callback',
           passport.authenticate('google', { failureRedirect: '/?google-callback-failure' }),
           function(req, res) {
@@ -95,9 +86,9 @@ mongo.connect().then(db => {
             res.redirect('/?google-callback-success');
           })
 
+  // Auth0
   app.get('/auth/auth0',
           passport.authenticate('auth0'))
-  
   app.get('/auth/auth0/callback',
           passport.authenticate('auth0', { failureRedirect: '/?auth0-callback-failure' }),
           function(req, res) {
@@ -105,15 +96,9 @@ mongo.connect().then(db => {
             res.redirect('/?auth0-callback-success');
           })
   
-  app.get('/favicon.ico', (req, res) => {
-    res.end()
-  })
-  
+  // Vue SSR
   // https://forum.vuejs.org/t/accessing-current-request-context-through-vue-instance-for-server-side-rendering-to-be-able-to-access-cookies-for-initial-user-authentication/48/11
   app.get('*', (req, res) => {
-    
-    console.log(req.url)
-    
     const context = {
       title: 'vue-admin',
       url: req.url,
@@ -132,9 +117,10 @@ mongo.connect().then(db => {
       })
     })
   })
-
+  
   const server = http.createServer(app);
   
+  // WebSocket
   // https://github.com/websockets/ws/blob/master/examples/express-session-parse/index.js
   const wss = new ws.Server({
     verifyClient: (info, done) => {
@@ -147,36 +133,18 @@ mongo.connect().then(db => {
   
   wss.on('connection', (ws, req) => {
     ws.on('message', (message) => {
-      
-      console.log('[WebSocket]')
-      console.dir(req.session)
-      
       const data = JSON.parse(message)
-      
-      console.dir(data)
-      
       if (!api[data.action]) {
         return
       }
-      
       api[data.action](data.payload).then(
-        r => {
-          ws.send(JSON.stringify({
-            jobid: data.jobid,
-            resolve: r
-          }))
-        },
-        e => {
-          ws.send(JSON.stringify({
-            jobid: data.jobid,
-            reject: e
-          }))
-        }
+        r => { ws.send(JSON.stringify({ jobid: data.jobid, resolve: r })) },
+        e => { ws.send(JSON.stringify({ jobid: data.jobid, reject: e })) }
       )
-      
     })
   })
   
+  // Start web server
   server.listen(8181, function listening() {
     console.log('Listening on %d', server.address().port);
   })

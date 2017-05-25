@@ -7,6 +7,7 @@ const TwitterStrategy = require('passport-twitter').Strategy;
 const Auth0Strategy = require('passport-auth0').Strategy;
 
 passport.serializeUser(function(user, done) {
+  console.dir(user)
   done(null, user._id)
 })
 
@@ -38,10 +39,15 @@ passport.use(new GoogleStrategy(
   {
     clientID: '1088034821843-fmeepsu3a7jqmqbcqej74qlu0em9viv4.apps.googleusercontent.com',
     clientSecret: 'alDLTJpR550tFMFtS85-2wqQ',
-    callbackURL: "http://localhost:8181/auth/google/callback"
+    callbackURL: "http://localhost:8181/auth/google/callback",
+    passReqToCallback: true
   },
-  function(accessToken, refreshToken, profile, done) {
-    return done(null, profile)
+  function(req, accessToken, refreshToken, profile, done) {
+    // http://passportjs.org/docs/authorize
+    if (!req.user) {
+      // create account
+      return done(null, profile)
+    }
   }
 ))
 

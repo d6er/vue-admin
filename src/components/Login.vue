@@ -24,6 +24,8 @@
             </p>
           </div>
         </form>
+        <a href="/auth/google">Sign in with Google</a>
+        <a href="/auth/auth0">Sign in with Auth0</a>
       </div>
     </div>
   </div>
