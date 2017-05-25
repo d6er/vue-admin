@@ -1,6 +1,7 @@
 const MongoClient = require('mongodb').MongoClient
 let db
 
+// https://team.goodeggs.com/export-this-interface-design-patterns-for-node-js-modules-b48a3b1f8f40
 module.exports = {
   
   connect: () => {
