@@ -30,8 +30,7 @@
     "webpack-hot-middleware": "*"
   },
   "scripts": {
-    "dev": "NODE_ENV=development node server",
-    "mon": "NODE_ENV=development nodemon server"
+    "dev": "NODE_ENV=development nodemon server"
   },
   "author": "d6er <d6er@qq.com>",
   "license": "MIT"

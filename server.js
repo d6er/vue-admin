@@ -16,6 +16,7 @@ const MongoStore = require('connect-mongo')(session)
 const { createBundleRenderer } = require('vue-server-renderer')
 
 const template = fs.readFileSync('./src/index.template.html', 'utf-8')
+//const template = fs.readFileSync('./src-uikit/index.template.html', 'utf-8')
 
 mongo.connect().then(db => {
   
