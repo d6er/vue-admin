@@ -7,7 +7,6 @@ const TwitterStrategy = require('passport-twitter').Strategy;
 const Auth0Strategy = require('passport-auth0').Strategy;
 
 passport.serializeUser(function(user, done) {
-  console.dir(user)
   done(null, user._id)
 })
 
@@ -27,7 +26,6 @@ passport.use(new LocalStrategy(
         username: username,
         password: password
       }).then(doc => {
-        console.dir(doc)
         return done(null, doc)
       })
     })
@@ -39,15 +37,31 @@ passport.use(new GoogleStrategy(
   {
     clientID: '1088034821843-fmeepsu3a7jqmqbcqej74qlu0em9viv4.apps.googleusercontent.com',
     clientSecret: 'alDLTJpR550tFMFtS85-2wqQ',
-    callbackURL: "http://localhost:8181/auth/google/callback",
-    passReqToCallback: true
+    callbackURL: "http://localhost:8181/auth/google/callback"
+    //passReqToCallback: true
   },
-  function(req, accessToken, refreshToken, profile, done) {
-    // http://passportjs.org/docs/authorize
-    if (!req.user) {
-      // create account
-      return done(null, profile)
-    }
+  function(accessToken, refreshToken, profile, done) {
+
+    mongo.connect().then(dbobj => {
+      db = dbobj
+      return db.collection('users').findOne({ 'google.id': profile.id })
+    }).then(doc => {
+      if (doc) {
+        console.log('google already exists')
+        done(null, doc)
+      } else {
+        console.log('google new')
+        return mongo.getNextId('users')
+      }
+    }).then(r => {
+      const new_user = {
+        _id: r.value.seq,
+        google: profile
+      }
+      db.collection('users').insertOne(new_user).then(r => {
+        done(null, new_user)
+      })
+    })
   }
 ))
 
