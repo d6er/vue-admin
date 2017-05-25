@@ -11,7 +11,7 @@ const config = merge(baseConfig, {
   },
   resolve: {
     alias: {
-      'api': '../api-server.js'
+      'api': '../src-server/api-server.js'
     }
   },
   externals: nodeExternals({

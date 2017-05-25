@@ -1,7 +1,7 @@
 'use strict'
 
-const api = require('./api-server')
-const mongo = require('./mongo')
+const api = require('./src-server/api-server')
+const mongo = require('./src-server/mongo')
 
 const fs = require('fs')
 const ws = require('ws')
@@ -9,7 +9,7 @@ const url = require('url')
 const http = require('http')
 const express = require('express')
 const session = require('express-session')
-const passport = require('./passport')
+const passport = require('./src-server/passport')
 const bodyParser = require('body-parser')
 const MongoStore = require('connect-mongo')(session)
 
