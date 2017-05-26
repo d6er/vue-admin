@@ -1,6 +1,6 @@
 'use strict'
 
-const api = require('./src-server/api-server')
+const api = require('./src-server/api')
 const mongo = require('./src-server/mongo')
 
 const fs = require('fs')
