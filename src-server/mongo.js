@@ -30,6 +30,8 @@ const actions = {
   createAccount: function (payload) {
     
     return db.collection('users').findOne({ username: payload.username }).then(r => {
+      console.log('createAccount')
+      console.dir(r)
       if (r) {
         reject('username ' + payload.username + ' already exists')
       }
@@ -43,8 +45,23 @@ const actions = {
     
   },
   
+  saveItem: function(payload) {
+    
+    payload.updated = new Date()
+    
+    if (payload._id) {
+      // existing item
+      return db.collection('items').updateOne({ _id: payload._id }, payload)
+    } else {
+      // new item
+      return this.getNextId('items').then(r => {
+        payload._id = r.value.seq
+        return db.collection('items').insertOne(payload)
+      })
+    }
+  },
+  
   fetchItems: function (payload) {
-    console.log('mongo.js fetchItems')
     return db.collection('items').find(payload).skip(0).limit(100).toArray()
   }
 

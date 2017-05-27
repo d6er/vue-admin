@@ -5,13 +5,23 @@
 class WebSocketPromise extends WebSocket {
   
   constructor (url, protocols) {
+    
     super(url, protocols)
+    
     this.job_id = 0
     this.jobs = []
+    
+    super.onmessage = function (event) {
+      const data = JSON.parse(event.data)
+      if (data.resolve) {
+        this.jobs[data.job_id].resolve(data.resolve)
+      } else if (data.reject) {
+        this.jobs[data.job_id].reject(data.reject)
+      }
+    }
   }
   
   send (data) {
-    
     this.job_id++
     
     super.send(JSON.stringify({
@@ -25,16 +35,6 @@ class WebSocketPromise extends WebSocket {
         reject: reject
       }
     })
-  }
-  
-  onmessage (event) {
-    const data = JSON.parse(event.data)
-    
-    if (data.resolve) {
-      this.jobs[data.job_id].resolve(data.resolve)
-    } else if (data.reject) {
-      this.jobs[data.job_id].reject(data.reject)
-    }
   }
 }
 

@@ -133,9 +133,17 @@ mongo.connect(config.mongo_url).then(db => {
   wss.on('connection', (ws, req) => {
     ws.on('message', (json) => {
       const message = JSON.parse(json)
+      console.log('server ws.on message')
+      console.dir(message)
       mongo[message.data.action](message.data.payload).then(
-        r => { ws.send(JSON.stringify({ job_id: message.job_id, resolve: r })) },
-        e => { ws.send(JSON.stringify({ job_id: message.job_id, reject: e })) }
+        r => {
+          console.dir(r)
+          ws.send(JSON.stringify({ job_id: message.job_id, resolve: r }))
+        },
+        e => {
+          console.dir(e)
+          ws.send(JSON.stringify({ job_id: message.job_id, reject: e }))
+        }
       )
     })
   })
