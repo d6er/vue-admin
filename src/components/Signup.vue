@@ -6,13 +6,13 @@
           <div class="field">
             <label class="label">Username:</label>
             <p class="control">
-              <input class="input" placeholder="Username" type="text" name="username" v-model="username">
+              <input v-model="username" class="input" placeholder="Username" type="text">
             </p>
           </div>
           <div class="field">
             <label class="label">Password:</label>
             <p class="control">
-              <input class="input" placeholder="Password" type="password" name="password" v-mode="password">
+              <input v-model="password" class="input" placeholder="Password" type="password">
             </p>
           </div>
           <div class="field is-grouped">
@@ -40,17 +40,22 @@ export default {
   methods: {
     // http://stackoverflow.com/questions/40165766/returning-promises-from-vuex-actions
     signup () {
-      this.$store.dispatch('create_account', { username: this.username, password: this.password })
-        .then(
-          response => {
-            console.dir(response)
-            // todo: auto login
-          },
-          error => {
-            console.log('signup: ' + error.message)
-            // todo: show message to user
-          }
-        )
+      
+      let payload = {
+        username: this.username,
+        password: this.password
+      }
+      
+      this.$store.dispatch('createAccount', payload).then(
+        response => {
+          console.dir(response)
+          // todo: auto login
+        },
+        error => {
+          console.log('signup: ' + error.message)
+          // todo: show message to user
+        }
+      )
     }
   }
 }

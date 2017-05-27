@@ -6,7 +6,7 @@ const config = merge(baseConfig, {
   entry: './src/entry-client.js',
   resolve: {
     alias: {
-      'api': './websocket.js'
+      'api': './api/api-client.js'
     }
   },
   plugins: [

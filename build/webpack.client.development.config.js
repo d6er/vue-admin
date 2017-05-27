@@ -10,7 +10,7 @@ const config = merge(baseConfig, {
   ],
   resolve: {
     alias: {
-      'api': './websocket.js'
+      'api': './api/api-client.js'
     }
   },
   output: {
