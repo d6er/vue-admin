@@ -1,24 +1,23 @@
 'use strict'
 
-const api = require('./src-server/api')
-const mongo = require('./src-server/mongo')
-
 const fs = require('fs')
 const ws = require('ws')
 const url = require('url')
 const http = require('http')
 const express = require('express')
 const session = require('express-session')
-const passport = require('./src-server/passport')
 const bodyParser = require('body-parser')
 const MongoStore = require('connect-mongo')(session)
 
-const { createBundleRenderer } = require('vue-server-renderer')
+const config = require('./config')
+const mongo = require('./src-server/mongo')
+const passport = require('./src-server/passport')
 
 const template = fs.readFileSync('./src/index.template.html', 'utf-8')
 //const template = fs.readFileSync('./src-uikit/index.template.html', 'utf-8')
+const { createBundleRenderer } = require('vue-server-renderer')
 
-mongo.connect().then(db => {
+mongo.connect(config.mongo_url).then(db => {
   
   // development
   let serverBundle, clientManifest, renderer
@@ -132,14 +131,11 @@ mongo.connect().then(db => {
   })
   
   wss.on('connection', (ws, req) => {
-    ws.on('message', (message) => {
-      const data = JSON.parse(message)
-      if (!api[data.action]) {
-        return
-      }
-      api[data.action](data.payload).then(
-        r => { ws.send(JSON.stringify({ jobid: data.jobid, resolve: r })) },
-        e => { ws.send(JSON.stringify({ jobid: data.jobid, reject: e })) }
+    ws.on('message', (json) => {
+      const message = JSON.parse(json)
+      mongo[message.data.action](message.data.payload).then(
+        r => { ws.send(JSON.stringify({ job_id: message.job_id, resolve: r })) },
+        e => { ws.send(JSON.stringify({ job_id: message.job_id, reject: e })) }
       )
     })
   })

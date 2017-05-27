@@ -10,39 +10,25 @@ export default new Vuex.Store({
   },
   // https://vuex.vuejs.org/en/strict.html
   strict: process.env.NODE_ENV !== 'production',
+  
   actions: {
     
-    create_account ({ commit }, data) {
-      return new Promise((resolve, reject) => {
-        api.call('createAccount', data).then(response => {
-          // update state
-          resolve(response)
-        }, error => {
-          reject(error)
-        })
-      })
-    },
-    
-    update_account ({ commit }, data) {
-    },
-    
-    delete_account ({ commit }, data) {
+    createAccount ({ commit }, data) {
+      return api.call({ action: 'createAccount', payload: data })
     },
     
     saveItem ({ commit }, data) {
-      return api.call('saveItem', data)
+      return api.call({ action: 'saveItem', payload: data })
     },
     
     fetchItems ({ commit }, data) {
-      return api.call('fetchItems', data).then(items => {
+      return api.call({ action: 'fetchItems', payload: data }).then(items => {
         commit('setItems', items)
       })
-    },
-    
-    deleteItem({ commit }, data) {
     }
     
   },
+  
   mutations: {
     // todo: use constant for function names. https://vuex.vuejs.org/en/mutations.html
     setItems (state, items) {
