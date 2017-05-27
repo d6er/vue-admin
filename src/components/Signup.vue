@@ -53,6 +53,7 @@ export default {
         },
         error => {
           console.log('signup error')
+          console.dir(error)
           // todo: show message to user
         }
       )
