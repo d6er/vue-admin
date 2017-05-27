@@ -28,9 +28,7 @@ const actions = {
   },
 
   createAccount: function (payload) {
-    
     return db.collection('users').findOne({ username: payload.username }).then(r => {
-      console.log('createAccount')
       console.dir(r)
       if (r) {
         reject('username ' + payload.username + ' already exists')
@@ -38,11 +36,9 @@ const actions = {
     }).then(() => {
       return this.getNextId('users')
     }).then(r => {
-      const new_user = payload
-      new_user._id = r.value.seq
-      console.dir(new_user)
+      payload._id = r.value.seq
+      return db.collection('users').insertOne(payload)
     })
-    
   },
   
   saveItem: function(payload) {

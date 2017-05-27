@@ -52,7 +52,7 @@ export default {
           // todo: auto login
         },
         error => {
-          console.log('signup: ' + error.message)
+          console.log('signup error')
           // todo: show message to user
         }
       )
