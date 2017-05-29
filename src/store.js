@@ -22,10 +22,7 @@ export default new Vuex.Store({
     },
     
     fetchItems ({ commit }, data) {
-      console.log('store fetchItems')
-      console.dir(data)
       return api.call({ action: 'fetchItems', payload: data }).then(items => {
-        console.dir(items)
         commit('setItems', items)
       })
     }

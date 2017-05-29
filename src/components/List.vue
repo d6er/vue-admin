@@ -53,11 +53,13 @@
     
     <table class="table is-narrow">
       <thead>
-        <th><input type="checkbox"></th>
-        <th></th>
-        <th>Title</th>
-        <th>Status</th>
-        <th>Updated</th>
+        <tr>
+          <th><input type="checkbox"></th>
+          <th></th>
+          <th>Title</th>
+          <th>Status</th>
+          <th>Updated</th>
+        </tr>
       </thead>
       <tbody>
         <tr v-for="item in items">
