@@ -19,24 +19,23 @@ const { createBundleRenderer } = require('vue-server-renderer')
 
 mongo.connect(config.mongo_url).then(db => {
   
-  // development
-  let serverBundle, clientManifest, renderer
-
-  // production
-  /*
-    let serverBundle = require('./dist/vue-ssr-server-bundle.json')
-    let clientManifest = require('./dist/vue-ssr-client-manifest.json')
-    let renderer = createBundleRenderer(serverBundle, {
-    runInNewContext: false,
-    template,
-    clientManifest
-    })
-  */
-  
   const app = express()
-
-  // Development
+  
+  let serverBundle, clientManifest, renderer
   let promise
+  
+  // production
+  if (process.env.NODE_ENV === 'production') {
+    serverBundle = require('./dist/vue-ssr-server-bundle.json')
+    clientManifest = require('./dist/vue-ssr-client-manifest.json')
+    renderer = createBundleRenderer(serverBundle, {
+      runInNewContext: false,
+      template,
+      clientManifest
+    })
+  }  
+  
+  // Development
   if (process.env.NODE_ENV === 'development') {
     promise = require('./build/setup-dev-server')(app, (serverBundle, clientManifest) => {
       renderer = createBundleRenderer(serverBundle, {
@@ -97,7 +96,9 @@ mongo.connect(config.mongo_url).then(db => {
   
   // Vue SSR
   // https://forum.vuejs.org/t/accessing-current-request-context-through-vue-instance-for-server-side-rendering-to-be-able-to-access-cookies-for-initial-user-authentication/48/11
+  
   app.get('*', (req, res) => {
+    
     const context = {
       title: 'vue-admin',
       url: req.url,
@@ -141,10 +142,12 @@ mongo.connect(config.mongo_url).then(db => {
   })
   
   // Start web server
-  server.listen(8181, function listening() {
+  server.listen(config.server_port, function listening() {
     console.log('Listening on %d', server.address().port);
   })
-
+  
 }).catch(err => {
+  
   console.log(err.message)
+  
 })

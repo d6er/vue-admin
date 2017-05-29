@@ -30,7 +30,7 @@
       </div>
       <div class="field-body">
         <div class="field">
-          <button class="button is-danger">Delete account</button>
+          <button @click="deleteAccount" class="button is-danger">Delete account</button>
         </div>
       </div>
     </div>
@@ -38,6 +38,7 @@
 </template>
 <script>
 export default {
+  
   computed: {
     username () {
       if (this.$store.state.user.google) {
@@ -45,6 +46,19 @@ export default {
       } else {
         return this.$store.state.user.username
       }
+    }
+  },
+  
+  methods: {
+    deleteAccount () {
+      this.$store.dispatch('deleteAccount').then(
+        r => {
+          // todo: go to home page
+        },
+        e => {
+          
+        }
+      )
     }
   }
 }
