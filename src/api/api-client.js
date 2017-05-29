@@ -10,8 +10,9 @@ connect()
 function connect () {
   wsp = new WebSocketPromise(config.websocket_url)
   wsp.onclose = function () {
-    console.log('WebSocket closed. reconnecting...')
+    console.log('WebSocket closed.')
     setTimeout(function () {
+      console.log('WebSocket reconnecting...')
       connect()
     }, 5000);
   }

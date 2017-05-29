@@ -8,7 +8,7 @@
       <span></span>
       <span></span>
     </span>
-    <div class="nav-right nav-menu">
+    <div class="nav-right nav-menu" v-bind:class="{ 'is-active': toggleActive }">
       <a class="nav-item">Features</a>
       <a class="nav-item">Blog</a>
       <a class="nav-item">Help</a>
@@ -36,7 +36,6 @@ export default {
   methods: {
     toggle () {
       this.toggleActive = !this.toggleActive
-console.log('toggle: ' + this.toggleActive)
     }
   }
 }
