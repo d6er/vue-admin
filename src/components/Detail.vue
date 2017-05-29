@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h1 class="title is-4">Item detail</h1>
     <nav class="level">
       <div class="level-left">
         <div class="level-item">

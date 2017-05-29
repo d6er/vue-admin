@@ -14,12 +14,12 @@
       </span>
       <div class="nav-right nav-menu" v-bind:class="{ 'is-active': toggleActive }">
         <div class="nav-item">
-          <a class="button is-small">
+          <router-link class="button is-small" to="/user">
             <span class="icon is-small">
               <i class="fa fa-user" aria-hidden="true"></i>
             </span>
             <span>{{ username }}</span>
-          </a>
+          </router-link>
         </div>
         <div class="nav-item">
           <a class="button is-small" href="/logout">

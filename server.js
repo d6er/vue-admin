@@ -79,20 +79,20 @@ mongo.connect(config.mongo_url).then(db => {
           passport.authenticate('google',
                                 { scope: 'https://www.googleapis.com/auth/userinfo.profile' }))
   app.get('/auth/google/callback',
-          passport.authenticate('google', { failureRedirect: '/?google-callback-failure' }),
+          passport.authenticate('google', { failureRedirect: '/login?google-callback-failure' }),
           function(req, res) {
             console.dir(req.user)
-            res.redirect('/?google-callback-success');
+            res.redirect('/list?google-callback-success');
           })
 
   // Auth0
   app.get('/auth/auth0',
           passport.authenticate('auth0'))
   app.get('/auth/auth0/callback',
-          passport.authenticate('auth0', { failureRedirect: '/?auth0-callback-failure' }),
+          passport.authenticate('auth0', { failureRedirect: '/login?auth0-callback-failure' }),
           function(req, res) {
             console.dir(req.user)
-            res.redirect('/?auth0-callback-success');
+            res.redirect('/list?auth0-callback-success');
           })
   
   // Vue SSR
@@ -134,12 +134,8 @@ mongo.connect(config.mongo_url).then(db => {
     ws.on('message', (json) => {
       const message = JSON.parse(json)
       mongo[message.data.action](message.data.payload).then(
-        r => {
-          ws.send(JSON.stringify({ job_id: message.job_id, resolve: r }))
-        },
-        e => {
-          ws.send(JSON.stringify({ job_id: message.job_id, reject: e }))
-        }
+        r => { ws.send(JSON.stringify({ job_id: message.job_id, resolve: r })) },
+        e => { ws.send(JSON.stringify({ job_id: message.job_id, reject: e })) }
       )
     })
   })

@@ -62,7 +62,16 @@ const router = new Router({
         nav: () => import('./components/MemberNav.vue'),
         menu: () => import('./components/SideMenu.vue')
       }
-    }
+    },
+    {
+      path: '/user',
+      beforeEnter: requireAuth,
+      components: {
+        default: () => import('./components/User.vue'),
+        nav: () => import('./components/MemberNav.vue'),
+        menu: () => import('./components/SideMenu.vue')
+      }
+    },
   ]
 })
 
