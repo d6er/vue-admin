@@ -12,13 +12,14 @@ passport.serializeUser(function(user, done) {
 
 passport.deserializeUser(function(id, done) {
   mongo.connect().then(db => {
-    db.collection('users').findOne({ _id: id }).then(doc => {
+    db.collection('users').findOne({ _id: id, deleted: { $ne: true } }).then(doc => {
       return done(null, doc)
     })
   })
 })
 
 // Local
+// todo: check deleted
 passport.use(new LocalStrategy(
   function(username, password, done) {
     mongo.connect().then(db => {
