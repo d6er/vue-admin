@@ -42,30 +42,30 @@ const actions = {
     })
   },
   
-  deleteAccount: function(payload, user_id) {
-    console.log('mongo.js deleteAccount')
+  deleteAccount: function(payload) {
+    console.log('mongo.js deleteAccount user_id: ' + payload.user_id)
   },
   
-  saveItem: function(payload, user_id) {
+  saveItem: function(payload) {
     
-    const coll = 'items.' + user_id
-    
-    payload.updated = new Date()
+    const coll = 'items.' + payload.user_id
+    const item = payload.item
+    item.updated = new Date()
     
     if (payload._id) {
       // existing item
-      return db.collection(coll).updateOne({ _id: payload._id }, payload)
+      return db.collection(coll).updateOne({ _id: payload._id }, item)
     } else {
       // new item
       return this.getNextId(coll).then(r => {
-        payload._id = r.value.seq
-        return db.collection(coll).insertOne(payload)
+        item._id = r.value.seq
+        return db.collection(coll).insertOne(item)
       })
     }
   },
   
-  fetchItems: function (payload, user_id) {
-    return db.collection('items.' + user_id).find(payload).skip(0).limit(100).toArray()
+  fetchItems: function (payload) {
+    return db.collection('items.' + payload.user_id).find().skip(0).limit(100).toArray()
       .then(docs => {
         docs.forEach(actions.convertItem)
         return docs
