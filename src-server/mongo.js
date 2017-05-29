@@ -42,31 +42,34 @@ const actions = {
     })
   },
   
-  deleteAccount: function(payload) {
+  deleteAccount: function(payload, user_id) {
     console.log('mongo.js deleteAccount')
   },
   
-  saveItem: function(payload) {
+  saveItem: function(payload, user_id) {
+    
+    const coll = 'items.' + user_id
     
     payload.updated = new Date()
     
     if (payload._id) {
       // existing item
-      return db.collection('items').updateOne({ _id: payload._id }, payload)
+      return db.collection(coll).updateOne({ _id: payload._id }, payload)
     } else {
       // new item
-      return this.getNextId('items').then(r => {
+      return this.getNextId(coll).then(r => {
         payload._id = r.value.seq
-        return db.collection('items').insertOne(payload)
+        return db.collection(coll).insertOne(payload)
       })
     }
   },
   
-  fetchItems: function (payload) {
-    return db.collection('items').find(payload).skip(0).limit(100).toArray().then(docs => {
-      docs.forEach(actions.convertItem)
-      return docs
-    })
+  fetchItems: function (payload, user_id) {
+    return db.collection('items.' + user_id).find(payload).skip(0).limit(100).toArray()
+      .then(docs => {
+        docs.forEach(actions.convertItem)
+        return docs
+      })
   },
   
   convertItem: function(item) {

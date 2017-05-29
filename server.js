@@ -133,8 +133,21 @@ mongo.connect(config.mongo_url).then(db => {
   
   wss.on('connection', (ws, req) => {
     ws.on('message', (json) => {
+      
       const message = JSON.parse(json)
-      mongo[message.data.action](message.data.payload).then(
+      
+      if (message.data.action != 'createAccount' && !req.session.passport.hasOwnProperty('user')) {
+        console.log('not auth')
+        ws.send(JSON.stringify({ job_id: message.job_id, reject: 'auth error' }))
+        return
+      }
+      
+      let user_id = null
+      if (message.data.action != 'createAccount') {
+        user_id = req.session.passport.user
+      }
+      
+      mongo[message.data.action](message.data.payload, user_id).then(
         r => { ws.send(JSON.stringify({ job_id: message.job_id, resolve: r })) },
         e => { ws.send(JSON.stringify({ job_id: message.job_id, reject: e })) }
       )

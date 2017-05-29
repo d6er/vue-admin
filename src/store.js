@@ -6,7 +6,9 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   
-  state: { },
+  state: {
+    items: {}
+  },
   
   // https://vuex.vuejs.org/en/strict.html
   strict: process.env.NODE_ENV !== 'production',
