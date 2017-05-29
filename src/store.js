@@ -24,12 +24,20 @@ export default new Vuex.Store({
     },
     
     saveItem ({ commit }, data) {
+      data.user_id = state.user._id
       return api.call({ action: 'saveItem', payload: data })
     },
     
-    fetchItems ({ commit }, data) {
+    fetchItems ({ commit, state }, data) {
+      data.user_id = state.user._id
       return api.call({ action: 'fetchItems', payload: data }).then(items => {
         commit('setItems', items)
+      })
+    },
+    
+    callApi ({ commit, state }, data) {
+      return api.call(state.user._id, data).then(items => {
+        
       })
     }
     
