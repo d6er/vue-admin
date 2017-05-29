@@ -1,5 +1,6 @@
 // https://team.goodeggs.com/export-this-interface-design-patterns-for-node-js-modules-b48a3b1f8f40
 const MongoClient = require('mongodb').MongoClient
+const moment = require('moment')
 
 let db
 
@@ -58,9 +59,15 @@ const actions = {
   },
   
   fetchItems: function (payload) {
-    return db.collection('items').find(payload).skip(0).limit(100).toArray()
+    return db.collection('items').find(payload).skip(0).limit(100).toArray().then(docs => {
+      docs.forEach(actions.convertItem)
+      return docs
+    })
+  },
+  
+  convertItem: function(item) {
+    item.updated = moment(item.updated).format('MMM D HH:mm:ss')
   }
-
 }
 
 module.exports = actions
