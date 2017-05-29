@@ -42,6 +42,10 @@ const actions = {
     })
   },
   
+  deleteAccount: function(payload) {
+    console.log('mongo.js deleteAccount')
+  },
+  
   saveItem: function(payload) {
     
     payload.updated = new Date()

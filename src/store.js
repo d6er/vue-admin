@@ -5,9 +5,9 @@ import api from 'api'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-  state: {
-    items: {}
-  },
+  
+  state: { },
+  
   // https://vuex.vuejs.org/en/strict.html
   strict: process.env.NODE_ENV !== 'production',
   
@@ -15,6 +15,10 @@ export default new Vuex.Store({
     
     createAccount ({ commit }, data) {
       return api.call({ action: 'createAccount', payload: data })
+    },
+    
+    deleteAccount ({ commit }) {
+      return api.call({ action: 'deleteAccount' })
     },
     
     saveItem ({ commit }, data) {
