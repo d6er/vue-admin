@@ -81,7 +81,7 @@
             <router-link :to="'/item/' + item._id">{{ item.title }}</router-link>
           </td>
           <td>
-            {{ item.status }}
+            <span class="tag is-light">{{ item.status }}</span>
           </td>
           <td>
             {{ item.updated }}
