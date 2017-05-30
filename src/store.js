@@ -21,9 +21,9 @@ export default new Vuex.Store({
     
     callApi ({ commit, state }, data) {
       data.user_id = state.user._id
-      console.log('store callApi()')
-      console.dir(data)
       return api.call(data).then(result => {
+        // todo: map action and commit
+        // https://github.com/vuejs/vuex/issues/755
         if (data.action == 'fetchItems') {
           commit('setItems', result)
         }

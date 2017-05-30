@@ -4,7 +4,7 @@
     <nav class="level">
       <div class="level-left">
         <div class="level-item" v-if="checkedItems.length">
-          <button class="button is-small">
+          <button @click="copyItems" class="button is-small">
             <span class="icon is-small">
               <i class="fa fa-files-o" aria-hidden="true"></i>
             </span>
@@ -12,7 +12,7 @@
           </button>
         </div>
         <div class="level-item" v-if="checkedItems.length">
-          <button class="button is-small">
+          <button @click="deleteItems" class="button is-small">
             <span class="icon is-small">
               <i class="fa fa-times" aria-hidden="true"></i>
             </span>
@@ -57,6 +57,7 @@
         <tr>
           <th><input type="checkbox"></th>
           <th></th>
+          <th></th>
           <th>Title</th>
           <th>Status</th>
           <th>Updated</th>
@@ -71,6 +72,9 @@
             <figure class="image is-32x32">
               <img src="http://bulma.io/images/placeholders/32x32.png">
             </figure>
+          </td>
+          <td>
+            {{ item._id }}
           </td>
           <td>
             <router-link :to="'/item/' + item._id">{{ item.title }}</router-link>
@@ -100,6 +104,14 @@ export default {
   computed: {
     items() {
       return this.$store.state.items
+    }
+  },
+  methods: {
+    deleteItems() {
+      this.$store.dispatch('callApi', { action: 'deleteItems', item_ids: this.checkedItems })
+    },
+    copyItems() {
+      this.$store.dispatch('callApi', { action: 'copyItems', item_ids: this.checkedItems })
     }
   }
 }
