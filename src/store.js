@@ -19,25 +19,17 @@ export default new Vuex.Store({
       return api.call({ action: 'createAccount', payload: data })
     },
     
-    deleteAccount ({ commit }) {
-      return api.call({ action: 'deleteAccount' })
-    },
-    
-    saveItem ({ commit }, data) {
-      data.user_id = state.user._id
-      return api.call({ action: 'saveItem', payload: data })
-    },
-    
-    fetchItems ({ commit, state }, data) {
-      data.user_id = state.user._id
-      return api.call({ action: 'fetchItems', payload: data }).then(items => {
-        commit('setItems', items)
-      })
-    },
-    
     callApi ({ commit, state }, data) {
-      return api.call(state.user._id, data).then(items => {
-        
+      data.user_id = state.user._id
+      console.log('store callApi()')
+      console.dir(data)
+      return api.call(data).then(result => {
+        if (data.action == 'fetchItems') {
+          commit('setItems', result)
+        }
+        if (data.action == 'fetchItem') {
+          commit('setItem', result)
+        }
       })
     }
     
@@ -49,6 +41,9 @@ export default new Vuex.Store({
       items.forEach(item => {
         Vue.set(state.items, item._id, item)
       })
+    },
+    setItem (state, item) {
+      Vue.set(state.items, item._id, item)
     }
   }
 })

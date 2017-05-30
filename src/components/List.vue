@@ -95,7 +95,7 @@ export default {
     }
   },
   asyncData ({ store, route }) {
-    return store.dispatch('fetchItems', {})
+    return store.dispatch('callApi', { action: 'fetchItems', query: {} })
   },
   computed: {
     items() {

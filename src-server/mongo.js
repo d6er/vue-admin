@@ -46,15 +46,16 @@ const actions = {
     console.log('mongo.js deleteAccount user_id: ' + payload.user_id)
   },
   
-  saveItem: function(payload) {
+  saveItem: function({ user_id, item }) {
     
-    const coll = 'items.' + payload.user_id
-    const item = payload.item
     item.updated = new Date()
+    console.dir(item)
     
-    if (payload._id) {
+    const coll = 'items.' + user_id
+    
+    if (item._id) {
       // existing item
-      return db.collection(coll).updateOne({ _id: payload._id }, item)
+      return db.collection(coll).updateOne({ _id: item._id }, item)
     } else {
       // new item
       return this.getNextId(coll).then(r => {
@@ -64,8 +65,20 @@ const actions = {
     }
   },
   
-  fetchItems: function (payload) {
-    return db.collection('items.' + payload.user_id).find().skip(0).limit(100).toArray()
+  fetchItem: function ({ user_id, item_id }) {
+    return db.collection('items.' + user_id).findOne({ _id: item_id })
+  },
+  
+  fetchItems: function ({ user_id, query }) {
+    console.log('mongo fetchItems')
+    console.log('user_id: ' + user_id)
+    console.dir(query)
+    
+    return db.collection('items.' + user_id)
+      .find(query)
+      .skip(0)
+      .limit(100)
+      .toArray()
       .then(docs => {
         docs.forEach(actions.convertItem)
         return docs
