@@ -127,11 +127,13 @@ export default {
     }
   },
   asyncData ({ store, route: { params: { id } } }) {
-    return store.dispatch('fetchItems', { _id: parseInt(id) })
+    if (id != 'new') {
+      return store.dispatch('callApi', { action: 'fetchItem', item_id: parseInt(id) })
+    }
   },
   methods: {
     save () {
-      this.$store.dispatch('saveItem', this.item).then(
+      this.$store.dispatch('callApi', { action: 'saveItem', item: this.item }).then(
         r => {
           this.$router.push('/list')
         },
