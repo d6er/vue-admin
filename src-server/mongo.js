@@ -76,6 +76,13 @@ const actions = {
   },
   
   fetchItems: function ({ user_id, query }) {
+    
+    if (query.title) {
+      query.title = new RegExp(actions.escapeRegExp(query.title), 'i')
+    } else {
+      delete query.title
+    }
+    
     return db.collection('items.' + user_id)
       .find(query)
       .skip(0)
@@ -106,6 +113,10 @@ const actions = {
   
   convertItem: function (item) {
     item.updated = moment(item.updated).format('MMM D HH:mm:ss')
+  },
+  
+  escapeRegExp: function (str) {
+    return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
   }
 }
 
