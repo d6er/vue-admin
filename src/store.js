@@ -38,6 +38,7 @@ export default new Vuex.Store({
   mutations: {
     // todo: use constant for function names. https://vuex.vuejs.org/en/mutations.html
     setItems (state, items) {
+      state.items = {}
       items.forEach(item => {
         Vue.set(state.items, item._id, item)
       })

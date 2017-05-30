@@ -32,10 +32,11 @@
         <div class="level-item">
           <div class="field has-addons">
             <p class="control">
-              <input class="input is-small" type="text" placeholder="Find items">
+              <input v-model="keyword" class="input is-small" type="text" placeholder="Find items"
+                     @keyup="fetchItems">
             </p>
             <p class="control">
-              <button class="button is-small">
+              <button @click="fetchItems" class="button is-small">
                 Search
               </button>
             </p>
@@ -95,6 +96,7 @@
 export default {
   data () {
     return {
+      keyword: '',
       checkedItems: []
     }
   },
@@ -112,7 +114,10 @@ export default {
     },
     copyItems() {
       this.$store.dispatch('callApi', { action: 'copyItems', item_ids: this.checkedItems })
-    }
+    },
+    fetchItems() {
+      this.$store.dispatch('callApi', { action: 'fetchItems', query: { title: this.keyword } })
+    },
   }
 }
 </script>
