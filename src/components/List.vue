@@ -84,7 +84,7 @@
             <span class="tag is-light">{{ item.status }}</span>
           </td>
           <td>
-            {{ item.updated }}
+            <span class="tag is-white">{{ item.updated }}</span>
           </td>
         </tr>
       </tbody>
@@ -100,8 +100,12 @@ export default {
       checkedItems: []
     }
   },
-  asyncData ({ store, route }) {
-    return store.dispatch('callApi', { action: 'fetchItems', query: {} })
+  asyncData ({ store, route: { params: { status } } }) {
+    const query = {}
+    if (status) {
+      query.status = status
+    }
+    return store.dispatch('callApi', { action: 'fetchItems', query: query })
   },
   computed: {
     items() {

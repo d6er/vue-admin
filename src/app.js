@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import App from './App.vue'
 //import App from '../src-uikit/App.vue'
 import store from './store'
-//import { sync } from 'vuex-router-sync'
+import { sync } from 'vuex-router-sync'
 
 Vue.use(Router)
 
@@ -55,6 +55,15 @@ const router = new Router({
       }
     },
     {
+      path: '/items/:status',
+      beforeEnter: requireAuth,
+      components: {
+        default: () => import('./components/List.vue'),
+        nav: () => import('./components/Nav.vue'),
+        menu: () => import('./components/SideMenu.vue')
+      }
+    },
+    {
       path: '/item/:id',
       beforeEnter: requireAuth,
       components: {
@@ -77,7 +86,7 @@ const router = new Router({
 
 export function createApp () {
   
-  //sync(store, router)
+  sync(store, router)
   
   // moved from entry-client.js for testing
   if (typeof window !== 'undefined') {

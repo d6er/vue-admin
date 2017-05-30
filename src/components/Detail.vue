@@ -70,9 +70,10 @@
           <div class="control">
             <div class="select is-fullwidth">
               <select v-model="item.status">
-                <option>Draft</option>
-                <option>Published</option>
-                <option>Unpublished</option>
+                <option value="draft">Draft</option>
+                <option value="published">Published</option>
+                <option value="unpublished">Unpublished</option>
+                <option value="trash">Trash</option>
               </select>
             </div>
           </div>
