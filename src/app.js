@@ -50,7 +50,7 @@ const router = new Router({
       beforeEnter: requireAuth,
       components: {
         default: () => import('./components/List.vue'),
-        nav: () => import('./components/MemberNav.vue'),
+        nav: () => import('./components/Nav.vue'),
         menu: () => import('./components/SideMenu.vue')
       }
     },
@@ -59,7 +59,7 @@ const router = new Router({
       beforeEnter: requireAuth,
       components: {
         default: () => import('./components/Detail.vue'),
-        nav: () => import('./components/MemberNav.vue'),
+        nav: () => import('./components/Nav.vue'),
         menu: () => import('./components/SideMenu.vue')
       }
     },
@@ -68,7 +68,7 @@ const router = new Router({
       beforeEnter: requireAuth,
       components: {
         default: () => import('./components/User.vue'),
-        nav: () => import('./components/MemberNav.vue'),
+        nav: () => import('./components/Nav.vue'),
         menu: () => import('./components/SideMenu.vue')
       }
     },

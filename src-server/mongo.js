@@ -28,28 +28,34 @@ const actions = {
     )
   },
 
-  createAccount: function (payload) {
-    return db.collection('users').findOne({ username: payload.username }).then(r => {
+  createAccount: function ({ username, password }) {
+    
+    // todo: encrypt password
+    const user = {
+      username: username,
+      password: password
+    }
+    
+    return db.collection('users').findOne({ username: username }).then(r => {
       console.dir(r)
       if (r) {
-        reject('username ' + payload.username + ' already exists')
+        reject('username ' + username + ' already exists')
       }
     }).then(() => {
       return this.getNextId('users')
     }).then(r => {
       payload._id = r.value.seq
-      return db.collection('users').insertOne(payload)
+      return db.collection('users').insertOne(user)
     })
   },
   
-  deleteAccount: function(payload) {
-    console.log('mongo.js deleteAccount user_id: ' + payload.user_id)
+  deleteAccount: function ({ user_id }) {
+    console.log('mongo.js deleteAccount user_id: ' + user_id)
   },
   
   saveItem: function({ user_id, item }) {
     
     item.updated = new Date()
-    console.dir(item)
     
     const coll = 'items.' + user_id
     
@@ -70,10 +76,6 @@ const actions = {
   },
   
   fetchItems: function ({ user_id, query }) {
-    console.log('mongo fetchItems')
-    console.log('user_id: ' + user_id)
-    console.dir(query)
-    
     return db.collection('items.' + user_id)
       .find(query)
       .skip(0)
@@ -85,7 +87,24 @@ const actions = {
       })
   },
   
-  convertItem: function(item) {
+  copyItems: function ({ user_id, item_ids }) {
+    return db.collection('items.' + user_id)
+      .find(query)
+      .skip(0)
+      .limit(100)
+      .toArray()
+      .then(docs => {
+        docs.forEach(doc => {
+          
+        })
+      })
+  },
+  
+  deleteItems: function ({ user_id, item_ids }) {
+    return db.collection('items.' + user_id).deleteMany({ _id: { $in: item_ids } })
+  },
+  
+  convertItem: function (item) {
     item.updated = moment(item.updated).format('MMM D HH:mm:ss')
   }
 }
