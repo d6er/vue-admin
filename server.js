@@ -65,7 +65,7 @@ mongo.connect(config.mongo_url).then(db => {
   
   // Username/Password
   app.post('/login', passport.authenticate('local'), (req, res) => {
-    const path = req.body.redirect ? req.body.redirect : '/list'
+    const path = req.body.redirect ? req.body.redirect : '/items'
     res.redirect(path)
   })
   app.get('/logout', (req, res) => {
@@ -81,7 +81,7 @@ mongo.connect(config.mongo_url).then(db => {
           passport.authenticate('google', { failureRedirect: '/login?google-callback-failure' }),
           function(req, res) {
             console.dir(req.user)
-            res.redirect('/list?google-callback-success');
+            res.redirect('/items?google-callback-success');
           })
 
   // Auth0
@@ -91,7 +91,7 @@ mongo.connect(config.mongo_url).then(db => {
           passport.authenticate('auth0', { failureRedirect: '/login?auth0-callback-failure' }),
           function(req, res) {
             console.dir(req.user)
-            res.redirect('/list?auth0-callback-success');
+            res.redirect('/items?auth0-callback-success');
           })
   
   // Vue SSR

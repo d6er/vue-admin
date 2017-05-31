@@ -46,16 +46,7 @@ const router = new Router({
       }
     },
     {
-      path: '/list',
-      beforeEnter: requireAuth,
-      components: {
-        default: () => import('./components/List.vue'),
-        nav: () => import('./components/Nav.vue'),
-        menu: () => import('./components/SideMenu.vue')
-      }
-    },
-    {
-      path: '/items/:status',
+      path: '/items/:status?',
       beforeEnter: requireAuth,
       components: {
         default: () => import('./components/List.vue'),
@@ -77,6 +68,15 @@ const router = new Router({
       beforeEnter: requireAuth,
       components: {
         default: () => import('./components/User.vue'),
+        nav: () => import('./components/Nav.vue'),
+        menu: () => import('./components/SideMenu.vue')
+      }
+    },
+    {
+      path: '/settings/items/fields',
+      beforeEnter: requireAuth,
+      components: {
+        default: () => import('./components/Fields.vue'),
         nav: () => import('./components/Nav.vue'),
         menu: () => import('./components/SideMenu.vue')
       }
