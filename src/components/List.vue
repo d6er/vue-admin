@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="title is-4">Items</h1>
+    <h1 class="title is-5">Items</h1>
     <nav class="level">
       <div class="level-left">
         <div class="level-item" v-if="checkedItems.length">
@@ -57,11 +57,25 @@
       <thead>
         <tr>
           <th><input type="checkbox"></th>
-          <th></th>
-          <th></th>
-          <th>Title</th>
-          <th>Status</th>
-          <th>Updated</th>
+          <th>Pic</th>
+          <th>
+            Title
+            <span class="icon is-small">
+              <i class="fa fa-sort" aria-hidden="true"></i>
+            </span>
+          </th>
+          <th>
+            Status
+            <span class="icon is-small">
+              <i class="fa fa-sort" aria-hidden="true"></i>
+            </span>
+          </th>
+          <th>
+            Updated
+            <span class="icon is-small">
+              <i class="fa fa-sort" aria-hidden="true"></i>
+            </span>
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -73,9 +87,6 @@
             <figure class="image is-32x32">
               <img src="http://bulma.io/images/placeholders/32x32.png">
             </figure>
-          </td>
-          <td>
-            {{ item._id }}
           </td>
           <td>
             <router-link :to="'/item/' + item._id">{{ item.title }}</router-link>
@@ -97,7 +108,7 @@ export default {
   data () {
     return {
       keyword: '',
-      checkedItems: []
+      checkedItems: [],
     }
   },
   asyncData ({ store, route: { params: { status } } }) {
@@ -112,6 +123,9 @@ export default {
       return this.$store.state.items
     }
   },
+  watch: {
+    '$route': 'fetchItems'
+  },
   methods: {
     deleteItems() {
       this.$store.dispatch('callApi', { action: 'deleteItems', item_ids: this.checkedItems })
@@ -120,7 +134,15 @@ export default {
       this.$store.dispatch('callApi', { action: 'copyItems', item_ids: this.checkedItems })
     },
     fetchItems() {
-      this.$store.dispatch('callApi', { action: 'fetchItems', query: { title: this.keyword } })
+      const query = {}
+      if (this.$route.params.status) {
+        query.status = this.$route.params.status
+      }
+      if (this.keyword) {
+        query.title = this.keyword
+      }
+      console.dir(query)
+      this.$store.dispatch('callApi', { action: 'fetchItems', query: query })
     },
   }
 }

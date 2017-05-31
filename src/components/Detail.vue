@@ -1,14 +1,14 @@
 <template>
   <div>
-    <h1 class="title is-4">{{ item.title }}</h1>
+    <h1 class="title is-5">{{ item.title }}</h1>
     <nav class="level">
       <div class="level-left">
         <div class="level-item">
-          <router-link to="/list" class="button is-small">
+          <button @click="back" class="button is-small">
             <span class="icon">
               <i class="fa fa-angle-left" aria-hidden="true"></i>
             </span>
-          </router-link>
+          </button>
         </div>
         <div class="level-item">
           <button @click="save" class="button is-info is-small">
@@ -16,22 +16,6 @@
               <i class="fa fa-save" aria-hidden="true"></i>
             </span>
             <span>Save</span>
-          </button>
-        </div>
-        <div class="level-item">
-          <button class="button is-small">
-            <span class="icon is-small">
-              <i class="fa fa-files-o" aria-hidden="true"></i>
-            </span>
-            <span>Copy</span>
-          </button>
-        </div>
-        <div class="level-item">
-          <button class="button is-small">
-            <span class="icon is-small">
-              <i class="fa fa-times" aria-hidden="true"></i>
-            </span>
-            <span>Delete</span>
           </button>
         </div>
       </div>
@@ -60,7 +44,18 @@
         </div>
       </div>
     </div>
-    
+    <div class="field is-horizontal">
+      <div class="field-label">
+        <label class="label">Sub Title</label>
+      </div>
+      <div class="field-body">
+        <div class="field">
+          <p class="control">
+            <input v-model="item.subtitle" type="text" name="subtitle" class="input">
+          </p>
+        </div>
+      </div>
+    </div>
     <div class="field is-horizontal">
       <div class="field-label is-normal">
         <label class="label">Status</label>
@@ -136,12 +131,15 @@ export default {
     save () {
       this.$store.dispatch('callApi', { action: 'saveItem', item: this.item }).then(
         r => {
-          this.$router.push('/list')
+          this.$router.go(-1)
         },
         e => {
           console.dir(e)
         }
       )
+    },
+    back () {
+      this.$router.go(-1)
     }
   }
 }

@@ -76,7 +76,7 @@ const actions = {
   },
   
   fetchItems: function ({ user_id, query }) {
-    
+    console.dir(query)
     if (query.title) {
       query.title = new RegExp(actions.escapeRegExp(query.title), 'i')
     } else {

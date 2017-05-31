@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="title is-4">Settings</h1>
+    <h1 class="title is-5">Settings</h1>
     <hr/>
     <div class="field is-horizontal">
       <div class="field-label">

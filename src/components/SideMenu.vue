@@ -1,6 +1,9 @@
 <template>
   <aside class="menu">
     <p class="menu-label">
+      <span class="icon is-small">
+        <i class="fa fa-list" aria-hidden="true"></i>
+      </span>
       ITEMS
     </p>
     <ul class="menu-list">
@@ -26,11 +29,32 @@
         </router-link>
       </li>
       <li>
+        <router-link to="/items">
+          All
+        </router-link>
+      </li>
+      <li>
         <hr/>
+      </li>
+      <p class="menu-label">
+        <span class="icon is-small">
+          <i class="fa fa-cogs" aria-hidden="true"></i>
+        </span>
+        SETTINGS
+      </p>
+      <li>
+        <router-link to="/settings/items/fields">
+          Fields
+        </router-link>
       </li>
       <li>
         <router-link to="/items/trash">
-          Setting
+          Import
+        </router-link>
+      </li>
+      <li>
+        <router-link to="/items/trash">
+          Export
         </router-link>
       </li>
     </ul>
