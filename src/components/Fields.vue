@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="title is-5">Fields</h1>
+    <h1 class="title is-5">Settings / Fields</h1>
     <hr/>
     <ul>
       <li>
@@ -23,6 +23,13 @@
         </span>
         <input type="checkbox">
         Status
+      </li>
+      <li>
+        <span class="icon">
+          <i class="fa fa-arrow-up" aria-hidden="true"></i>
+        </span>
+        <input type="checkbox">
+        Updated
       </li>
     </ul>
   </div>
