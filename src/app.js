@@ -49,7 +49,7 @@ const router = new Router({
       path: '/items/:status?',
       beforeEnter: requireAuth,
       components: {
-        default: () => import('./components/List.vue'),
+        default: () => import('./components/Items.vue'),
         nav: () => import('./components/Nav.vue'),
         menu: () => import('./components/SideMenu.vue')
       }
@@ -58,7 +58,7 @@ const router = new Router({
       path: '/item/:id',
       beforeEnter: requireAuth,
       components: {
-        default: () => import('./components/Detail.vue'),
+        default: () => import('./components/Item.vue'),
         nav: () => import('./components/Nav.vue'),
         menu: () => import('./components/SideMenu.vue')
       }

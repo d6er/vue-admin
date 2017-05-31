@@ -95,16 +95,26 @@ const actions = {
   },
   
   copyItems: function ({ user_id, item_ids }) {
-    return db.collection('items.' + user_id)
-      .find(query)
-      .skip(0)
-      .limit(100)
-      .toArray()
-      .then(docs => {
-        docs.forEach(doc => {
-          
+    
+    console.dir(item_ids)
+    const query = { _id: { $in: item_ids } }
+    const coll = 'items.' + user_id
+
+    return db.collection(coll).find(query).toArray().then(docs => {
+      
+      const copies = docs.map(doc => {
+        return this.getNextId(coll).then(r => {
+          const copied = Object.assign({}, doc)
+          copied._id = r.value.seq
+          return copied
         })
       })
+      
+      return Promise.all(copies).then(copied_items => {
+        console.dir(copied_items)
+        return db.collection(coll).insertMany(copied_items)
+      })
+    })
   },
   
   deleteItems: function ({ user_id, item_ids }) {
