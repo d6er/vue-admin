@@ -56,7 +56,7 @@
     <table class="table is-narrow">
       <thead>
         <tr>
-          <th><input type="checkbox"></th>
+          <th><input type="checkbox" v-model="checkedAll" @click="checkAll"></th>
           <th>Pic</th>
           <th>
             Title
@@ -89,7 +89,7 @@
             </figure>
           </td>
           <td>
-            <router-link :to="'/item/' + item._id">{{ item.title }}</router-link>
+            <router-link :to="'/item/' + item._id">{{ item._id + ' ' + item.title }}</router-link>
           </td>
           <td>
             <span class="tag is-light">{{ item.status }}</span>
@@ -109,6 +109,7 @@ export default {
     return {
       keyword: '',
       checkedItems: [],
+      checkedAll: false
     }
   },
   asyncData ({ store, route: { params: { status } } }) {
@@ -144,6 +145,13 @@ export default {
       console.dir(query)
       this.$store.dispatch('callApi', { action: 'fetchItems', query: query })
     },
+    checkAll() {
+      if (this.checkedAll) {
+        this.checkedItems = Object.keys(this.items).map(i => parseInt(i))
+      } else {
+        this.checkedItems = []
+      }
+    }
   }
 }
 </script>
