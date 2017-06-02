@@ -46,7 +46,7 @@ const router = new Router({
       }
     },
     {
-      path: '/items/:status?',
+      path: '/items/:status?/:page?',
       beforeEnter: requireAuth,
       components: {
         default: () => import('./components/Items.vue'),
