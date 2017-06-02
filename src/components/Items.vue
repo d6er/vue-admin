@@ -27,8 +27,6 @@
             <span>Create</span>
           </router-link>
         </div>
-      </div>
-      <div class="level-right">
         <div class="level-item">
           <div class="field has-addons">
             <p class="control">
@@ -39,6 +37,29 @@
               <button @click="fetchItems" class="button is-small">
                 Search
               </button>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="level-right">
+        <div class="level-item">
+          1 - 10 of {{ $store.state.items_count }}
+        </div>
+        <div class="level-item">
+          <div class="field has-addons">
+            <p class="control">
+              <a class="button is-small">
+                <span class="icon is-small">
+                  <i class="fa fa-angle-left"></i>
+                </span>
+              </a>
+            </p>
+            <p class="control">
+              <a class="button is-small">
+                <span class="icon is-small">
+                  <i class="fa fa-angle-right"></i>
+                </span>
+              </a>
             </p>
           </div>
         </div>

@@ -83,15 +83,15 @@ const actions = {
       delete query.title
     }
     
-    return db.collection('items.' + user_id)
-      .find(query)
-      .skip(0)
-      .limit(100)
-      .toArray()
-      .then(docs => {
+    const cursor = db.collection('items.' + user_id).find(query)
+    
+    return cursor.count().then(count => {
+      return cursor.skip(0).limit(10).toArray().then(docs => {
         docs.forEach(actions.convertItem)
-        return docs
+        return { items: docs, count: count }
       })
+    })
+    
   },
   
   copyItems: function ({ user_id, item_ids }) {
