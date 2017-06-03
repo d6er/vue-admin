@@ -44,6 +44,12 @@ mongo.connect(config.mongo_url).then(db => {
         clientManifest
       })
     })
+    
+    process.once('SIGUSR2', function () {
+      console.log('SIGUSR2')
+      
+      process.kill(process.pid, 'SIGUSR2');
+    });
   }
   
   const sessionParser = session({

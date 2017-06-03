@@ -1,0 +1,44 @@
+<template>
+  <div id="tab-picture">
+    <div class="columns">
+      <div class="column" v-for="i in 6">
+        <div class="card">
+          <header class="card-header">
+            <p class="card-header-title">
+              {{ i }}
+            </p>
+            <a class="card-header-icon">
+              <span class="icon">
+                <i class="fa fa-angle-down"></i>
+              </span>
+            </a>
+          </header>
+          <div class="card-image has-text-centered">
+            <figure class="image is-128x128">
+              <img src="http://bulma.io/images/placeholders/128x128.png">
+            </figure>
+          </div>
+          <footer class="card-footer">
+            <a class="card-footer-item">a</a>
+            <a class="card-footer-item">a</a>
+            <a class="card-footer-item">a</a>
+          </footer>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+<script>
+export default {
+  computed: {
+    item () {
+      if (this.$route.params.id == 'new') {
+        return {}
+      } else {
+        // POINT: disconnect item from vuex
+        return Object.assign({}, this.$store.state.items[this.$route.params.id])
+      }
+    }
+  }
+}
+</script>

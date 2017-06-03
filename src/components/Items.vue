@@ -20,7 +20,7 @@
           </button>
         </div>
         <div class="level-item" v-if="!checkedItems.length">
-          <router-link to="/item/new" class="button is-small">
+          <router-link to="/item/new/detail" class="button is-small">
             <span class="icon is-small">
               <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
             </span>
@@ -110,7 +110,9 @@
             </figure>
           </td>
           <td>
-            <router-link :to="'/item/' + item._id">{{ item._id + ' ' + item.title }}</router-link>
+            <router-link :to="'/item/' + item._id + '/detail'">
+              {{ item._id + ' ' + item.title }}
+            </router-link>
           </td>
           <td>
             <span class="tag is-light">{{ item.status }}</span>

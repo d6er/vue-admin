@@ -22,94 +22,31 @@
     </nav>
     <div class="tabs">
       <ul>
-        <li class="is-active">
-          <a>
-            <span class="icon is-small"><i class="fa fa-image"></i></span>
-            <span>Detail</span>
-          </a>
+        <li v-for="tab in tabs" :class="$route.params.tab == tab.id ? 'is-active' : ''">
+          <router-link :to="'/item/' + $route.params.id + '/' + tab.id" replace>
+            <span class="icon is-small"><i class="fa" :class="tab.icon"></i></span>
+            <span>{{ tab.name }}</span>
+          </router-link>
         </li>
-        <li><a>Picture</a></li>
-        <li><a>Shipping</a></li>
       </ul>
     </div>
-    <div class="field is-horizontal">
-      <div class="field-label">
-        <label class="label">Title</label>
-      </div>
-      <div class="field-body">
-        <div class="field">
-          <p class="control">
-            <input v-model="item.title" type="text" name="title" class="input">
-          </p>
-        </div>
-      </div>
-    </div>
-    <div class="field is-horizontal">
-      <div class="field-label">
-        <label class="label">Sub Title</label>
-      </div>
-      <div class="field-body">
-        <div class="field">
-          <p class="control">
-            <input v-model="item.subtitle" type="text" name="subtitle" class="input">
-          </p>
-        </div>
-      </div>
-    </div>
-    <div class="field is-horizontal">
-      <div class="field-label is-normal">
-        <label class="label">Status</label>
-      </div>
-      <div class="field-body">
-        <div class="field is-narrow">
-          <div class="control">
-            <div class="select is-fullwidth">
-              <select v-model="item.status">
-                <option value="draft">Draft</option>
-                <option value="published">Published</option>
-                <option value="unpublished">Unpublished</option>
-                <option value="trash">Trash</option>
-              </select>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <div class="field is-horizontal">
-      <div class="field-label">
-        <label class="label">No padding</label>
-      </div>
-      <div class="field-body">
-        <div class="field">
-          <div class="control">
-            <label class="checkbox">
-              <input type="checkbox">
-              Checkbox
-            </label>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <div class="field is-horizontal">
-      <div class="field-label is-normal">
-        <label class="label">Description</label>
-      </div>
-      <div class="field-body">
-        <div class="field">
-          <div class="control">
-            <textarea v-model="item.description" class="textarea" placeholder="Description"></textarea>
-          </div>
-        </div>
-      </div>
-    </div>
-    
+    <detail v-show="$route.params.tab == 'detail'"/>
+    <picture v-show="$route.params.tab == 'picture'"/>
+    <description v-show="$route.params.tab == 'description'"/>
   </div>
 </template>
 
 <script>
 export default {
+  data() {
+    return {
+      tabs: [
+        { id: 'detail', name: 'Detail', icon: 'fa-list-alt' },
+        { id: 'picture', name: 'Picture', icon: 'fa-picture-o' },
+        { id: 'description', name: 'Description', icon: 'fa-file-text-o' }
+      ]
+    }
+  },
   // https://github.com/vuejs/vue/issues/1056
   // https://forum.vuejs.org/t/vuex-v-model-on-property-in-nested-object/6242/2
   computed: {
@@ -141,6 +78,11 @@ export default {
     back () {
       this.$router.go(-1)
     }
+  },
+  components: {
+    Detail: () => import('./ItemTabs/Detail.vue'),
+    Picture: () => import('./ItemTabs/Picture.vue'),
+    Description: () => import('./ItemTabs/Description.vue')
   }
 }
 </script>
