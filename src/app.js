@@ -55,7 +55,7 @@ const router = new Router({
       }
     },
     {
-      path: '/item/:id',
+      path: '/item/:id/:tab',
       beforeEnter: requireAuth,
       components: {
         default: () => import('./components/Item.vue'),
