@@ -166,7 +166,9 @@ export default {
         query.title = this.keyword
       }
       console.dir(query)
-      this.$store.dispatch('callApi', { action: 'fetchItems', query: query })
+      this.$store.dispatch('callApi', { action: 'fetchItems',
+                                        query: query,
+                                        page: this.$route.params.page })
     },
     checkAll() {
       if (this.checkedAll) {

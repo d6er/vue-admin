@@ -75,8 +75,8 @@ const actions = {
     return db.collection('items.' + user_id).findOne({ _id: item_id })
   },
   
-  fetchItems: function ({ user_id, query }) {
-    console.dir(query)
+  fetchItems: function ({ user_id, query, page }) {
+    
     if (query.title) {
       query.title = new RegExp(actions.escapeRegExp(query.title), 'i')
     } else {
@@ -85,13 +85,15 @@ const actions = {
     
     const cursor = db.collection('items.' + user_id).find(query)
     
+    const limit = 10
+    const skip = page ? limit * ( page - 1 ) : 0
+    
     return cursor.count().then(count => {
-      return cursor.skip(0).limit(10).toArray().then(docs => {
+      return cursor.skip(skip).limit(limit).toArray().then(docs => {
         docs.forEach(actions.convertItem)
         return { items: docs, count: count }
       })
     })
-    
   },
   
   copyItems: function ({ user_id, item_ids }) {
@@ -122,7 +124,7 @@ const actions = {
   },
   
   convertItem: function (item) {
-    item.updated = moment(item.updated).format('MMM D HH:mm:ss')
+    item.updated = moment(item.updated).format('MMM D HH:mm')
   },
   
   escapeRegExp: function (str) {
