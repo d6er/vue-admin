@@ -5,15 +5,6 @@
 </template>
 <script>
 export default {
-  computed: {
-    item () {
-      if (this.$route.params.id == 'new') {
-        return {}
-      } else {
-        // POINT: disconnect item from vuex
-        return Object.assign({}, this.$store.state.items[this.$route.params.id])
-      }
-    }
-  }
+  props: ['item']
 }
 </script>

@@ -30,9 +30,9 @@
         </li>
       </ul>
     </div>
-    <detail v-show="$route.params.tab == 'detail'"/>
-    <picture v-show="$route.params.tab == 'picture'"/>
-    <description v-show="$route.params.tab == 'description'"/>
+    <detail v-show="$route.params.tab == 'detail'" :item.sync="item"/>
+    <picture v-show="$route.params.tab == 'picture'" :item.sync="item"/>
+    <description v-show="$route.params.tab == 'description'" :item.sync="item"/>
   </div>
 </template>
 
@@ -44,19 +44,13 @@ export default {
         { id: 'detail', name: 'Detail', icon: 'fa-list-alt' },
         { id: 'picture', name: 'Picture', icon: 'fa-picture-o' },
         { id: 'description', name: 'Description', icon: 'fa-file-text-o' }
-      ]
-    }
-  },
-  // https://github.com/vuejs/vue/issues/1056
-  // https://forum.vuejs.org/t/vuex-v-model-on-property-in-nested-object/6242/2
-  computed: {
-    item () {
-      if (this.$route.params.id == 'new') {
-        return {}
-      } else {
-        // POINT: disconnect item from vuex
-        return Object.assign({}, this.$store.state.items[this.$route.params.id])
-      }
+      ],
+      
+      // https://github.com/vuejs/vue/issues/1056
+      // https://forum.vuejs.org/t/vuex-v-model-on-property-in-nested-object/6242/2
+      // POINT: disconnect item from vuex
+      item: (this.$route.params.id == 'new')
+        ? {} : Object.assign({}, this.$store.state.items[this.$route.params.id])
     }
   },
   asyncData ({ store, route: { params: { id } } }) {
