@@ -26,6 +26,7 @@
         </div>
       </div>
     </div>
+    <input type="file">
   </div>
 </template>
 <script>
