@@ -48,18 +48,18 @@
         <div class="level-item">
           <div class="field has-addons">
             <p class="control">
-              <a class="button is-small">
+              <router-link :to="prevPage" class="button is-small">
                 <span class="icon is-small">
                   <i class="fa fa-angle-left"></i>
                 </span>
-              </a>
+              </router-link>
             </p>
             <p class="control">
-              <a class="button is-small">
+              <router-link :to="nextPage" class="button is-small">
                 <span class="icon is-small">
                   <i class="fa fa-angle-right"></i>
                 </span>
-              </a>
+              </router-link>
             </p>
           </div>
         </div>
@@ -135,16 +135,26 @@ export default {
       checkedAll: false
     }
   },
-  asyncData ({ store, route: { params: { status } } }) {
+  asyncData ({ store, route: { params: { status, page } } }) {
     const query = {}
     if (status) {
       query.status = status
     }
-    return store.dispatch('callApi', { action: 'fetchItems', query: query })
+    return store.dispatch('callApi', { action: 'fetchItems',
+                                       query: query,
+                                       page: page })
   },
   computed: {
     items() {
       return this.$store.state.items
+    },
+    prevPage() {
+      const page = this.$route.params.page ? parseInt(this.$route.params.page) : 1
+      return '/items/' + this.$route.params.status + '/' + (page - 1)
+    },
+    nextPage() {
+      const page = this.$route.params.page ? parseInt(this.$route.params.page) : 1
+      return '/items/' + this.$route.params.status + '/' + (page + 1)
     }
   },
   watch: {
