@@ -7,7 +7,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   
   state: {
-    items: {}
+    items: {},
+    notification: null
   },
   
   // https://vuex.vuejs.org/en/strict.html
@@ -30,6 +31,9 @@ export default new Vuex.Store({
         if (data.action == 'fetchItem') {
           commit('setItem', result)
         }
+        if (data.action == 'saveItem') {
+          commit('setNotification', 'Item was saved.')
+        }
       })
     }
     
@@ -46,6 +50,12 @@ export default new Vuex.Store({
     },
     setItem (state, item) {
       Vue.set(state.items, item._id, item)
+    },
+    setNotification (state, message) {
+      state.notification = message
+    },
+    clearNotification (state) {
+      state.notification = null
     }
   }
 })

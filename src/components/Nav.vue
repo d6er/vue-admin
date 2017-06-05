@@ -7,6 +7,15 @@
         <router-link class="nav-item is-tab" to="/items">Todos</router-link>
         <router-link class="nav-item is-tab" to="/items">Messages</router-link>
       </div>
+      <div class="nav-center">
+        <div class="nav-item">
+          
+          <div class="notification" v-show="notification">
+            <button class="delete" @click="clearNotification"></button>
+            {{ notification }}
+          </div>
+        </div>
+      </div>
       <span class="nav-toggle" @click="toggle">
         <span></span>
         <span></span>
@@ -48,12 +57,18 @@ export default {
       } else {
         return this.$store.state.user.username
       }
+    },
+    notification () {
+      return this.$store.state.notification
     }
   },
   methods: {
     toggle () {
       this.toggleActive = !this.toggleActive
-console.log('toggle: ' + this.toggleActive)
+      console.log('toggle: ' + this.toggleActive)
+    },
+    clearNotification () {
+      this.$store.commit('clearNotification')
     }
   }
 }
