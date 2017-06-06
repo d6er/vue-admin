@@ -64,6 +64,7 @@ mongo.connect(config.mongo_url).then(db => {
   app.use(passport.session())
   app.use(bodyParser.urlencoded({ extended: false }))
   app.use('/dist', express.static('dist'))
+  app.use('/images', express.static('images'))
   
   app.get('/favicon.ico', (req, res) => {
     res.end()
@@ -107,14 +108,13 @@ mongo.connect(config.mongo_url).then(db => {
     
     const context = {
       title: 'vue-admin',
-      url: req.url,
-      isAuthenticated: req.isAuthenticated()
+      url: req.url
     }
     
     if (req.isAuthenticated()) {
       context.user = req.user
     } else {
-      delete context.user
+      context.user = null
     }
     
     promise.then(() => {
@@ -148,6 +148,15 @@ mongo.connect(config.mongo_url).then(db => {
           ws.send(JSON.stringify({ job_id: message.job_id, reject: 'auth error' }))
           return
         }
+      }
+      
+      if (message.data.action == 'uploadImage') {
+        console.dir(message)
+        const buffer = Buffer.from(message.data.file, 'base64');
+        fs.writeFileSync('./images/' + message.data.name, buffer)
+        ws.send(JSON.stringify({ job_id: message.job_id,
+                                 resolve: { path: '/images/' + message.data.name } }))
+        return
       }
       
       mongo[message.data.action](message.data).then(
