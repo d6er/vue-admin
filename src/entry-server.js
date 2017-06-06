@@ -6,13 +6,7 @@ export default context => {
     
     const { app, router, store } = createApp()
     
-    store.state.isAuthenticated = context.isAuthenticated
-    
-    if (context.user) {
-      store.state.user = context.user
-    } else {
-      delete store.state.user
-    }
+    store.state.user = context.user
     
     router.push(context.url)
     

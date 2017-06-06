@@ -8,7 +8,7 @@ import { sync } from 'vuex-router-sync'
 Vue.use(Router)
 
 // https://medium.com/@bradfmd/vue-js-setting-up-auth0-6eb26cbbc48a
-function requireAuth(to, from, next) {
+function requireAuth (to, from, next) {
   if (store.state.user) {
     next()
   } else {
@@ -19,12 +19,21 @@ function requireAuth(to, from, next) {
   }
 }
 
+function checkAuth (to, from, next) {
+  if (store.state.user) {
+    next({ path: '/items' })
+  } else {
+    next()
+  }
+}
+
 // auth-flow: https://github.com/vuejs/vue-router/tree/dev/examples/auth-flow/components
 const router = new Router({
   mode: 'history',
   routes: [
     {
       path: '/',
+      beforeEnter: checkAuth,
       components: {
         default: () => import('./components/Home.vue'),
         nav: () => import('./components/GuestNav.vue')
@@ -32,6 +41,7 @@ const router = new Router({
     },
     {
       path: '/login',
+      beforeEnter: checkAuth,
       components: {
         default: () => import('./components/Login.vue'),
         nav: () => import('./components/GuestNav.vue')
@@ -40,6 +50,7 @@ const router = new Router({
     {
       // todo: check logged out
       path: '/signup',
+      beforeEnter: checkAuth,
       components: {
         default: () => import('./components/Signup.vue'),
         nav: () => import('./components/GuestNav.vue')
