@@ -7,6 +7,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   
   state: {
+    user: null,
     items: {},
     notification: null
   },
@@ -33,6 +34,10 @@ export default new Vuex.Store({
         }
         if (data.action == 'saveItem') {
           commit('setNotification', 'Item was saved.')
+        }
+        if (data.action == 'uploadImage') {
+          //console.dir(result)
+          return result
         }
       })
     }
