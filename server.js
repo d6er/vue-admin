@@ -17,6 +17,13 @@ const template = fs.readFileSync('./src/index.template.html', 'utf-8')
 //const template = fs.readFileSync('./src-uikit/index.template.html', 'utf-8')
 const { createBundleRenderer } = require('vue-server-renderer')
 
+// https://github.com/vuejs/vue-hackernews-2.0/issues/52
+//const { JSDOM } = require('jsdom')
+//const dom = new JSDOM('<!doctype html><html><body></body></html>', { url: 'http://localhost' })
+//global.window = dom.window
+//global.document = window.document
+//global.navigator = window.navigator
+
 mongo.connect(config.mongo_url).then(db => {
   
   const app = express()
