@@ -8,26 +8,31 @@
     "connect-mongo": "*",
     "express": "*",
     "express-session": "*",
+    "jsdom": "^11.0.0",
+    "moment": "^2.18.1",
     "passport": "*",
     "passport-auth0": "*",
     "passport-google-oauth": "*",
     "passport-local": "*",
     "passport-twitter": "*",
+    "quill": "^1.2.6",
     "vue": "*",
     "vue-router": "*",
     "vue-server-renderer": "*",
+    "vue2-editor": "^2.0.24",
     "vuex": "*",
+    "vuex-router-sync": "^4.2.0",
     "ws": "*"
   },
   "devDependencies": {
-    "css-loader": "*",
-    "vue-loader": "*",
+    "css-loader": "^0.28.4",
+    "vue-loader": "^12.2.1",
     "vue-template-compiler": "*",
     "webpack": "*",
-    "webpack-merge": "*",
-    "webpack-node-externals": "*",
     "webpack-dev-middleware": "*",
-    "webpack-hot-middleware": "*"
+    "webpack-hot-middleware": "*",
+    "webpack-merge": "*",
+    "webpack-node-externals": "*"
   },
   "scripts": {
     "dev": "NODE_ENV=development nodemon server"
