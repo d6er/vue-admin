@@ -1,27 +1,19 @@
 <template>
-  <div>
-    <div id="tab-description">
-      test content<br/>
-      test content<br/>
-      test content<br/>
-      test content<br/>
-      <!--vue-editor></vue-editor-->
+  <div id="tab-description">
+    <div id="editor" v-html="item.description">
     </div>
   </div>
 </template>
 <script>
-//import { VueEditor } from 'vue2-editor'
 import Quill from 'quill'
 
 export default {
   props: ['item'],
-  components: {
-   // VueEditor
-  },
   mounted () {
     if (window) {
-      new Quill('#tab-description', {
-        theme: 'snow'
+      const quill = new Quill('#editor', { theme: 'snow' })
+      quill.on('text-change', () => {
+        this.item.description = document.querySelector('#editor .ql-editor').innerHTML
       })
     }
   }
