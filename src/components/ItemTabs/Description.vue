@@ -5,12 +5,11 @@
   </div>
 </template>
 <script>
-import Quill from 'quill'
-
 export default {
   props: ['item'],
   mounted () {
     if (window) {
+      const Quill = require('quill')
       const quill = new Quill('#editor', { theme: 'snow' })
       quill.on('text-change', () => {
         this.item.description = document.querySelector('#editor .ql-editor').innerHTML

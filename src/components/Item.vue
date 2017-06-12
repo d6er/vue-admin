@@ -37,6 +37,10 @@
 </template>
 
 <script>
+import Detail from './ItemTabs/Detail.vue'
+import Picture from './ItemTabs/Picture.vue'
+import Description from './ItemTabs/Description.vue'
+
 export default {
   data() {
     return {
@@ -44,12 +48,15 @@ export default {
         { id: 'detail', name: 'Detail', icon: 'fa-list-alt' },
         { id: 'picture', name: 'Picture', icon: 'fa-picture-o' },
         { id: 'description', name: 'Description', icon: 'fa-file-text-o' }
-      ],
-      
+      ]
+    }
+  },
+  computed: {
+    item() {
       // https://github.com/vuejs/vue/issues/1056
       // https://forum.vuejs.org/t/vuex-v-model-on-property-in-nested-object/6242/2
       // POINT: disconnect item from vuex
-      item: Object.assign({}, this.$store.state.items[this.$route.params.id])
+      return Object.assign({}, this.$store.state.items[this.$route.params.id])
     }
   },
   asyncData ({ store, route: { params: { id } } }) {
@@ -73,9 +80,9 @@ export default {
     }
   },
   components: {
-    Detail: () => import('./ItemTabs/Detail.vue'),
-    Picture: () => import('./ItemTabs/Picture.vue'),
-    Description: () => import('./ItemTabs/Description.vue')
+    Detail: Detail,
+    Picture: Picture,
+    Description: Description
   }
 }
 </script>
