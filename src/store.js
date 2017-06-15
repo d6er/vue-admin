@@ -35,12 +35,12 @@ export default new Vuex.Store({
         if (data.action == 'saveItem') {
           commit('setNotification', 'Item was saved.')
         }
+        if (data.action == 'copyItems') {
+          commit('setNotification', 'Copied.')
+        }
         if (data.action == 'uploadImage') {
           //console.dir(result)
           return result
-        }
-        if (data.action == 'copyItems') {
-          commit('setNotification', 'Copied.')
         }
       })
     }
