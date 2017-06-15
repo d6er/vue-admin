@@ -39,6 +39,9 @@ export default new Vuex.Store({
           //console.dir(result)
           return result
         }
+        if (data.action == 'copyItems') {
+          commit('setNotification', 'Copied.')
+        }
       })
     }
     
