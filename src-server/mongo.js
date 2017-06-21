@@ -89,9 +89,18 @@ const actions = {
     const skip = page ? limit * ( page - 1 ) : 0
     
     return cursor.count().then(count => {
+      
+      const paging = {
+        start: skip + 1,
+        end: (skip + limit < count) ? (skip + limit) : count,
+        count: count,
+        hasPrev: (page > 1),
+        hasNext: (skip + limit < count)
+      }
+      
       return cursor.skip(skip).limit(limit).toArray().then(docs => {
         docs.forEach(actions.convertItem)
-        return { items: docs, count: count }
+        return { items: docs, paging: paging }
       })
     })
   },

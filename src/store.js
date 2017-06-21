@@ -9,6 +9,7 @@ export default new Vuex.Store({
   state: {
     user: null,
     items: {},
+    paging: {},
     notification: null
   },
   
@@ -50,7 +51,7 @@ export default new Vuex.Store({
   mutations: {
     // todo: use constant for function names. https://vuex.vuejs.org/en/mutations.html
     setItems (state, data) {
-      state.items_count = data.count
+      state.paging = data.paging
       state.items = {}
       data.items.forEach(item => {
         Vue.set(state.items, item._id, item)

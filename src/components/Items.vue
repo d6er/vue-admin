@@ -43,23 +43,36 @@
       </div>
       <div class="level-right">
         <div class="level-item">
-          1 - 10 of {{ $store.state.items_count }}
+          {{ $store.state.paging.start }} - {{ $store.state.paging.end }}
+          of {{ $store.state.paging.count }}
         </div>
         <div class="level-item">
           <div class="field has-addons">
             <p class="control">
-              <router-link :to="prevPage" class="button is-small">
+              <router-link :to="prevPage" class="button is-small"
+                           v-if="$store.state.paging.hasPrev">
                 <span class="icon is-small">
                   <i class="fa fa-angle-left"></i>
                 </span>
               </router-link>
+              <button class="button is-small" disabled v-else>
+                <span class="icon is-small">
+                  <i class="fa fa-angle-left"></i>
+                </span>
+              </button>
             </p>
             <p class="control">
-              <router-link :to="nextPage" class="button is-small">
+              <router-link :to="nextPage" class="button is-small"
+                           v-if="$store.state.paging.hasNext">
                 <span class="icon is-small">
                   <i class="fa fa-angle-right"></i>
                 </span>
               </router-link>
+              <button class="button is-small" disabled v-else>
+                <span class="icon is-small">
+                  <i class="fa fa-angle-right"></i>
+                </span>
+              </button>
             </p>
           </div>
         </div>
