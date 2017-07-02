@@ -18,8 +18,7 @@
       </div>
       <div class="field-body">
         <div class="field">
-          <select>
-          </select>
+          {{ timezone }}
         </div>
       </div>
     </div>
@@ -37,6 +36,8 @@
   </div>
 </template>
 <script>
+import moment from 'moment-timezone'
+
 export default {
   
   computed: {
@@ -46,6 +47,9 @@ export default {
       } else {
         return this.$store.state.user.username
       }
+    },
+    timezone () {
+      return moment.tz.guess()
     }
   },
   
