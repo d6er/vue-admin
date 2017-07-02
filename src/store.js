@@ -8,7 +8,18 @@ export default new Vuex.Store({
   
   state: {
     user: null,
+    setting: {
+      items: {
+        sort: { field: 'title', order: 1 },
+        columns: [ 'picture', 'title', 'status', 'updated' ]
+      },
+      messages: {
+        sort: { field: 'title', order: 1 },
+        columns: [ 'picture', 'title', 'status', 'updated' ]
+      }
+    },
     items: {},
+    messages: {},
     paging: {},
     notification: null
   },
