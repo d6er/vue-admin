@@ -77,35 +77,38 @@
           </div>
         </div>
         <p class="level-item">
-          <a class="button is-small">
+          <button class="button is-small" @click="customize">
             <span class="icon is-small">
               <i class="fa fa-cogs" aria-hidden="true"></i>
             </span>
             <span>Customize</span>
-          </a>
+          </button>
         </p>
       </div>
     </nav>
-    
+    <div class="modal" :class="{ 'is-active': isCustomizeActive }">
+      <div class="modal-background" @click="closeCustomize"></div>
+      <div class="modal-content">
+        <div class="box">
+          <h1 class="title is-5">Customize columns</h1>
+          <hr/>
+          <li>
+            <ul v-for="column in $store.state.setting.items.columns">
+              {{ column }}
+            </ul>
+          </li>
+        </div>
+      </div>
+      <button class="modal-close is-large" @click="closeCustomize"></button>
+    </div>
     <table class="table is-narrow">
       <thead>
         <tr>
-          <th><input type="checkbox" v-model="checkedAll" @click="checkAll"></th>
-          <th>Pic</th>
           <th>
-            Title
-            <span class="icon is-small">
-              <i class="fa fa-sort" aria-hidden="true"></i>
-            </span>
+            <input type="checkbox" v-model="checkedAll" @click="checkAll">
           </th>
-          <th>
-            Status
-            <span class="icon is-small">
-              <i class="fa fa-sort" aria-hidden="true"></i>
-            </span>
-          </th>
-          <th>
-            Updated
+          <th v-for="column in $store.state.setting.items.columns">
+            {{ column }}
             <span class="icon is-small">
               <i class="fa fa-sort" aria-hidden="true"></i>
             </span>
@@ -117,21 +120,26 @@
           <td>
             <input type="checkbox" :value="item._id" v-model="checkedItems">
           </td>
-          <td>
-            <figure class="image is-32x32">
-              <img src="http://bulma.io/images/placeholders/32x32.png">
-            </figure>
-          </td>
-          <td>
-            <router-link :to="'/item/' + item._id + '/detail'">
-              {{ item._id + ' ' + item.title }}
-            </router-link>
-          </td>
-          <td>
-            <span class="tag is-light">{{ item.status }}</span>
-          </td>
-          <td>
-            <span class="tag is-white">{{ item.updated }}</span>
+          <td v-for="column in $store.state.setting.items.columns">
+            <template v-if="column == 'title'">
+              <router-link :to="'/item/' + item._id + '/detail'">
+                {{ item._id + ' ' + item[column] }}
+              </router-link>
+            </template>
+            <template v-else-if="column == 'picture'">
+              <figure class="image is-32x32">
+                <img src="http://bulma.io/images/placeholders/32x32.png">
+              </figure>
+            </template>
+            <template v-else-if="column == 'status'">
+              <span class="tag is-light">{{ item[column] }}</span>
+            </template>
+            <template v-else-if="column == 'updated'">
+              <span class="tag is-white">{{ item[column] }}</span>
+            </template>
+            <template v-else>
+              {{ item[column] }}
+            </template>
           </td>
         </tr>
       </tbody>
@@ -145,7 +153,8 @@ export default {
     return {
       keyword: '',
       checkedItems: [],
-      checkedAll: false
+      checkedAll: false,
+      isCustomizeActive: false
     }
   },
   asyncData ({ store, route: { params: { status, page } } }) {
@@ -198,6 +207,12 @@ export default {
       } else {
         this.checkedItems = []
       }
+    },
+    customize() {
+      this.isCustomizeActive = !this.isCustomizeActive
+    },
+    closeCustomize() {
+      this.isCustomizeActive = false
     }
   }
 }
