@@ -18,6 +18,16 @@ export default new Vuex.Store({
         columns: [ 'picture', 'title', 'status', 'updated' ]
       }
     },
+    filters: {
+      items: [
+        {
+          name: 'Published',
+          filters: [ { 'status': 'published' } ],
+          sorting: [ { 'title': 1 } ],
+          columns: [ 'picture', 'title', 'status', 'updated' ]
+        }
+      ]
+    },
     items: {},
     messages: {},
     paging: {},

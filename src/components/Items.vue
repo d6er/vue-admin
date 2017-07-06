@@ -1,6 +1,105 @@
 <template>
   <div>
     <h5 class="title is-5">Items</h5>
+    
+    <div class="box">
+    <div class="columns">
+      <div class="column is-narrow">
+        <h6 class="title is-6">Filters</h6>
+        <div class="field has-addons" v-for="i in [1,2]">
+          <p class="control">
+            <span class="select is-small">
+              <select>
+                <option>Title</option>
+              </select>
+            </span>
+          </p>
+          <p class="control">
+            <span class="select is-small">
+              <select>
+                <option>contains</option>
+              </select>
+            </span>
+          </p>
+          <p class="control">
+            <input class="input is-small" type="text" placeholder="Keyword">
+          </p>
+          <p class="control">
+            <button class="button is-small">
+              <span class="icon is-small">
+                <i class="fa fa-times" aria-hidden="true"></i>
+              </span>
+            </button>
+          </p>
+        </div>
+        <a class="button is-link is-small">Add filter</a>
+        
+      </div>
+      <div class="column is-narrow">
+        
+        <h6 class="title is-6">Sorting</h6>
+        <div class="field has-addons" v-for="i in [1,2,3,4]">
+          <p class="control">
+            <span class="select is-small">
+              <select>
+                <option>Title</option>
+              </select>
+            </span>
+          </p>
+          <p class="control">
+            <span class="select is-small">
+              <select>
+                <option>High to Low</option>
+              </select>
+            </span>
+          </p>
+          <p class="control">
+            <button class="button is-small">
+              <span class="icon is-small">
+                <i class="fa fa-times" aria-hidden="true"></i>
+              </span>
+            </button>
+          </p>
+        </div>
+        <a class="button is-link is-small">Add sorting</a>
+      </div>
+      <div class="column is-narrow">
+        
+        <h6 class="title is-6">Columns</h6>
+        <div class="field has-addons" v-for="i in [1,2]">
+          <p class="control">
+            <button class="button is-small">
+              Title
+            </button>
+          </p>
+          <p class="control">
+            <button class="button is-small">
+              <span class="icon is-small">
+                <i class="fa fa-arrow-up" aria-hidden="true"></i>
+              </span>
+            </button>
+          </p>
+          <p class="control">
+            <button class="button is-small">
+              <span class="icon is-small">
+                <i class="fa fa-arrow-down" aria-hidden="true"></i>
+              </span>
+            </button>
+          </p>
+          <p class="control">
+            <button class="button is-small">
+              <span class="icon is-small">
+                <i class="fa fa-times" aria-hidden="true"></i>
+              </span>
+            </button>
+          </p>
+        </div>
+        <a class="button is-link is-small">Add column</a>
+        
+      </div>
+    </div>
+    </div>
+    
     <nav class="level">
       <div class="level-left">
         <div class="level-item" v-if="checkedItems.length">
@@ -86,124 +185,7 @@
         </p>
       </div>
     </nav>
-    
-    <h5 class="title is-5">List options</h5>
-    <div class="columns">
-      <div class="column is-narrow">
-        
-        <div class="columns">
-          <div class="column is-2">
-            <h6 class="title is-6 is-pulled-right">Filters</h6>
-          </div>
-          <div class="column">
-            <div class="field has-addons" v-for="i in [1,2]">
-              <p class="control">
-                <span class="select is-small">
-                  <select>
-                    <option>Best Offer Auto Accept Price</option>
-                  </select>
-                </span>
-              </p>
-              <p class="control">
-                <span class="select is-small">
-                  <select>
-                    <option>contains</option>
-                  </select>
-                </span>
-              </p>
-              <p class="control">
-                <input class="input is-small" type="text" placeholder="Keyword">
-              </p>
-              <p class="control">
-                <button class="button is-small">
-                  <span class="icon is-small">
-                    <i class="fa fa-times" aria-hidden="true"></i>
-                  </span>
-                </button>
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="columns">
-          <div class="column is-2">
-            <h6 class="title is-6 is-pulled-right">Sorting</h6>
-          </div>
-          <div class="column">
-            <div class="field has-addons" v-for="i in [1,2]">
-              <p class="control">
-                <span class="select is-small">
-                  <select>
-                    <option>Best Offer Auto Accept Price</option>
-                  </select>
-                </span>
-              </p>
-              <p class="control">
-                <span class="select is-small">
-                  <select>
-                    <option>High to Low</option>
-                  </select>
-                </span>
-              </p>
-              <p class="control">
-                <button class="button is-small">
-                  <span class="icon is-small">
-                    <i class="fa fa-times" aria-hidden="true"></i>
-                  </span>
-                </button>
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="column is-narrow">
-      </div>
-      <div class="column">
-        <div class="columns">
-          <div class="column is-2">
-            <h6 class="title is-6 is-pulled-right">Columns</h6>
-          </div>
-          <div class="column">
-            
-            <div class="field has-addons" v-for="i in [1,2]">
-              <p class="control">
-                <button class="button is-small">
-                  Best Offer Auto Accept Price
-                </button>
-              </p>
-              <p class="control">
-                <button class="button is-small">
-                  <span class="icon is-small">
-                    <i class="fa fa-arrow-up" aria-hidden="true"></i>
-                  </span>
-                </button>
-              </p>
-              <p class="control">
-                <button class="button is-small">
-                  <span class="icon is-small">
-                    <i class="fa fa-arrow-down" aria-hidden="true"></i>
-                  </span>
-                </button>
-              </p>
-              <p class="control">
-                <button class="button is-small">
-                  <span class="icon is-small">
-                    <i class="fa fa-times" aria-hidden="true"></i>
-                  </span>
-                </button>
-              </p>
-            </div>
-            <p class="control">
-              <span class="select is-small">
-                <select>
-                  <option>Add column</option>
-                </select>
-              </span>
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-    
+
     <div class="modal" :class="{ 'is-active': isCustomizeActive }">
       <div class="modal-background" @click="closeCustomize"></div>
       <div class="modal-content">
