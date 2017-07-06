@@ -98,6 +98,9 @@
         
       </div>
     </div>
+    <button class="button is-small is-info">Save</button>
+    <button class="button is-small is-light">Cancel</button>
+    <button class="button is-small is-link">Delete</button>
     </div>
     
     <nav class="level">
