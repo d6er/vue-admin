@@ -21,10 +21,16 @@ export default new Vuex.Store({
     filters: {
       items: [
         {
-          name: 'Published',
-          filters: [ { 'status': 'published' } ],
-          sorting: [ { 'title': 1 } ],
-          columns: [ 'picture', 'title', 'status', 'updated' ]
+          name: 'published',
+          query: { 'status': 'published' },
+          sort: { 'updated' : -1, 'title': 1 },
+          fields: [ 'picture', 'title', 'status', 'updated' ]
+        },
+        {
+          name: 'unpublished',
+          query: { 'status': 'unpublished' },
+          sort: { 'updated' : -1, 'title': 1 },
+          fields: [ 'picture', 'title', 'status', 'updated' ]
         }
       ]
     },

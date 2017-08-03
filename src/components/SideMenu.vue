@@ -7,6 +7,11 @@
       ITEMS
     </p>
     <ul class="menu-list">
+      <li v-for="filters in $store.state.filters.items">
+        <router-link :to="'/items/' + filters.name">
+          {{ filters.name }}
+        </router-link>
+      </li>
       <li>
         <router-link to="/items/published">
           Published
