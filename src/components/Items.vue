@@ -204,7 +204,7 @@
       </div>
       <button class="modal-close is-large" @click="closeCustomize"></button>
     </div>
-    <table class="table is-narrow">
+    <table class="table is-narrow is-fullwidth">
       <thead>
         <tr>
           <th>
@@ -233,12 +233,6 @@
               <figure class="image is-32x32">
                 <img src="http://bulma.io/images/placeholders/32x32.png">
               </figure>
-            </template>
-            <template v-else-if="column == 'status'">
-              <span class="tag is-light">{{ item[column] }}</span>
-            </template>
-            <template v-else-if="column == 'updated'">
-              <span class="tag is-white">{{ item[column] }}</span>
             </template>
             <template v-else>
               {{ item[column] }}
