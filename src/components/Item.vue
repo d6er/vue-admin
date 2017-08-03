@@ -31,14 +31,14 @@
       </ul>
     </div>
     <detail v-show="$route.params.tab == 'detail'" :item.sync="item"/>
-    <picture v-show="$route.params.tab == 'picture'" :item.sync="item"/>
+    <pictures v-show="$route.params.tab == 'pictures'" :item.sync="item"/>
     <description v-show="$route.params.tab == 'description'" :item.sync="item"/>
   </div>
 </template>
 
 <script>
 import Detail from './ItemTabs/Detail.vue'
-import Picture from './ItemTabs/Picture.vue'
+import Pictures from './ItemTabs/Pictures.vue'
 import Description from './ItemTabs/Description.vue'
 
 export default {
@@ -46,7 +46,7 @@ export default {
     return {
       tabs: [
         { id: 'detail', name: 'Detail', icon: 'fa-list-alt' },
-        { id: 'picture', name: 'Picture', icon: 'fa-picture-o' },
+        { id: 'pictures', name: 'Picture', icon: 'fa-picture-o' },
         { id: 'description', name: 'Description', icon: 'fa-file-text-o' }
       ]
     }
@@ -81,7 +81,7 @@ export default {
   },
   components: {
     Detail: Detail,
-    Picture: Picture,
+    Pictures: Pictures,
     Description: Description
   }
 }
