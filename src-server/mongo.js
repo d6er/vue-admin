@@ -78,8 +78,7 @@ const actions = {
   fetchItems: function ({ user_id, query, sort, fields, page }) {
     
     //filter.query.title = new RegExp(actions.escapeRegExp(filter.query.title), 'i')
-    
-    const cursor = db.collection('items.' + user_id).find(query).sort(sort)
+    const cursor = db.collection('items.' + user_id).find(query)
     
     const limit = 10
     const skip = page ? limit * ( page - 1 ) : 0
@@ -94,7 +93,7 @@ const actions = {
         hasNext: (skip + limit < count)
       }
       
-      return cursor.skip(skip).limit(limit).toArray().then(docs => {
+      return cursor.sort(sort).skip(skip).limit(limit).toArray().then(docs => {
         docs.forEach(actions.convertItem)
         return { items: docs, paging: paging }
       })

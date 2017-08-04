@@ -20,7 +20,7 @@ export default new Vuex.Store({
           name: 'unpublished',
           query: { 'status': 'unpublished' },
           sort: { 'updated' : 1, 'title': 1 },
-          fields: [ 'picture', 'title', 'status' ]
+          fields: [ 'updated', 'picture', 'title', 'status' ]
         },
         {
           name: 'draft',
@@ -89,11 +89,11 @@ export default new Vuex.Store({
       state.paging = data.paging
       state.items = {}
       data.items.forEach(item => {
-        Vue.set(state.items, item._id, item)
+        Vue.set(state.items, '.' + item._id, item)
       })
     },
     setItem (state, item) {
-      Vue.set(state.items, item._id, item)
+      Vue.set(state.items, '.' + item._id, item)
     },
     setNotification (state, message) {
       state.notification = message

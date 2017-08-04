@@ -226,8 +226,9 @@
           <td v-for="column in currentFilter.fields">
             <template v-if="column == 'title'">
               <router-link :to="'/item/' + item._id + '/detail'">
-                {{ item._id + ' ' + item[column] }}
+                {{ item[column] }}
               </router-link>
+              {{ item._id }}
             </template>
             <template v-else-if="column == 'picture'">
               <figure class="image is-32x32">
