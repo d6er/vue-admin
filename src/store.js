@@ -93,8 +93,8 @@ export default new Vuex.Store({
       })
     },
     setItem (state, item) {
-      // todo: find item by _id in items array
-      Vue.set(state.items, item._id, item)
+      const index = state.items.findIndex(e => { return e._id == item._id })
+      Vue.set(state.items, index, item)
     },
     setNotification (state, message) {
       state.notification = message
