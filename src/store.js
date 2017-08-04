@@ -42,9 +42,9 @@ export default new Vuex.Store({
         }
       ]
     },
-    items: {},
-    messages: {},
-    paging: {},
+    items: [],
+    messages: [],
+    paging: [],
     notification: null
   },
   
@@ -87,13 +87,14 @@ export default new Vuex.Store({
     // todo: use constant for function names. https://vuex.vuejs.org/en/mutations.html
     setItems (state, data) {
       state.paging = data.paging
-      state.items = {}
-      data.items.forEach(item => {
-        Vue.set(state.items, '.' + item._id, item)
+      state.items = []
+      data.items.forEach((item, index) => {
+        Vue.set(state.items, index, item)
       })
     },
     setItem (state, item) {
-      Vue.set(state.items, '.' + item._id, item)
+      // todo: find item by _id in items array
+      Vue.set(state.items, item._id, item)
     },
     setNotification (state, message) {
       state.notification = message
