@@ -13,32 +13,6 @@
         </router-link>
       </li>
       <li>
-        <router-link to="/items/published">
-          Published
-          <span class="tag">123</span>
-        </router-link>
-      </li>
-      <li>
-        <router-link to="/items/unpublished">
-          Unpublished
-        </router-link>
-      </li>
-      <li>
-        <router-link to="/items/draft">
-          Draft
-        </router-link>
-      </li>
-      <li>
-        <router-link to="/items/trash">
-          Trash
-        </router-link>
-      </li>
-      <li>
-        <router-link to="/items">
-          All
-        </router-link>
-      </li>
-      <li>
         <hr/>
       </li>
       <p class="menu-label">

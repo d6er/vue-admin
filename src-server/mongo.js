@@ -75,15 +75,11 @@ const actions = {
     return db.collection('items.' + user_id).findOne({ _id: item_id })
   },
   
-  fetchItems: function ({ user_id, query, page }) {
+  fetchItems: function ({ user_id, query, sort, fields, page }) {
     
-    if (query.title) {
-      query.title = new RegExp(actions.escapeRegExp(query.title), 'i')
-    } else {
-      delete query.title
-    }
+    //filter.query.title = new RegExp(actions.escapeRegExp(filter.query.title), 'i')
     
-    const cursor = db.collection('items.' + user_id).find(query)
+    const cursor = db.collection('items.' + user_id).find(query).sort(sort)
     
     const limit = 10
     const skip = page ? limit * ( page - 1 ) : 0

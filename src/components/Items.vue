@@ -38,7 +38,7 @@
       <div class="column is-narrow">
         
         <h6 class="title is-6">Sorting</h6>
-        <div class="field has-addons" v-for="i in [1,2,3,4]">
+        <div class="field has-addons" v-for="i in [1,2]">
           <p class="control">
             <span class="select is-small">
               <select>
@@ -196,7 +196,7 @@
           <h1 class="title is-5">Customize columns</h1>
           <hr/>
           <li>
-            <ul v-for="column in $store.state.setting.items.columns">
+            <ul v-for="column in currentFilter.fields">
               {{ column }}
             </ul>
           </li>
@@ -210,7 +210,7 @@
           <th>
             <input type="checkbox" v-model="checkedAll" @click="checkAll">
           </th>
-          <th v-for="column in $store.state.setting.items.columns">
+          <th v-for="column in currentFilter.fields">
             {{ column }}
             <span class="icon is-small">
               <i class="fa fa-sort" aria-hidden="true"></i>
@@ -223,7 +223,7 @@
           <td>
             <input type="checkbox" :value="item._id" v-model="checkedItems">
           </td>
-          <td v-for="column in $store.state.setting.items.columns">
+          <td v-for="column in currentFilter.fields">
             <template v-if="column == 'title'">
               <router-link :to="'/item/' + item._id + '/detail'">
                 {{ item._id + ' ' + item[column] }}
@@ -274,6 +274,11 @@ export default {
     nextPage() {
       const page = this.$route.params.page ? parseInt(this.$route.params.page) : 1
       return '/items/' + this.$route.params.status + '/' + (page + 1)
+    },
+    currentFilter() {
+      const status = this.$route.params.status
+      const filter = this.$store.state.filters.items.find(e => { return e.name == status })
+      return filter
     }
   },
   watch: {
@@ -287,15 +292,11 @@ export default {
       this.$store.dispatch('callApi', { action: 'copyItems', item_ids: this.checkedItems })
     },
     fetchItems() {
-      const query = {}
-      if (this.$route.params.status) {
-        query.status = this.$route.params.status
-      }
-      if (this.keyword) {
-        query.title = this.keyword
-      }
+      const filter = this.currentFilter
       this.$store.dispatch('callApi', { action: 'fetchItems',
-                                        query: query,
+                                        query: filter.query,
+                                        sort: filter.sort,
+                                        fields: filter.fields,
                                         page: this.$route.params.page })
     },
     checkAll() {

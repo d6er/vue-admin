@@ -8,16 +8,6 @@ export default new Vuex.Store({
   
   state: {
     user: null,
-    setting: {
-      items: {
-        sort: { field: 'title', order: 1 },
-        columns: [ 'picture', 'title', 'status', 'updated' ]
-      },
-      messages: {
-        sort: { field: 'title', order: 1 },
-        columns: [ 'picture', 'title', 'status', 'updated' ]
-      }
-    },
     filters: {
       items: [
         {
@@ -29,6 +19,24 @@ export default new Vuex.Store({
         {
           name: 'unpublished',
           query: { 'status': 'unpublished' },
+          sort: { 'updated' : 1, 'title': 1 },
+          fields: [ 'picture', 'title', 'status' ]
+        },
+        {
+          name: 'draft',
+          query: { 'status': 'draft' },
+          sort: { 'updated' : -1, 'title': 1 },
+          fields: [ 'picture', 'title', 'status', 'updated' ]
+        },
+        {
+          name: 'trash',
+          query: { 'status': 'trash' },
+          sort: { 'updated' : -1, 'title': 1 },
+          fields: [ 'title', 'status', 'updated' ]
+        },
+        {
+          name: 'all',
+          query: { },
           sort: { 'updated' : -1, 'title': 1 },
           fields: [ 'picture', 'title', 'status', 'updated' ]
         }
