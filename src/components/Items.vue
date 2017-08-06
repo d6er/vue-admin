@@ -6,33 +6,41 @@
     <div class="columns">
       <div class="column is-narrow">
         <h6 class="title is-6">Filters</h6>
-        <div class="field has-addons" v-for="i in [1,2]">
+        <div class="field has-addons" v-for="(q, idx) in filter.query">
           <p class="control">
             <span class="select is-small">
-              <select>
-                <option>Title</option>
+              <select v-model="q.field">
+                <option value="" disabled hidden>(field)</option>
+                <option v-for="field in $store.state.fields.item">
+                  {{ field.name }}
+                </option>
               </select>
             </span>
           </p>
           <p class="control">
             <span class="select is-small">
-              <select>
+              <select v-model="q.condition">
+                <option value="" disabled hidden>(condition)</option>
+                <option>is equal to</option>
+                <option>is not equal to</option>
                 <option>contains</option>
+                <option>does not contain</option>
               </select>
             </span>
           </p>
           <p class="control">
-            <input class="input is-small" type="text" placeholder="Keyword">
+            <input v-model="q.value" class="input is-small" type="text" placeholder="Keyword">
           </p>
           <p class="control">
-            <button class="button is-small">
+            <button @click="deleteQuery(idx)" class="button is-small">
               <span class="icon is-small">
                 <i class="fa fa-times" aria-hidden="true"></i>
+                {{ idx }}
               </span>
             </button>
           </p>
         </div>
-        <a class="button is-link is-small">Add filter</a>
+        <a @click="addQuery" class="button is-link is-small">Add filter</a>
         
       </div>
       <div class="column is-narrow">
@@ -196,7 +204,7 @@
           <h1 class="title is-5">Customize columns</h1>
           <hr/>
           <li>
-            <ul v-for="column in currentFilter.fields">
+            <ul v-for="column in filter.fields">
               {{ column }}
             </ul>
           </li>
@@ -210,7 +218,7 @@
           <th>
             <input type="checkbox" v-model="checkedAll" @click="checkAll">
           </th>
-          <th v-for="column in currentFilter.fields">
+          <th v-for="column in filter.fields">
             {{ column }}
             <span class="icon is-small">
               <i class="fa fa-sort" aria-hidden="true"></i>
@@ -223,7 +231,7 @@
           <td>
             <input type="checkbox" :value="item._id" v-model="checkedItems">
           </td>
-          <td v-for="column in currentFilter.fields">
+          <td v-for="column in filter.fields">
             <template v-if="column == 'title'">
               <router-link :to="'/item/' + item._id + '/detail'">
                 {{ item[column] }}
@@ -252,17 +260,26 @@ export default {
       keyword: '',
       checkedItems: [],
       checkedAll: false,
-      isCustomizeActive: false
+      isCustomizeActive: false,
+      filter: {
+        query: {},
+        fields: {},
+        sort: {}
+      }
     }
   },
   asyncData ({ store, route: { params: { status, page } } }) {
-    const query = {}
-    if (status) {
-      query.status = status
-    }
+    const filter = store.state.filters.items.find(e => { return e.name == status })
     return store.dispatch('callApi', { action: 'fetchItems',
-                                       query: query,
+                                       query: filter.query,
+                                       sort: filter.sort,
+                                       fields: filter.fields,
                                        page: page })
+  },
+  created: function() {
+    const status = this.$route.params.status
+    const filter = this.$store.state.filters.items.find(e => { return e.name == status })
+    this.filter = JSON.parse(JSON.stringify(filter)) // deep copy
   },
   computed: {
     items() {
@@ -275,11 +292,6 @@ export default {
     nextPage() {
       const page = this.$route.params.page ? parseInt(this.$route.params.page) : 1
       return '/items/' + this.$route.params.status + '/' + (page + 1)
-    },
-    currentFilter() {
-      const status = this.$route.params.status
-      const filter = this.$store.state.filters.items.find(e => { return e.name == status })
-      return filter
     }
   },
   watch: {
@@ -312,6 +324,13 @@ export default {
     },
     closeCustomize() {
       this.isCustomizeActive = false
+    },
+    addQuery() {
+      const idx = this.filter.query.length
+      this.$set(this.filter.query, idx, { field: '', condition: '', value: '' })
+    },
+    deleteQuery(idx) {
+      this.$delete(this.filter.query, idx)
     }
   }
 }

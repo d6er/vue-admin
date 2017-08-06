@@ -77,6 +77,8 @@ const actions = {
   
   fetchItems: function ({ user_id, query, sort, fields, page }) {
     
+    query = actions.convertQuery(query)
+    sort = {}
     //filter.query.title = new RegExp(actions.escapeRegExp(filter.query.title), 'i')
     const cursor = db.collection('items.' + user_id).find(query)
     
@@ -132,7 +134,18 @@ const actions = {
   },
   
   escapeRegExp: function (str) {
-    return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+    return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")
+  },
+
+  convertQuery: function(query) {
+    let converted = {}
+    for (var i in query) {
+      var q = query[i]
+      if (q.condition == 'is equal to') {
+        converted[q.field] = q.value
+      }
+    }
+    return converted
   }
 }
 

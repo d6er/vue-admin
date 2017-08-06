@@ -8,36 +8,84 @@ export default new Vuex.Store({
   
   state: {
     user: null,
+    fields: {
+      item: [
+        {
+          name: 'title',
+          type: 'text'
+        },
+        {
+          name: 'subtitle',
+          type: 'text'
+        },
+        {
+          name: 'status',
+          type: 'select',
+          values: [ 'published', 'unpublished', 'draft', 'trash' ]
+        },
+        {
+          name: 'updated',
+          type: 'datetime'
+        },
+        {
+          name: 'created',
+          type: 'datetime'
+        }
+      ]
+    },
     filters: {
       items: [
         {
           name: 'published',
-          query: { 'status': 'published' },
-          sort: { 'updated' : -1, 'title': 1 },
+          query: [
+            { field: 'status', condition: 'is equal to', value: 'published' }
+          ],
+          sort: [
+            { field: 'updated', order: 'desc' },
+            { field: 'title', order: 'asc' }
+          ],
           fields: [ 'picture', 'title', 'status', 'updated' ]
         },
         {
           name: 'unpublished',
-          query: { 'status': 'unpublished' },
-          sort: { 'updated' : 1, 'title': 1 },
+          query: [
+            { field: 'status', condition: 'is equal to', value: 'unpublished' }
+          ],
+          sort: [
+            { field: 'updated', order: 'desc' },
+            { field: 'title', order: 'asc' }
+          ],
           fields: [ 'updated', 'picture', 'title', 'status' ]
         },
         {
           name: 'draft',
-          query: { 'status': 'draft' },
-          sort: { 'updated' : -1, 'title': 1 },
+          query: [
+            { field: 'status', condition: 'is equal to', value: 'draft' }
+          ],
+          sort: [
+            { field: 'updated', order: 'desc' },
+            { field: 'title', order: 'asc' }
+          ],
           fields: [ 'picture', 'title', 'status', 'updated' ]
         },
         {
           name: 'trash',
-          query: { 'status': 'trash' },
-          sort: { 'updated' : -1, 'title': 1 },
+          query: [
+            { field: 'status', condition: 'is equal to', value: 'trash' }
+          ],
+          sort: [
+            { field: 'updated', order: 'desc' },
+            { field: 'title', order: 'asc' }
+          ],
           fields: [ 'title', 'status', 'updated' ]
         },
         {
           name: 'all',
-          query: { },
-          sort: { 'updated' : -1, 'title': 1 },
+          query: [],
+          sort: [
+            { field: 'updated', order: 'desc' },
+            { field: 'title', order: 'asc' }
+          ],
           fields: [ 'picture', 'title', 'status', 'updated' ]
         }
       ]

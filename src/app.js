@@ -21,7 +21,7 @@ function requireAuth (to, from, next) {
 
 function checkAuth (to, from, next) {
   if (store.state.user) {
-    next({ path: '/items' })
+    next({ path: '/items/all' })
   } else {
     next()
   }
@@ -82,16 +82,7 @@ const router = new Router({
         nav: () => import('./components/Nav.vue'),
         menu: () => import('./components/SideMenu.vue')
       }
-    },
-    {
-      path: '/settings/items/fields',
-      beforeEnter: requireAuth,
-      components: {
-        default: () => import('./components/Fields.vue'),
-        nav: () => import('./components/Nav.vue'),
-        menu: () => import('./components/SideMenu.vue')
-      }
-    },
+    }
   ]
 })
 

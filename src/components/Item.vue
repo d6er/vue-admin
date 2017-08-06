@@ -58,7 +58,7 @@ export default {
       // POINT: disconnect item from vuex
       const _id = this.$route.params.id
       const index = this.$store.state.items.findIndex(e => { return e._id == _id })
-      return Object.assign({}, this.$store.state.items[index])
+      return Object.assign({}, this.$store.state.items[index]) // maybe mutation error later
     }
   },
   asyncData ({ store, route: { params: { id } } }) {
