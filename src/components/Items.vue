@@ -4,7 +4,7 @@
     
     <div class="box">
     <div class="columns">
-      <div class="column is-narrow">
+      <div class="column">
         <h6 class="title is-6">Filters</h6>
         <div class="field has-addons" v-for="(q, idx) in filter.queries">
           <p class="control">
@@ -42,7 +42,7 @@
         <a @click="addQuery" class="button is-link is-small">Add filter</a>
         
       </div>
-      <div class="column is-narrow">
+      <div class="column">
         
         <h6 class="title is-6">Sorting</h6>
         <div class="field has-addons" v-for="(s, idx) in filter.sorting">
@@ -74,7 +74,7 @@
         </div>
         <a @click="addSorting" class="button is-link is-small">Add sorting</a>
       </div>
-      <div class="column is-narrow">
+      <div class="column">
         
         <h6 class="title is-6">Columns</h6>
         <div class="field has-addons" v-for="(c, idx) in filter.columns">
@@ -110,7 +110,7 @@
             </button>
           </p>
         </div>
-        <a class="button is-link is-small">Add column</a>
+        <a @click="addColumn" class="button is-link is-small">Add column</a>
         
       </div>
     </div>
@@ -303,9 +303,16 @@ export default {
     }
   },
   watch: {
-    '$route': 'fetchItems'
+    //'$route': 'fetchItems'
+    '$route': 'updateFilter'
   },
   methods: {
+    updateFilter() {
+      const status = this.$route.params.status
+      const filter = this.$store.state.filters.item.find(e => { return e.name == status })
+      this.filter = JSON.parse(JSON.stringify(filter)) // deep copy
+      this.fetchItems()
+    },
     fetchItems() {
       this.$store.dispatch('callApi', { action: 'fetchItems',
                                         queries: this.filter.queries,
