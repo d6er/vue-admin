@@ -7,7 +7,7 @@
     "body-parser": "*",
     "connect-mongo": "*",
     "enhanced-resolve": "^3.4.1",
-    "express": "*",
+    "express": "^4.15.4",
     "express-session": "^1.15.5",
     "fast-deep-equal": "^1.0.0",
     "jsdom": "^11.1.0",

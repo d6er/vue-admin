@@ -7,7 +7,7 @@
       ITEMS
     </p>
     <ul class="menu-list">
-      <li v-for="filters in $store.state.filters.items">
+      <li v-for="filters in $store.state.filters.item">
         <router-link :to="'/items/' + filters.name">
           {{ filters.name }}
         </router-link>

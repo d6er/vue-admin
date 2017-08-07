@@ -30,63 +30,67 @@ export default new Vuex.Store({
         {
           name: 'created',
           type: 'datetime'
+        },
+        {
+          name: 'picture',
+          type: 'image'
         }
       ]
     },
     filters: {
-      items: [
+      item: [
         {
           name: 'published',
-          query: [
+          queries: [
             { field: 'status', condition: 'is equal to', value: 'published' }
           ],
-          sort: [
+          sorting: [
             { field: 'updated', order: 'desc' },
             { field: 'title', order: 'asc' }
           ],
-          fields: [ 'picture', 'title', 'status', 'updated' ]
+          columns: [ 'picture', 'title', 'status', 'updated' ]
         },
         {
           name: 'unpublished',
-          query: [
+          queries: [
             { field: 'status', condition: 'is equal to', value: 'unpublished' }
           ],
-          sort: [
+          sorting: [
             { field: 'updated', order: 'desc' },
             { field: 'title', order: 'asc' }
           ],
-          fields: [ 'updated', 'picture', 'title', 'status' ]
+          columns: [ 'updated', 'picture', 'title', 'status' ]
         },
         {
           name: 'draft',
-          query: [
+          queries: [
             { field: 'status', condition: 'is equal to', value: 'draft' }
           ],
-          sort: [
+          sorting: [
             { field: 'updated', order: 'desc' },
             { field: 'title', order: 'asc' }
           ],
-          fields: [ 'picture', 'title', 'status', 'updated' ]
+          columns: [ 'picture', 'title', 'status', 'updated' ]
         },
         {
           name: 'trash',
-          query: [
+          queries: [
             { field: 'status', condition: 'is equal to', value: 'trash' }
           ],
-          sort: [
+          sorting: [
             { field: 'updated', order: 'desc' },
             { field: 'title', order: 'asc' }
           ],
-          fields: [ 'title', 'status', 'updated' ]
+          columns: [ 'title', 'status', 'updated' ]
         },
         {
           name: 'all',
-          query: [],
-          sort: [
+          queries: [ ],
+          sorting: [
             { field: 'updated', order: 'desc' },
             { field: 'title', order: 'asc' }
           ],
-          fields: [ 'picture', 'title', 'status', 'updated' ]
+          columns: [ 'picture', 'title', 'status', 'updated' ]
         }
       ]
     },

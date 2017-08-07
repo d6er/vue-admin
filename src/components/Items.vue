@@ -6,7 +6,7 @@
     <div class="columns">
       <div class="column is-narrow">
         <h6 class="title is-6">Filters</h6>
-        <div class="field has-addons" v-for="(q, idx) in filter.query">
+        <div class="field has-addons" v-for="(q, idx) in filter.queries">
           <p class="control">
             <span class="select is-small">
               <select v-model="q.field">
@@ -35,7 +35,6 @@
             <button @click="deleteQuery(idx)" class="button is-small">
               <span class="icon is-small">
                 <i class="fa fa-times" aria-hidden="true"></i>
-                {{ idx }}
               </span>
             </button>
           </p>
@@ -46,39 +45,48 @@
       <div class="column is-narrow">
         
         <h6 class="title is-6">Sorting</h6>
-        <div class="field has-addons" v-for="i in [1,2]">
+        <div class="field has-addons" v-for="(s, idx) in filter.sorting">
           <p class="control">
             <span class="select is-small">
-              <select>
-                <option>Title</option>
+              <select v-model="s.field">
+                <option value="" disabled hidden>(field)</option>
+                <option v-for="field in $store.state.fields.item">
+                  {{ field.name }}
+                </option>
               </select>
             </span>
           </p>
           <p class="control">
             <span class="select is-small">
-              <select>
-                <option>High to Low</option>
+              <select v-model="s.order">
+                <option value="asc">Low to High</option>
+                <option value="desc">High to Low</option>
               </select>
             </span>
           </p>
           <p class="control">
-            <button class="button is-small">
+            <button @click="deleteSorting(idx)" class="button is-small">
               <span class="icon is-small">
                 <i class="fa fa-times" aria-hidden="true"></i>
               </span>
             </button>
           </p>
         </div>
-        <a class="button is-link is-small">Add sorting</a>
+        <a @click="addSorting" class="button is-link is-small">Add sorting</a>
       </div>
       <div class="column is-narrow">
         
         <h6 class="title is-6">Columns</h6>
-        <div class="field has-addons" v-for="i in [1,2]">
+        <div class="field has-addons" v-for="(c, idx) in filter.columns">
           <p class="control">
-            <button class="button is-small">
-              Title
-            </button>
+            <span class="select is-small">
+              <select v-model="filter.columns[idx]">
+                <option value="" disabled hidden>(field)</option>
+                <option v-for="field in $store.state.fields.item">
+                  {{ field.name }}
+                </option>
+              </select>
+            </span>
           </p>
           <p class="control">
             <button class="button is-small">
@@ -95,7 +103,7 @@
             </button>
           </p>
           <p class="control">
-            <button class="button is-small">
+            <button @click="deleteColumn(idx)"class="button is-small">
               <span class="icon is-small">
                 <i class="fa fa-times" aria-hidden="true"></i>
               </span>
@@ -218,7 +226,7 @@
           <th>
             <input type="checkbox" v-model="checkedAll" @click="checkAll">
           </th>
-          <th v-for="column in filter.fields">
+          <th v-for="column in filter.columns">
             {{ column }}
             <span class="icon is-small">
               <i class="fa fa-sort" aria-hidden="true"></i>
@@ -231,7 +239,7 @@
           <td>
             <input type="checkbox" :value="item._id" v-model="checkedItems">
           </td>
-          <td v-for="column in filter.fields">
+          <td v-for="column in filter.columns">
             <template v-if="column == 'title'">
               <router-link :to="'/item/' + item._id + '/detail'">
                 {{ item[column] }}
@@ -262,23 +270,23 @@ export default {
       checkedAll: false,
       isCustomizeActive: false,
       filter: {
-        query: {},
-        fields: {},
-        sort: {}
+        queries: [],
+        sorting: [],
+        columns: []
       }
     }
   },
   asyncData ({ store, route: { params: { status, page } } }) {
-    const filter = store.state.filters.items.find(e => { return e.name == status })
+    const filter = store.state.filters.item.find(e => { return e.name == status })
     return store.dispatch('callApi', { action: 'fetchItems',
-                                       query: filter.query,
-                                       sort: filter.sort,
-                                       fields: filter.fields,
+                                       queries: filter.queries,
+                                       sorting: filter.sorting,
+                                       columns: filter.columns,
                                        page: page })
   },
   created: function() {
     const status = this.$route.params.status
-    const filter = this.$store.state.filters.items.find(e => { return e.name == status })
+    const filter = this.$store.state.filters.item.find(e => { return e.name == status })
     this.filter = JSON.parse(JSON.stringify(filter)) // deep copy
   },
   computed: {
@@ -298,20 +306,15 @@ export default {
     '$route': 'fetchItems'
   },
   methods: {
-    deleteItems() {
-      this.$store.dispatch('callApi', { action: 'deleteItems', item_ids: this.checkedItems })
-    },
-    copyItems() {
-      this.$store.dispatch('callApi', { action: 'copyItems', item_ids: this.checkedItems })
-    },
     fetchItems() {
-      const filter = this.currentFilter
       this.$store.dispatch('callApi', { action: 'fetchItems',
-                                        query: filter.query,
-                                        sort: filter.sort,
-                                        fields: filter.fields,
+                                        queries: this.filter.queries,
+                                        sorting: this.filter.sorting,
+                                        columns: this.filter.columns,
                                         page: this.$route.params.page })
     },
+    
+    // Checkbox
     checkAll() {
       if (this.checkedAll) {
         this.checkedItems = Object.keys(this.items).map(i => parseInt(i))
@@ -319,18 +322,42 @@ export default {
         this.checkedItems = []
       }
     },
+    copyItems() {
+      this.$store.dispatch('callApi', { action: 'copyItems', item_ids: this.checkedItems })
+    },
+    deleteItems() {
+      this.$store.dispatch('callApi', { action: 'deleteItems', item_ids: this.checkedItems })
+    },
+    
+    // Customize
     customize() {
       this.isCustomizeActive = !this.isCustomizeActive
     },
     closeCustomize() {
       this.isCustomizeActive = false
     },
+    
+    // Filter
     addQuery() {
-      const idx = this.filter.query.length
-      this.$set(this.filter.query, idx, { field: '', condition: '', value: '' })
+      const idx = this.filter.queries.length
+      this.$set(this.filter.queries, idx, { field: '', condition: '', value: '' })
+    },
+    addSorting() {
+      const idx = this.filter.sorting.length
+      this.$set(this.filter.sorting, idx, { field: '', order: 'asc' })
+    },
+    addColumn() {
+      const idx = this.filter.columns.length
+      this.$set(this.filter.columns, idx, '')
     },
     deleteQuery(idx) {
-      this.$delete(this.filter.query, idx)
+      this.$delete(this.filter.queries, idx)
+    },
+    deleteSorting(idx) {
+      this.$delete(this.filter.sorting, idx)
+    },
+    deleteColumn(idx) {
+      this.$delete(this.filter.columns, idx)
     }
   }
 }

@@ -75,10 +75,15 @@ const actions = {
     return db.collection('items.' + user_id).findOne({ _id: item_id })
   },
   
-  fetchItems: function ({ user_id, query, sort, fields, page }) {
+  fetchItems: function ({ user_id, queries, sorting, columns, page }) {
     
-    query = actions.convertQuery(query)
-    sort = {}
+    console.dir(queries)
+    console.dir(sorting)
+    console.dir(columns)
+    
+    const query = actions.convertQuery(queries)
+    
+    const sort = {}
     //filter.query.title = new RegExp(actions.escapeRegExp(filter.query.title), 'i')
     const cursor = db.collection('items.' + user_id).find(query)
     
@@ -137,10 +142,10 @@ const actions = {
     return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")
   },
 
-  convertQuery: function(query) {
+  convertQuery: function(queries) {
     let converted = {}
-    for (var i in query) {
-      var q = query[i]
+    for (var i in queries) {
+      var q = queries[i]
       if (q.condition == 'is equal to') {
         converted[q.field] = q.value
       }
