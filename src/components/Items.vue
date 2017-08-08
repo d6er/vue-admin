@@ -304,7 +304,11 @@ export default {
   },
   watch: {
     //'$route': 'fetchItems'
-    '$route': 'updateFilter'
+    '$route': 'updateFilter',
+    filter: {
+      handler: 'fetchItems',
+      deep: true // https://vuejs.org/v2/api/#watch
+    }
   },
   methods: {
     updateFilter() {

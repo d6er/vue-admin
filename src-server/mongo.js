@@ -81,10 +81,9 @@ const actions = {
     console.dir(sorting)
     console.dir(columns)
     
-    const query = actions.convertQuery(queries)
-    
-    const sort = {}
-    //filter.query.title = new RegExp(actions.escapeRegExp(filter.query.title), 'i')
+    const query = actions.convertQueries(queries)
+    const sort = actions.convertSorting(sorting)
+    console.dir(sort)
     const cursor = db.collection('items.' + user_id).find(query)
     
     const limit = 10
@@ -142,12 +141,29 @@ const actions = {
     return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")
   },
 
-  convertQuery: function(queries) {
+  convertQueries: function (queries) {
     let converted = {}
     for (var i in queries) {
       var q = queries[i]
       if (q.condition == 'is equal to') {
         converted[q.field] = q.value
+      } else if (q.condition == 'is not equal to') {
+        converted[q.field] = { $ne: q.value }
+      } else if (q.condition == 'contains') {
+        converted[q.field] = new RegExp(actions.escapeRegExp(q.value), 'i')
+      }
+    }
+    return converted
+  },
+  
+  convertSorting: function (sorting) {
+    let converted = []
+    for (var i in sorting) {
+      var s = sorting[i]
+      if (s.order == 'asc') {
+        converted.push([ s.field, 1 ])
+      } else if (s.order == 'desc') {
+        converted.push([ s.field, -1 ])
       }
     }
     return converted
