@@ -11,6 +11,11 @@
         <router-link :to="'/items/' + filters.name">
           {{ filters.name }}
         </router-link>
+        <ul v-if="filters.name == 'draft'">
+          <li><a>Sub 1</a></li>
+          <li><a>Sub Menu 2</a></li>
+          <li><a>Sub Menu Name 3</a></li>
+        </ul>
       </li>
       <li>
         <hr/>
