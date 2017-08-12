@@ -19,13 +19,8 @@
         <span class="icon is-small">
           <i class="fa fa-cogs" aria-hidden="true"></i>
         </span>
-        SETTINGS
+        TOOLS
       </p>
-      <li>
-        <router-link to="/settings/items/fields">
-          Fields
-        </router-link>
-      </li>
       <li>
         <router-link to="/items/trash">
           Import
