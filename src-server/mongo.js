@@ -86,7 +86,7 @@ const actions = {
     console.dir(sort)
     const cursor = db.collection('items.' + user_id).find(query)
     
-    const limit = 10
+    const limit = 20
     const skip = page ? limit * ( page - 1 ) : 0
     
     return cursor.count().then(count => {
