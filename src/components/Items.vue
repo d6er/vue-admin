@@ -39,6 +39,9 @@
             </p>
           </div>
         </div>
+        <div class="level-item">
+          <button @click="showFilter=!showFilter" class="button is-link is-small">Search option</button>
+        </div>
       </div>
       <div class="level-right">
         <div class="level-item">
@@ -101,7 +104,7 @@
       </div>
       <button class="modal-close is-large" @click="closeCustomize"></button>
     </div>
-    <ListFilter :filter.sync="filter"/>
+    <ListFilter v-if="showFilter" :filter.sync="filter"/>
     <table class="table is-narrow is-fullwidth">
       <thead>
         <tr>

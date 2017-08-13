@@ -19,6 +19,10 @@ export default new Vuex.Store({
           type: 'text'
         },
         {
+          name: 'account',
+          type: 'text'
+        },
+        {
           name: 'status',
           type: 'select',
           values: [ 'published', 'unpublished', 'draft', 'trash' ]
@@ -39,6 +43,18 @@ export default new Vuex.Store({
     },
     filters: {
       item: [
+        {
+          name: 'accounts',
+          foreach: 'account',
+          queries: [
+            { field: 'account', condition: 'is equal to foreach' }
+          ],
+          sorting: [
+            { field: 'updated', order: 'desc' },
+            { field: 'title', order: 'asc' }
+          ],
+          columns: [ 'picture', 'title', 'status', 'updated' ]
+        },
         {
           name: 'published',
           queries: [

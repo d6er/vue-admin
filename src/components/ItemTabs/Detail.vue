@@ -26,6 +26,18 @@
     </div>
     <div class="field is-horizontal">
       <div class="field-label is-normal">
+        <label class="label">Account</label>
+      </div>
+      <div class="field-body">
+        <div class="field is-narrow">
+          <p class="control">
+            <input v-model="item.account" type="text" name="account" class="input">
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="field is-horizontal">
+      <div class="field-label is-normal">
         <label class="label">Status</label>
       </div>
       <div class="field-body">

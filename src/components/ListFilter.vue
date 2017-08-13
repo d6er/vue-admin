@@ -50,6 +50,7 @@
                 <option>is not equal to</option>
                 <option>contains</option>
                 <option>does not contain</option>
+                <option>expand</option>
               </select>
             </span>
           </p>
