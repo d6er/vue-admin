@@ -47,7 +47,7 @@ export default new Vuex.Store({
         {
           name: 'account',
           parent: '',
-          children: [ 'account' ],
+          foreach: 'accounts',
           queries: [
             { field: 'account', condition: 'is equal to foreach' }
           ],

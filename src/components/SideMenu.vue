@@ -10,12 +10,12 @@
     
     <ul class="menu-list">
       <template v-for="filters in $store.state.filters.item">
-        <li v-if="filters.children" v-for="elm in $store.state[filters.foreach]">
+        <li v-if="filters.foreach != ''" v-for="elm in $store.state[filters.foreach]">
           <router-link :to="'/items/' + filters.name + '/' + elm">
             {{ elm }}
           </router-link>
         </li>
-        <li v-if="!filters.children">
+        <li v-if="!filters.foreach">
           <router-link :to="'/items/' + filters.name">
             {{ filters.name }}
           </router-link>
