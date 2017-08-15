@@ -8,6 +8,7 @@ export default new Vuex.Store({
   
   state: {
     user: null,
+    accounts: [ 'Account1', 'Account2', 'Account3' ],
     fields: {
       item: [
         {
@@ -44,8 +45,9 @@ export default new Vuex.Store({
     filters: {
       item: [
         {
-          name: 'accounts',
-          foreach: 'account',
+          name: 'account',
+          parent: '',
+          children: [ 'account' ],
           queries: [
             { field: 'account', condition: 'is equal to foreach' }
           ],

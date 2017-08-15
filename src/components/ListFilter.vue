@@ -23,10 +23,32 @@
       </div>
     </nav>
     <div class="columns">
-      <div class="column field is-narrow">
-        <label class="label">Filter name</label>
-        <div class="control">
-          <input class="input is-small" type="text" v-model="filter.name">
+      <div class="column is-narrow">
+        <div class="field">
+          <label class="label">Filter name</label>
+          <div class="control">
+            <input class="input is-small" type="text" v-model="filter.name">
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Parent filter</label>
+          <div class="control">
+            <span class="select is-small">
+              <select>
+                <option value="" disabled hidden>(field)</option>
+              </select>
+            </span>
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Child filters</label>
+          <div class="control">
+            <span class="select is-small">
+              <select>
+                <option value="" disabled hidden>(field)</option>
+              </select>
+            </span>
+          </div>
         </div>
       </div>
       <div class="column field is-narrow">
