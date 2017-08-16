@@ -57,6 +57,18 @@ const router = new Router({
       }
     },
     {
+      path: '/test/:filter+',
+      beforeEnter: requireAuth,
+      components: {
+        default: () => import('./components/Test.vue'),
+        nav: () => import('./components/Nav.vue'),
+        menu: () => import('./components/SideMenu.vue')
+      }
+    },
+    {
+      /*
+        /items/account.hal9000dev/status.active/
+       */
       path: '/items/:status?/:page?',
       beforeEnter: requireAuth,
       components: {

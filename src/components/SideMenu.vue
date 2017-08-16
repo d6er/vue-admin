@@ -8,25 +8,7 @@
       ITEMS
     </p>
     
-    <ul class="menu-list">
-      <template v-for="filters in $store.state.filters.item">
-        <li v-if="filters.foreach != ''" v-for="elm in $store.state[filters.foreach]">
-          <router-link :to="'/items/' + filters.name + '/' + elm">
-            {{ elm }}
-          </router-link>
-        </li>
-        <li v-if="!filters.foreach">
-          <router-link :to="'/items/' + filters.name">
-            {{ filters.name }}
-          </router-link>
-          <ul v-if="filters.name == 'draft'">
-            <li><a>Sub 1</a></li>
-            <li><a>Sub Menu 2</a></li>
-            <li><a>Sub Menu Name 3</a></li>
-          </ul>
-        </li>
-      </template>
-    </ul>
+    <SideMenuList parent="" depth="0"/>
     
     <hr/>
     
@@ -52,3 +34,13 @@
     
   </aside>
 </template>
+
+<script>
+import SideMenuList from './SideMenuList.vue'
+
+export default {
+  components: {
+    SideMenuList: SideMenuList
+  }
+}  
+</script>
