@@ -29,8 +29,8 @@
         <div class="level-item">
           <div class="field has-addons">
             <p class="control">
-              <input v-model="keyword" class="input is-small" type="text" placeholder="Find items"
-                     @keyup="fetchItems">
+              <input @keyup="fetchItems" v-model="keyword" class="input is-small"
+                     type="text" placeholder="Find items">
             </p>
             <p class="control">
               <button @click="fetchItems" class="button is-small">
@@ -40,7 +40,9 @@
           </div>
         </div>
         <div class="level-item">
-          <button @click="showFilter=!showFilter" class="button is-link is-small">Search option</button>
+          <button @click="showFilter=!showFilter" class="button is-link is-small">
+            Search option
+          </button>
         </div>
       </div>
       <div class="level-right">
@@ -164,18 +166,19 @@ export default {
       }
     }
   },
-  asyncData ({ store, route: { params: { status, page } } }) {
-    const filter = store.state.filters.item.find(e => { return e.name == status })
+  /*
+  asyncData ({ store, route: { params: { filter } } }) {
+    //this.currentFilter(filter)
     return store.dispatch('callApi', { action: 'fetchItems',
-                                       queries: filter.queries,
-                                       sorting: filter.sorting,
-                                       columns: filter.columns,
+                                       queries: this.filter.queries,
+                                       sorting: this.filter.sorting,
+                                       columns: this.filter.columns,
                                        page: page })
   },
+  */
   created: function() {
-    const status = this.$route.params.status
-    const filter = this.$store.state.filters.item.find(e => { return e.name == status })
-    this.filter = JSON.parse(JSON.stringify(filter)) // deep copy
+    const filter = this.currentFilter(this.$route.params.filter)
+    //this.filter = JSON.parse(JSON.stringify(filter)) // deep copy
   },
   computed: {
     items() {
@@ -202,10 +205,33 @@ export default {
     ListFilter: ListFilter
   },
   methods: {
+    currentFilter(urlFilter) {
+      const filter = { queries: [], sorting: [], columns: [] }
+      const path = urlFilter.split('/')
+      for (let i in path) {
+        let arr = path[i].split(/:/)
+        let refFilter = this.$store.state.filters.item.find(filter => filter.name == arr[0])
+        let thisFilter = JSON.parse(JSON.stringify(refFilter)) // deep copy
+        
+        if (arr.length == 2) {
+          filter.queries.push({
+            field: thisFilter.foreach,
+            condition: 'is equal to',
+            value: arr[1]
+          })
+        }
+        
+        if (thisFilter.sorting) {
+          filter.sorting = thisFilter.sorting
+        }
+        if (thisFilter.columns) {
+          filter.columns = thisFilter.columns
+        }
+      }
+      this.filter = filter
+    },
     updateFilter() {
-      const status = this.$route.params.status
-      const filter = this.$store.state.filters.item.find(e => { return e.name == status })
-      this.filter = JSON.parse(JSON.stringify(filter)) // deep copy
+      this.currentFilter(this.$route.params.filter)
       this.fetchItems()
     },
     fetchItems() {

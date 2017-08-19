@@ -69,7 +69,7 @@ const router = new Router({
       /*
         /items/account.hal9000dev/status.active/
        */
-      path: '/items/:status?/:page?',
+      path: '/items/:filter+',
       beforeEnter: requireAuth,
       components: {
         default: () => import('./components/Items.vue'),

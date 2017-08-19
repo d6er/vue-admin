@@ -8,7 +8,7 @@
       ITEMS
     </p>
     
-    <SideMenuList parent="" depth="0"/>
+    <SideMenuList parent="" parentPath="/items" depth="0"/>
     
     <hr/>
     

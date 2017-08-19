@@ -8,8 +8,8 @@ export default new Vuex.Store({
   
   state: {
     user: null,
-    accounts: [ 'Account1', 'Account2', 'Account3' ],
-    statuses: [ 'published', 'unpublished', 'draft', 'trash' ],
+    account: [ 'Account1', 'Account2', 'Account3' ],
+    status: [ 'published', 'unpublished', 'draft', 'trash' ],
     fields: {
       item: [
         {
@@ -48,28 +48,17 @@ export default new Vuex.Store({
         {
           name: 'account',
           parent: '',
-          foreach: 'accounts',
-          queries: [
-            { field: 'account', condition: 'is equal to foreach' }
-          ],
+          foreach: 'account',
           sorting: [
             { field: 'updated', order: 'desc' },
             { field: 'title', order: 'asc' }
           ],
-          columns: [ 'picture', 'title', 'status', 'updated' ]
+          columns: [ 'picture', 'title', 'account', 'status', 'updated' ]
         },
         {
           name: 'status',
           parent: 'account',
-          foreach: 'statuses',
-          queries: [
-            { field: 'status', condition: 'is equal to', value: 'published' }
-          ],
-          sorting: [
-            { field: 'updated', order: 'desc' },
-            { field: 'title', order: 'asc' }
-          ],
-          columns: [ 'picture', 'title', 'status', 'updated' ]
+          foreach: 'status'
         },
         {
           name: 'all',
@@ -79,7 +68,7 @@ export default new Vuex.Store({
             { field: 'updated', order: 'desc' },
             { field: 'title', order: 'asc' }
           ],
-          columns: [ 'picture', 'title', 'status', 'updated' ]
+          columns: [ 'picture', 'title', 'account', 'status', 'updated' ]
         }
       ]
     },

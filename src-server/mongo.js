@@ -78,12 +78,11 @@ const actions = {
   fetchItems: function ({ user_id, queries, sorting, columns, page }) {
     
     console.dir(queries)
-    console.dir(sorting)
-    console.dir(columns)
+    //console.dir(sorting)
+    //console.dir(columns)
     
     const query = actions.convertQueries(queries)
     const sort = actions.convertSorting(sorting)
-    console.dir(sort)
     const cursor = db.collection('items.' + user_id).find(query)
     
     const limit = 20
