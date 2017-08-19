@@ -1,27 +1,5 @@
 <template>
-  <div class="box">
-    <nav class="level">
-      <div class="level-left">
-        <div class="level-item">
-          <button @click="saveFilter" class="button is-info is-small">
-            <span class="icon is-small">
-              <i class="fa fa-save" aria-hidden="true"></i>
-            </span>
-            <span>Save</span>
-          </button>
-        </div>
-        <div class="level-item">
-          <button class="button is-light is-small">
-            <span>Cancel</span>
-          </button>
-        </div>
-        <div class="level-item">
-          <button @click="deleteFilter" class="button is-link is-small">
-            Delete this filter
-          </button>
-        </div>
-      </div>
-    </nav>
+  <div class="box" id="filterFormBox">
     <div class="columns">
       <div class="column is-narrow">
         <div class="field">
@@ -159,6 +137,28 @@
         
       </div>
     </div>
+    <nav class="level">
+      <div class="level-left">
+        <div class="level-item">
+          <button @click="saveFilter" class="button is-info is-small">
+            <span class="icon is-small">
+              <i class="fa fa-save" aria-hidden="true"></i>
+            </span>
+            <span>Save</span>
+          </button>
+        </div>
+        <div class="level-item">
+          <button class="button is-light is-small">
+            <span>Cancel</span>
+          </button>
+        </div>
+        <div class="level-item">
+          <button @click="deleteFilter" class="button is-link is-small">
+            Delete this filter
+          </button>
+        </div>
+      </div>
+    </nav>
   </div>
 </template>
 

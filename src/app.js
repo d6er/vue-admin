@@ -21,7 +21,7 @@ function requireAuth (to, from, next) {
 
 function checkAuth (to, from, next) {
   if (store.state.user) {
-    next({ path: '/items/all' })
+    next({ path: '/items/All items' })
   } else {
     next()
   }
@@ -66,10 +66,8 @@ const router = new Router({
       }
     },
     {
-      /*
-        /items/account.hal9000dev/status.active/
-       */
       path: '/items/:filter+',
+      name: 'items',
       beforeEnter: requireAuth,
       components: {
         default: () => import('./components/Items.vue'),

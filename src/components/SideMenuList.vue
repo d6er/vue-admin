@@ -28,7 +28,7 @@ export default {
   name: 'SideMenuList', // required for recursive components
   props: [ 'parent', 'parentPath', 'depth' ],
   created: function () {
-    console.dir('=> ' + this.depth + ' ' + this.parent)
+    //console.dir('=> ' + this.depth + ' ' + this.parent)
   },
   computed: {
     filters() {

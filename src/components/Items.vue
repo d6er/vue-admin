@@ -106,7 +106,7 @@
       </div>
       <button class="modal-close is-large" @click="closeCustomize"></button>
     </div>
-    <ListFilter v-if="showFilter" :filter.sync="filter"/>
+    <ListFilter v-if="showFilter" :filter.sync="filterForm"/>
     <table class="table is-narrow is-fullwidth">
       <thead>
         <tr>
@@ -163,6 +163,11 @@ export default {
         queries: [],
         sorting: [],
         columns: []
+      },
+      filterForm: {
+        queries: [],
+        sorting: [],
+        columns: []
       }
     }
   },
@@ -177,7 +182,7 @@ export default {
   },
   */
   created: function() {
-    const filter = this.currentFilter(this.$route.params.filter)
+    //const filter = this.currentFilter(this.$route.params.filter)
     //this.filter = JSON.parse(JSON.stringify(filter)) // deep copy
   },
   computed: {
@@ -194,10 +199,9 @@ export default {
     }
   },
   watch: {
-    //'$route': 'fetchItems'
-    '$route': 'updateFilter',
-    filter: {
-      handler: 'fetchItems',
+    '$route': 'handleRouteChange',
+    filterForm: {
+      handler: 'handleFilterFormChange',
       deep: true // https://vuejs.org/v2/api/#watch
     }
   },
@@ -205,14 +209,44 @@ export default {
     ListFilter: ListFilter
   },
   methods: {
-    currentFilter(urlFilter) {
+    
+    handleFilterFormChange() {
+      let filterFormBox = document.getElementById('filterFormBox')
+      let formData = new FormData(filterFormBox)
+      console.log(JSON.stringify(this.filterForm))
+      let str = JSON.stringify(this.filterForm)
+      //this.$router.push('/items/' + this.$route.params.filter + ':' + str)
+      this.$router.push({
+        /*
+        name: 'items',
+        params: {
+          filter: this.$route.params.filter
+        },
+        */
+        path: '/items/' + this.$route.params.filter,
+        query: this.filterForm
+      })
+    },
+    
+    handleRouteChange() {
+      this.filter = this.parseUrlFilter(this.$route.params.filter)
+      this.fetchItems(this.filter)
+    },
+    
+    parseUrlFilter(urlFilter) {
       const filter = { queries: [], sorting: [], columns: [] }
+      
       const path = urlFilter.split('/')
       for (let i in path) {
         let arr = path[i].split(/:/)
         let refFilter = this.$store.state.filters.item.find(filter => filter.name == arr[0])
         let thisFilter = JSON.parse(JSON.stringify(refFilter)) // deep copy
         
+        if (i == path.length - 1) {
+          this.filterForm = thisFilter
+        }
+        
+        // queries
         if (arr.length == 2) {
           filter.queries.push({
             field: thisFilter.foreach,
@@ -221,25 +255,31 @@ export default {
           })
         }
         
+        // sorting
         if (thisFilter.sorting) {
           filter.sorting = thisFilter.sorting
         }
+        
+        // columns
         if (thisFilter.columns) {
           filter.columns = thisFilter.columns
         }
       }
-      this.filter = filter
+      
+      return filter
     },
+    
     updateFilter() {
-      this.currentFilter(this.$route.params.filter)
-      this.fetchItems()
+      //this.currentFilter(this.$route.params.filter)
+      //this.fetchItems()
     },
+    
     fetchItems() {
       this.$store.dispatch('callApi', { action: 'fetchItems',
                                         queries: this.filter.queries,
                                         sorting: this.filter.sorting,
                                         columns: this.filter.columns,
-                                        page: this.$route.params.page })
+                                        page: 1 })
     },
     
     // Checkbox

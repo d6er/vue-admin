@@ -46,6 +46,16 @@ export default new Vuex.Store({
     filters: {
       item: [
         {
+          name: 'All items',
+          parent: '',
+          queries: [ ],
+          sorting: [
+            { field: 'updated', order: 'desc' },
+            { field: 'title', order: 'asc' }
+          ],
+          columns: [ 'picture', 'title', 'account', 'status', 'updated' ]
+        },
+        {
           name: 'account',
           parent: '',
           foreach: 'account',
@@ -59,16 +69,6 @@ export default new Vuex.Store({
           name: 'status',
           parent: 'account',
           foreach: 'status'
-        },
-        {
-          name: 'all',
-          parent: '',
-          queries: [ ],
-          sorting: [
-            { field: 'updated', order: 'desc' },
-            { field: 'title', order: 'asc' }
-          ],
-          columns: [ 'picture', 'title', 'account', 'status', 'updated' ]
         }
       ]
     },
