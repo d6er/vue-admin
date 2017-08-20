@@ -47,32 +47,30 @@
       </div>
       <div class="level-right">
         <div class="level-item">
-          {{ $store.state.paging.start }} - {{ $store.state.paging.end }}
+          {{ $store.state.paging.from }} - {{ $store.state.paging.to }}
           of {{ $store.state.paging.count }}
         </div>
         <div class="level-item">
           <div class="field has-addons">
             <p class="control">
-              <router-link :to="prevPage" class="button is-small"
-                           v-if="$store.state.paging.hasPrev">
+              <router-link v-if="prevPage" :to="prevPage" class="button is-small">
                 <span class="icon is-small">
                   <i class="fa fa-angle-left"></i>
                 </span>
               </router-link>
-              <button class="button is-small" disabled v-else>
+              <button v-else class="button is-small" disabled>
                 <span class="icon is-small">
                   <i class="fa fa-angle-left"></i>
                 </span>
               </button>
             </p>
             <p class="control">
-              <router-link :to="nextPage" class="button is-small"
-                           v-if="$store.state.paging.hasNext">
+              <router-link v-if="nextPage" :to="nextPage" class="button is-small">
                 <span class="icon is-small">
                   <i class="fa fa-angle-right"></i>
                 </span>
               </router-link>
-              <button class="button is-small" disabled v-else>
+              <button v-else class="button is-small" disabled>
                 <span class="icon is-small">
                   <i class="fa fa-angle-right"></i>
                 </span>
@@ -179,12 +177,18 @@ export default {
       return this.$store.state.items
     },
     prevPage() {
-      const page = this.$route.params.page ? parseInt(this.$route.params.page) : 1
-      return '/items/' + this.$route.params.status + '/' + (page - 1)
+      if (this.$store.state.paging.prev) {
+        return '#' + this.$store.state.paging.prev.from + '-' + this.$store.state.paging.prev.to
+      } else {
+        return null
+      }
     },
     nextPage() {
-      const page = this.$route.params.page ? parseInt(this.$route.params.page) : 1
-      return '/items/' + this.$route.params.status + '/' + (page + 1)
+      if (this.$store.state.paging.next) {
+        return '#' + this.$store.state.paging.next.from + '-' + this.$store.state.paging.next.to
+      } else {
+        return null
+      }
     }
   },
   watch: {
@@ -236,7 +240,6 @@ export default {
           filter.columns = thisFilter.columns
         }
       }
-      console.dir(filter.queries)
       
       this.filter = filter
       this.fetchItems()
@@ -253,11 +256,17 @@ export default {
     },
     
     fetchItems() {
+      
+      let paging = { from: 1, to: 20 }
+      let hashPaging = this.$route.hash.match(/^#([\d]+)-([\d]+)$/)
+      console.dir(hashPaging)
+      if (hashPaging) {
+        paging = { from: hashPaging[1], to: hashPaging[2] }
+      }
+      
       this.$store.dispatch('callApi', { action: 'fetchItems',
-                                        queries: this.filter.queries,
-                                        sorting: this.filter.sorting,
-                                        columns: this.filter.columns,
-                                        page: 1 })
+                                        filter: this.filter,
+                                        paging: paging })
     },
     
     // Checkbox

@@ -76,6 +76,14 @@ export default new Vuex.Store({
           queries: [
             { field: 'title', condition: 'contains', value: 'aa' }
           ]
+        },
+        {
+          name: 'status',
+          parent: 'All items',
+          foreach: 'status',
+          queries: [
+            { field: 'title', condition: 'contains', value: 'cc' }
+          ]
         }
       ]
     },

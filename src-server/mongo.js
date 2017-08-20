@@ -75,38 +75,44 @@ const actions = {
     return db.collection('items.' + user_id).findOne({ _id: item_id })
   },
   
-  fetchItems: function ({ user_id, queries, sorting, columns, page }) {
+  fetchItems: function ({ user_id, filter, paging }) {
     
-    console.log('mongo queries')
-    console.dir(queries)
-    console.log('mongo sorting')
-    console.dir(sorting)
-    console.log('mongo columns')
-    console.dir(columns)
+    paging.from = parseInt(paging.from)
+    paging.to = parseInt(paging.to)
     
-    const query = actions.convertQueries(queries)
-    const sort = actions.convertSorting(sorting)
+    const query = actions.convertQueries(filter.queries)
+    const sort = actions.convertSorting(filter.sorting)
+    
+    const skip = paging.from - 1
+    const limit = paging.to - skip
+    
     const cursor = db.collection('items.' + user_id).find(query)
-    
-    console.log('mongo query')
-    console.dir(query)
-    
-    const limit = 20
-    const skip = page ? limit * ( page - 1 ) : 0
     
     return cursor.count().then(count => {
       
-      const paging = {
-        start: skip + 1,
-        end: (skip + limit < count) ? (skip + limit) : count,
+      let newPaging = {
         count: count,
-        hasPrev: (page > 1),
-        hasNext: (skip + limit < count)
+        from: count ? paging.from : 0,
+        to: (count > paging.to) ? paging.to : count
       }
       
-      return cursor.sort(sort).skip(skip).limit(limit).toArray().then(docs => {
-        docs.forEach(actions.convertItem)
-        return { items: docs, paging: paging }
+      if (paging.from > 1) {
+        newPaging.prev = {
+          from: (paging.from - limit > 1) ? paging.from - limit : 1,
+          to: paging.from - 1
+        }
+      }
+      
+      if (count > paging.to) {
+        newPaging.next = {
+          from: paging.to + 1,
+          to: (count > paging.to + limit) ? paging.to + limit : count
+        }
+      }
+      
+      return cursor.sort(sort).skip(skip).limit(limit).toArray().then(items => {
+        items.forEach(actions.convertItem)
+        return { items: items, paging: newPaging }
       })
     })
   },
