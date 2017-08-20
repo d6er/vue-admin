@@ -12,18 +12,22 @@
           <label class="label">Parent filter</label>
           <div class="control">
             <span class="select is-small">
-              <select>
-                <option value="" disabled hidden>(field)</option>
+              <select v-model="filter.parent">
+                <option value="">(none)</option>
+                <option>account</option>
+                <option>status</option>
               </select>
             </span>
           </div>
         </div>
         <div class="field">
-          <label class="label">Child filters</label>
+          <label class="label">Apply to each</label>
           <div class="control">
             <span class="select is-small">
-              <select>
-                <option value="" disabled hidden>(field)</option>
+              <select v-model="filter.foreach">
+                <option value="">(none)</option>
+                <option>account</option>
+                <option>status</option>
               </select>
             </span>
           </div>
@@ -50,7 +54,6 @@
                 <option>is not equal to</option>
                 <option>contains</option>
                 <option>does not contain</option>
-                <option>expand</option>
               </select>
             </span>
           </p>

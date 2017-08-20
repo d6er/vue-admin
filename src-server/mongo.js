@@ -77,13 +77,19 @@ const actions = {
   
   fetchItems: function ({ user_id, queries, sorting, columns, page }) {
     
+    console.log('mongo queries')
     console.dir(queries)
-    //console.dir(sorting)
-    //console.dir(columns)
+    console.log('mongo sorting')
+    console.dir(sorting)
+    console.log('mongo columns')
+    console.dir(columns)
     
     const query = actions.convertQueries(queries)
     const sort = actions.convertSorting(sorting)
     const cursor = db.collection('items.' + user_id).find(query)
+    
+    console.log('mongo query')
+    console.dir(query)
     
     const limit = 20
     const skip = page ? limit * ( page - 1 ) : 0
@@ -144,12 +150,17 @@ const actions = {
     let converted = {}
     for (var i in queries) {
       var q = queries[i]
+      if (!q.field) continue
+      
+      // todo: AND for multiple queries
       if (q.condition == 'is equal to') {
         converted[q.field] = q.value
       } else if (q.condition == 'is not equal to') {
         converted[q.field] = { $ne: q.value }
       } else if (q.condition == 'contains') {
         converted[q.field] = new RegExp(actions.escapeRegExp(q.value), 'i')
+      } else if (q.condition == 'does not contain') {
+        converted[q.field] = { $ne: new RegExp(actions.escapeRegExp(q.value), 'i') }
       }
     }
     return converted
@@ -159,6 +170,8 @@ const actions = {
     let converted = []
     for (var i in sorting) {
       var s = sorting[i]
+      if (!s.field) continue
+      
       if (s.order == 'asc') {
         converted.push([ s.field, 1 ])
       } else if (s.order == 'desc') {

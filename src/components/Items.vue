@@ -115,9 +115,6 @@
           </th>
           <th v-for="column in filter.columns">
             {{ column }}
-            <span class="icon is-small">
-              <i class="fa fa-sort" aria-hidden="true"></i>
-            </span>
           </th>
         </tr>
       </thead>
@@ -159,16 +156,8 @@ export default {
       checkedAll: false,
       isCustomizeActive: false,
       showFilter: false,
-      filter: {
-        queries: [],
-        sorting: [],
-        columns: []
-      },
-      filterForm: {
-        queries: [],
-        sorting: [],
-        columns: []
-      }
+      filter: {},
+      filterForm: {}
     }
   },
   /*
@@ -211,39 +200,18 @@ export default {
   methods: {
     
     handleFilterFormChange() {
-      let filterFormBox = document.getElementById('filterFormBox')
-      let formData = new FormData(filterFormBox)
-      console.log(JSON.stringify(this.filterForm))
-      let str = JSON.stringify(this.filterForm)
-      //this.$router.push('/items/' + this.$route.params.filter + ':' + str)
-      this.$router.push({
-        /*
-        name: 'items',
-        params: {
-          filter: this.$route.params.filter
-        },
-        */
-        path: '/items/' + this.$route.params.filter,
-        query: this.filterForm
-      })
-    },
-    
-    handleRouteChange() {
-      this.filter = this.parseUrlFilter(this.$route.params.filter)
-      this.fetchItems(this.filter)
-    },
-    
-    parseUrlFilter(urlFilter) {
       const filter = { queries: [], sorting: [], columns: [] }
       
-      const path = urlFilter.split('/')
+      const path = this.$route.params.filter.split('/')
       for (let i in path) {
         let arr = path[i].split(/:/)
-        let refFilter = this.$store.state.filters.item.find(filter => filter.name == arr[0])
-        let thisFilter = JSON.parse(JSON.stringify(refFilter)) // deep copy
         
-        if (i == path.length - 1) {
-          this.filterForm = thisFilter
+        let thisFilter = {}
+        if (arr[0] == this.filterForm.name) {
+          thisFilter = this.filterForm
+        } else {
+          let refFilter = this.$store.state.filters.item.find(filter => filter.name == arr[0])
+          thisFilter = JSON.parse(JSON.stringify(refFilter)) // deep copy
         }
         
         // queries
@@ -253,6 +221,9 @@ export default {
             condition: 'is equal to',
             value: arr[1]
           })
+        }
+        if (thisFilter.queries) {
+          filter.queries.push.apply(filter.queries, thisFilter.queries)
         }
         
         // sorting
@@ -265,13 +236,20 @@ export default {
           filter.columns = thisFilter.columns
         }
       }
+      console.dir(filter.queries)
       
-      return filter
+      this.filter = filter
+      this.fetchItems()
     },
     
-    updateFilter() {
-      //this.currentFilter(this.$route.params.filter)
-      //this.fetchItems()
+    handleRouteChange() {
+      
+      let path = this.$route.params.filter.split('/')
+      let arr = path[path.length-1].split(/:/)
+      let refFilter = this.$store.state.filters.item.find(filter => filter.name == arr[0])
+      let thisFilter = JSON.parse(JSON.stringify(refFilter)) // deep copy
+      
+      this.filterForm = thisFilter
     },
     
     fetchItems() {
