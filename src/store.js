@@ -12,35 +12,17 @@ export default new Vuex.Store({
     status: [ 'published', 'unpublished', 'draft', 'trash' ],
     fields: {
       item: [
-        {
-          name: 'title',
-          type: 'text'
-        },
-        {
-          name: 'subtitle',
-          type: 'text'
-        },
-        {
-          name: 'account',
-          type: 'text'
-        },
+        { name: 'title', type: 'text' },
+        { name: 'subtitle', type: 'text' },
+        { name: 'account', type: 'text' },
         {
           name: 'status',
           type: 'select',
           values: [ 'published', 'unpublished', 'draft', 'trash' ]
         },
-        {
-          name: 'updated',
-          type: 'datetime'
-        },
-        {
-          name: 'created',
-          type: 'datetime'
-        },
-        {
-          name: 'picture',
-          type: 'image'
-        }
+        { name: 'updated', type: 'datetime' },
+        { name: 'created', type: 'datetime' },
+        { name: 'picture', type: 'image' }
       ]
     },
     filters: {
@@ -90,6 +72,7 @@ export default new Vuex.Store({
     items: [],
     messages: [],
     paging: [],
+    filter: {},
     notification: null
   },
   
@@ -129,6 +112,13 @@ export default new Vuex.Store({
   },
   
   mutations: {
+    
+    // filter
+    setFilter (state, filter) {
+      state.filter = filter
+    },
+    
+    // item
     // todo: use constant for function names. https://vuex.vuejs.org/en/mutations.html
     setItems (state, data) {
       state.paging = data.paging
@@ -141,6 +131,8 @@ export default new Vuex.Store({
       const index = state.items.findIndex(e => { return e._id == item._id })
       Vue.set(state.items, index, item)
     },
+    
+    // notification
     setNotification (state, message) {
       state.notification = message
     },

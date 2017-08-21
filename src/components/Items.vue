@@ -96,7 +96,7 @@
           <h1 class="title is-5">Customize columns</h1>
           <hr/>
           <li>
-            <ul v-for="column in filter.fields">
+            <ul v-for="column in $store.state.filter.fields">
               {{ column }}
             </ul>
           </li>
@@ -111,7 +111,7 @@
           <th>
             <input type="checkbox" v-model="checkedAll" @click="checkAll">
           </th>
-          <th v-for="column in filter.columns">
+          <th v-for="column in $store.state.filter.columns">
             {{ column }}
           </th>
         </tr>
@@ -121,7 +121,7 @@
           <td>
             <input type="checkbox" :value="item._id" v-model="checkedItems">
           </td>
-          <td v-for="column in filter.columns">
+          <td v-for="column in $store.state.filter.columns">
             <template v-if="column == 'title'">
               <router-link :to="'/item/' + item._id + '/detail'">
                 {{ item[column] }}
@@ -158,16 +158,15 @@ export default {
       filterForm: {}
     }
   },
-  /*
   asyncData ({ store, route: { params: { filter } } }) {
-    //this.currentFilter(filter)
+    console.dir(store.state)
+    let mergedFilter = this.methods.getMergedFilter(filter, store.state.filters.item)
+    let paging = { from: 1, to: 20 }
+    store.commit('setFilter', mergedFilter)
     return store.dispatch('callApi', { action: 'fetchItems',
-                                       queries: this.filter.queries,
-                                       sorting: this.filter.sorting,
-                                       columns: this.filter.columns,
-                                       page: page })
+                                       filter: mergedFilter,
+                                       paging: paging })
   },
-  */
   created: function() {
     //const filter = this.currentFilter(this.$route.params.filter)
     //this.filter = JSON.parse(JSON.stringify(filter)) // deep copy
@@ -194,7 +193,12 @@ export default {
   watch: {
     '$route': 'handleRouteChange',
     filterForm: {
-      handler: 'handleFilterFormChange',
+      handler: function() {
+        let filter = this.getMergedFilter(this.$route.params.filter,
+                                          this.$store.state.filters.item)
+        this.filter = filter
+        this.fetchItems()
+      },
       deep: true // https://vuejs.org/v2/api/#watch
     }
   },
@@ -203,18 +207,17 @@ export default {
   },
   methods: {
     
-    handleFilterFormChange() {
+    getMergedFilter(urlFilter, definedFilters) {
       const filter = { queries: [], sorting: [], columns: [] }
       
-      const path = this.$route.params.filter.split('/')
+      const path = urlFilter.split('/')
       for (let i in path) {
         let arr = path[i].split(/:/)
-        
         let thisFilter = {}
-        if (arr[0] == this.filterForm.name) {
+        if (this.filterForm && arr[0] == this.filterForm.name) {
           thisFilter = this.filterForm
         } else {
-          let refFilter = this.$store.state.filters.item.find(filter => filter.name == arr[0])
+          let refFilter = definedFilters.find(filter => filter.name == arr[0])
           thisFilter = JSON.parse(JSON.stringify(refFilter)) // deep copy
         }
         
@@ -241,8 +244,7 @@ export default {
         }
       }
       
-      this.filter = filter
-      this.fetchItems()
+      return filter
     },
     
     handleRouteChange() {
@@ -259,7 +261,6 @@ export default {
       
       let paging = { from: 1, to: 20 }
       let hashPaging = this.$route.hash.match(/^#([\d]+)-([\d]+)$/)
-      console.dir(hashPaging)
       if (hashPaging) {
         paging = { from: hashPaging[1], to: hashPaging[2] }
       }

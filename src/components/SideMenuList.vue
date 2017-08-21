@@ -37,7 +37,6 @@ export default {
       return this.$store.state.filters.item.filter(filter => filter.parent == this.parent)
     },
     path() {
-      console.dir(this.$route.params.filter.split('/'))
       return this.$route.params.filter.split('/')
     }
   },
