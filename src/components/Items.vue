@@ -19,7 +19,7 @@
           </button>
         </div>
         <div class="level-item" v-if="!checkedItems.length">
-          <router-link to="/item/new/detail" class="button is-small">
+          <router-link to="?id=new" class="button is-small">
             <span class="icon is-small">
               <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
             </span>

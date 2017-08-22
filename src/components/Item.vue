@@ -22,17 +22,17 @@
     </nav>
     <div class="tabs">
       <ul>
-        <li v-for="tab in tabs" :class="$route.params.tab == tab.id ? 'is-active' : ''">
-          <router-link :to="'/item/' + $route.params.id + '/' + tab.id" replace>
+        <li v-for="tab in tabs" :class="$route.query.tab == tab.id ? 'is-active' : ''">
+          <router-link :to="'?id=' + $route.query.id + '&tab=' + tab.id" replace>
             <span class="icon is-small"><i class="fa" :class="tab.icon"></i></span>
             <span>{{ tab.name }}</span>
           </router-link>
         </li>
       </ul>
     </div>
-    <detail :item.sync="item"/>
-    <pictures v-show="$route.params.tab == 'pictures'" :item.sync="item"/>
-    <description v-show="$route.params.tab == 'description'" :item.sync="item"/>
+    <detail v-show="$route.query.tab == ''" :item.sync="item"/>
+    <pictures v-show="$route.query.tab == 'pictures'" :item.sync="item"/>
+    <description v-show="$route.query.tab == 'description'" :item.sync="item"/>
   </div>
 </template>
 
@@ -45,7 +45,7 @@ export default {
   data() {
     return {
       tabs: [
-        { id: 'detail', name: 'Detail', icon: 'fa-list-alt' },
+        { id: '', name: 'Detail', icon: 'fa-list-alt' },
         { id: 'pictures', name: 'Picture', icon: 'fa-picture-o' },
         { id: 'description', name: 'Description', icon: 'fa-file-text-o' }
       ]
