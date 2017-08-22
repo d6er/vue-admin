@@ -19,7 +19,7 @@
           </button>
         </div>
         <div class="level-item" v-if="!checkedItems.length">
-          <router-link to="?id=new" class="button is-small">
+          <router-link to="?id=new&tab=detail" class="button is-small">
             <span class="icon is-small">
               <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
             </span>
@@ -107,8 +107,7 @@
       <button class="modal-close is-large" @click="closeCustomize"></button>
     </div>
     <ListFilter v-if="showFilter" :filter.sync="filterForm"/>
-    <Item v-if="$route.query.id"/>
-    <table v-else class="table is-narrow is-fullwidth">
+    <table class="table is-narrow is-fullwidth">
       <thead>
         <tr>
           <th>
@@ -126,7 +125,7 @@
           </td>
           <td v-for="column in $store.state.filter.columns">
             <template v-if="column == 'title'">
-              <router-link :to="'?id=' + item._id">
+              <router-link :to="'?id=' + item._id + '&tab=detail'">
                 {{ item[column] }}
               </router-link>
               {{ item._id }}
@@ -148,7 +147,6 @@
 
 <script>
 import ListFilter from './ListFilter.vue'
-import Item from './Item.vue'
 
 export default {
   data () {
@@ -158,22 +156,16 @@ export default {
       checkedAll: false,
       isCustomizeActive: false,
       showFilter: false,
-      filter: {},
       filterForm: {}
     }
   },
-  asyncData ({ store, route: { params: { filter }, query: { page, id } } }) {
+  asyncData ({ store, route: { params: { filter }, query: { page } } }) {
     console.dir(store.state)
-    console.log('page:' + page + ' id:' + id)
     let mergedFilter = this.methods.getMergedFilter(filter, store.state.filters.item)
     store.commit('setFilter', mergedFilter)
     return store.dispatch('callApi', { action: 'fetchItems',
                                        filter: mergedFilter,
                                        page: page })
-  },
-  created: function() {
-    //const filter = this.currentFilter(this.$route.params.filter)
-    //this.filter = JSON.parse(JSON.stringify(filter)) // deep copy
   },
   computed: {
     items() {
@@ -192,17 +184,17 @@ export default {
     '$route': 'handleRouteChange',
     filterForm: {
       handler: function() {
-        let filter = this.getMergedFilter(this.$route.params.filter,
-                                          this.$store.state.filters.item)
-        this.filter = filter
+        console.log('filterForm changed')
+        let mergedFilter = this.getMergedFilter(this.$route.params.filter,
+                                                this.$store.state.filters.item)
+        this.$store.commit('setFilter', mergedFilter)
         this.fetchItems()
       },
       deep: true // https://vuejs.org/v2/api/#watch
     }
   },
   components: {
-    ListFilter: ListFilter,
-    Item: Item
+    ListFilter: ListFilter
   },
   methods: {
     
@@ -256,7 +248,7 @@ export default {
     
     fetchItems() {
       this.$store.dispatch('callApi', { action: 'fetchItems',
-                                        filter: this.filter,
+                                        filter: this.$store.state.filter,
                                         page: this.$route.query.page })
     },
     

@@ -30,7 +30,7 @@
         </li>
       </ul>
     </div>
-    <detail v-show="$route.query.tab == ''" :item.sync="item"/>
+    <detail v-show="$route.query.tab == 'detail'" :item.sync="item"/>
     <pictures v-show="$route.query.tab == 'pictures'" :item.sync="item"/>
     <description v-show="$route.query.tab == 'description'" :item.sync="item"/>
   </div>
@@ -45,7 +45,7 @@ export default {
   data() {
     return {
       tabs: [
-        { id: '', name: 'Detail', icon: 'fa-list-alt' },
+        { id: 'detail', name: 'Detail', icon: 'fa-list-alt' },
         { id: 'pictures', name: 'Picture', icon: 'fa-picture-o' },
         { id: 'description', name: 'Description', icon: 'fa-file-text-o' }
       ]

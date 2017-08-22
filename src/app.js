@@ -58,19 +58,9 @@ const router = new Router({
     },
     {
       path: '/items/:filter+',
-      name: 'items',
       beforeEnter: requireAuth,
       components: {
-        default: () => import('./components/Items.vue'),
-        nav: () => import('./components/Nav.vue'),
-        menu: () => import('./components/SideMenu.vue')
-      }
-    },
-    {
-      path: '/item/:id/:tab',
-      beforeEnter: requireAuth,
-      components: {
-        default: () => import('./components/Item.vue'),
+        default: () => import('./components/Main.vue'),
         nav: () => import('./components/Nav.vue'),
         menu: () => import('./components/SideMenu.vue')
       }
