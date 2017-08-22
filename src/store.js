@@ -31,7 +31,7 @@ export default new Vuex.Store({
           name: 'All items',
           parent: '',
           foreach: '',
-          queries: [ ],
+          queries: [],
           sorting: [
             { field: 'updated', order: 'desc' },
             { field: 'title', order: 'asc' }
@@ -42,9 +42,7 @@ export default new Vuex.Store({
           name: 'account',
           parent: '',
           foreach: 'account',
-          queries: [
-            { field: 'title', condition: 'contains', value: 'a' }
-          ],
+          queries: [],
           sorting: [
             { field: 'updated', order: 'desc' },
             { field: 'title', order: 'asc' }
@@ -55,17 +53,13 @@ export default new Vuex.Store({
           name: 'status',
           parent: 'account',
           foreach: 'status',
-          queries: [
-            { field: 'title', condition: 'contains', value: 'aa' }
-          ]
+          queries: []
         },
         {
           name: 'status',
           parent: 'All items',
           foreach: 'status',
-          queries: [
-            { field: 'title', condition: 'contains', value: 'cc' }
-          ]
+          queries: []
         }
       ]
     },

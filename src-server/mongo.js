@@ -75,44 +75,29 @@ const actions = {
     return db.collection('items.' + user_id).findOne({ _id: item_id })
   },
   
-  fetchItems: function ({ user_id, filter, paging }) {
-    
-    paging.from = parseInt(paging.from)
-    paging.to = parseInt(paging.to)
+  fetchItems: function ({ user_id, filter, page }) {
     
     const query = actions.convertQueries(filter.queries)
     const sort = actions.convertSorting(filter.sorting)
     
-    const skip = paging.from - 1
-    const limit = paging.to - skip
+    const limit = 10
+    const skip = page ? limit * ( page - 1 ) : 0
     
     const cursor = db.collection('items.' + user_id).find(query)
     
     return cursor.count().then(count => {
       
-      let newPaging = {
+      const paging = {
+        start: skip + 1,
+        end: (skip + limit < count) ? (skip + limit) : count,
         count: count,
-        from: count ? paging.from : 0,
-        to: (count > paging.to) ? paging.to : count
-      }
-      
-      if (paging.from > 1) {
-        newPaging.prev = {
-          from: (paging.from - limit > 1) ? paging.from - limit : 1,
-          to: paging.from - 1
-        }
-      }
-      
-      if (count > paging.to) {
-        newPaging.next = {
-          from: paging.to + 1,
-          to: (count > paging.to + limit) ? paging.to + limit : count
-        }
+        hasPrev: (page > 1),
+        hasNext: (skip + limit < count)
       }
       
       return cursor.sort(sort).skip(skip).limit(limit).toArray().then(items => {
         items.forEach(actions.convertItem)
-        return { items: items, paging: newPaging }
+        return { items: items, paging: paging }
       })
     })
   },

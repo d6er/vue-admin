@@ -47,13 +47,14 @@
       </div>
       <div class="level-right">
         <div class="level-item">
-          {{ $store.state.paging.from }} - {{ $store.state.paging.to }}
+          {{ $store.state.paging.start }} - {{ $store.state.paging.end }}
           of {{ $store.state.paging.count }}
         </div>
         <div class="level-item">
           <div class="field has-addons">
             <p class="control">
-              <router-link v-if="prevPage" :to="prevPage" class="button is-small">
+              <router-link v-if="$store.state.paging.hasPrev" :to="prevPage"
+                           class="button is-small">
                 <span class="icon is-small">
                   <i class="fa fa-angle-left"></i>
                 </span>
@@ -65,7 +66,8 @@
               </button>
             </p>
             <p class="control">
-              <router-link v-if="nextPage" :to="nextPage" class="button is-small">
+              <router-link v-if="$store.state.paging.hasNext" :to="nextPage"
+                           class="button is-small">
                 <span class="icon is-small">
                   <i class="fa fa-angle-right"></i>
                 </span>
@@ -158,14 +160,14 @@ export default {
       filterForm: {}
     }
   },
-  asyncData ({ store, route: { params: { filter } } }) {
+  asyncData ({ store, route: { params: { filter }, query: { page, id } } }) {
     console.dir(store.state)
+    console.log('page:' + page + ' id:' + id)
     let mergedFilter = this.methods.getMergedFilter(filter, store.state.filters.item)
-    let paging = { from: 1, to: 20 }
     store.commit('setFilter', mergedFilter)
     return store.dispatch('callApi', { action: 'fetchItems',
                                        filter: mergedFilter,
-                                       paging: paging })
+                                       page: page })
   },
   created: function() {
     //const filter = this.currentFilter(this.$route.params.filter)
@@ -176,18 +178,12 @@ export default {
       return this.$store.state.items
     },
     prevPage() {
-      if (this.$store.state.paging.prev) {
-        return '#' + this.$store.state.paging.prev.from + '-' + this.$store.state.paging.prev.to
-      } else {
-        return null
-      }
+      const page = this.$route.query.page ? parseInt(this.$route.query.page) : 1
+      return '/items/' + this.$route.params.filter + '?page=' + (page - 1)
     },
     nextPage() {
-      if (this.$store.state.paging.next) {
-        return '#' + this.$store.state.paging.next.from + '-' + this.$store.state.paging.next.to
-      } else {
-        return null
-      }
+      const page = this.$route.query.page ? parseInt(this.$route.query.page) : 1
+      return '/items/' + this.$route.params.filter + '?page=' + (page + 1)
     }
   },
   watch: {
