@@ -30,7 +30,7 @@
         </li>
       </ul>
     </div>
-    <detail v-show="$route.params.tab == 'detail'" :item.sync="item"/>
+    <detail :item.sync="item"/>
     <pictures v-show="$route.params.tab == 'pictures'" :item.sync="item"/>
     <description v-show="$route.params.tab == 'description'" :item.sync="item"/>
   </div>
@@ -56,12 +56,12 @@ export default {
       // https://github.com/vuejs/vue/issues/1056
       // https://forum.vuejs.org/t/vuex-v-model-on-property-in-nested-object/6242/2
       // POINT: disconnect item from vuex
-      const _id = this.$route.params.id
+      const _id = this.$route.query.id
       const index = this.$store.state.items.findIndex(e => { return e._id == _id })
       return Object.assign({}, this.$store.state.items[index]) // maybe mutation error later
     }
   },
-  asyncData ({ store, route: { params: { id } } }) {
+  asyncData ({ store, route: { query: { id } } }) {
     if (id != 'new') {
       return store.dispatch('callApi', { action: 'fetchItem', item_id: parseInt(id) })
     }

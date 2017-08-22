@@ -107,7 +107,8 @@
       <button class="modal-close is-large" @click="closeCustomize"></button>
     </div>
     <ListFilter v-if="showFilter" :filter.sync="filterForm"/>
-    <table class="table is-narrow is-fullwidth">
+    <Item v-if="$route.query.id"/>
+    <table v-else class="table is-narrow is-fullwidth">
       <thead>
         <tr>
           <th>
@@ -125,7 +126,7 @@
           </td>
           <td v-for="column in $store.state.filter.columns">
             <template v-if="column == 'title'">
-              <router-link :to="'/item/' + item._id + '/detail'">
+              <router-link :to="'?id=' + item._id">
                 {{ item[column] }}
               </router-link>
               {{ item._id }}
@@ -147,6 +148,7 @@
 
 <script>
 import ListFilter from './ListFilter.vue'
+import Item from './Item.vue'
 
 export default {
   data () {
@@ -199,7 +201,8 @@ export default {
     }
   },
   components: {
-    ListFilter: ListFilter
+    ListFilter: ListFilter,
+    Item: Item
   },
   methods: {
     
@@ -244,26 +247,17 @@ export default {
     },
     
     handleRouteChange() {
-      
       let path = this.$route.params.filter.split('/')
       let arr = path[path.length-1].split(/:/)
       let refFilter = this.$store.state.filters.item.find(filter => filter.name == arr[0])
       let thisFilter = JSON.parse(JSON.stringify(refFilter)) // deep copy
-      
       this.filterForm = thisFilter
     },
     
     fetchItems() {
-      
-      let paging = { from: 1, to: 20 }
-      let hashPaging = this.$route.hash.match(/^#([\d]+)-([\d]+)$/)
-      if (hashPaging) {
-        paging = { from: hashPaging[1], to: hashPaging[2] }
-      }
-      
       this.$store.dispatch('callApi', { action: 'fetchItems',
                                         filter: this.filter,
-                                        paging: paging })
+                                        page: this.$route.query.page })
     },
     
     // Checkbox
