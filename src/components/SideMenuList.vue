@@ -2,13 +2,13 @@
   <ul :class="{ 'menu-list': depth == 0 }">
     <template v-for="filter in filters">
       <li v-if="!filter.foreach">
-        <router-link :to="parentPath + '/' + filter.name"
-                     :class="{ 'is-active': isActive(parentPath + '/' + filter.name) }">
+        <router-link :to="parentPath + '/' + encodeURIComponent(filter.name)"
+                     :class="{ 'is-active': isActive(parentPath + '/' + encodeURIComponent(filter.name)) }">
           {{ filter.name }}
         </router-link>
         <SideMenuList v-if="hasChildren(filter.name) && filter.name == path[depth]"
                       :parent="filter.name"
-                      :parentPath="parentPath + '/' + filter.name"
+                      :parentPath="parentPath + '/' + encodeURIComponent(filter.name)"
                       :depth="parseInt(depth) + 1"/>
       </li>
       <li v-if="filter.foreach != ''" v-for="elm in $store.state[filter.foreach]">

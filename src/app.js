@@ -66,6 +66,15 @@ const router = new Router({
       }
     },
     {
+      path: '/items/:filter+/p:page(\\d+)',
+      beforeEnter: requireAuth,
+      components: {
+        default: () => import('./components/List.vue'),
+        nav: () => import('./components/Nav.vue'),
+        menu: () => import('./components/SideMenu.vue')
+      }
+    },
+    {
       path: '/items/:filter+',
       beforeEnter: requireAuth,
       components: {

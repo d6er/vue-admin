@@ -125,7 +125,7 @@
           </td>
           <td v-for="column in $store.state.filter.columns">
             <template v-if="column == 'title'">
-              <router-link :to="item._id + '/detail'">
+              <router-link :to="$route.path + '/' + item._id + '/detail'">
                 {{ item[column] }}
               </router-link>
               {{ item._id }}
@@ -159,8 +159,7 @@ export default {
       filterForm: {}
     }
   },
-  asyncData ({ store, route: { params: { filter }, query: { page } } }) {
-    console.dir(store.state)
+  asyncData ({ store, route: { params: { filter, page } } }) {
     let mergedFilter = this.methods.getMergedFilter(filter, store.state.filters.item)
     store.commit('setFilter', mergedFilter)
     return store.dispatch('callApi', { action: 'fetchItems',
@@ -172,12 +171,12 @@ export default {
       return this.$store.state.items
     },
     prevPage() {
-      const page = this.$route.query.page ? parseInt(this.$route.query.page) : 1
-      return '/items/' + this.$route.params.filter + '?page=' + (page - 1)
+      const page = this.$route.params.page ? parseInt(this.$route.params.page) : 1
+      return '/items/' + this.$route.params.filter + '/p' + (page - 1)
     },
     nextPage() {
-      const page = this.$route.query.page ? parseInt(this.$route.query.page) : 1
-      return '/items/' + this.$route.params.filter + '?page=' + (page + 1)
+      const page = this.$route.params.page ? parseInt(this.$route.params.page) : 1
+      return '/items/' + this.$route.params.filter + '/p' + (page + 1)
     }
   },
   watch: {
@@ -249,13 +248,13 @@ export default {
     fetchItems() {
       this.$store.dispatch('callApi', { action: 'fetchItems',
                                         filter: this.$store.state.filter,
-                                        page: this.$route.query.page })
+                                        page: this.$route.params.page })
     },
     
     // Checkbox
     checkAll() {
       if (this.checkedAll) {
-        this.checkedItems = Object.keys(this.items).map(i => parseInt(i))
+        this.checkedItems = Object.keys(this.items).map(i => this.items[i]._id)
       } else {
         this.checkedItems = []
       }
