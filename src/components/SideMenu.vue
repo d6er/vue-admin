@@ -21,9 +21,7 @@
     
     <ul class="menu-list">
       <li>
-        <router-link to="/items/trash">
-          Import
-        </router-link>
+        <button class="button" @click="importNews">Import</button>
       </li>
       <li>
         <router-link to="/items/trash">
@@ -39,6 +37,11 @@
 import SideMenuList from './SideMenuList.vue'
 
 export default {
+  methods: {
+    importNews() {
+      this.$store.dispatch('importNews')
+    }
+  },
   components: {
     SideMenuList: SideMenuList
   }

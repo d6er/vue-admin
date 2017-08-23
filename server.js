@@ -12,6 +12,7 @@ const MongoStore = require('connect-mongo')(session)
 const config = require('./config')
 const mongo = require('./src-server/mongo')
 const passport = require('./src-server/passport')
+const hackernews = require('./src-server/hackernews')
 
 const template = fs.readFileSync('./src/index.template.html', 'utf-8')
 //const template = fs.readFileSync('./src-uikit/index.template.html', 'utf-8')
@@ -166,9 +167,21 @@ mongo.connect(config.mongo_url).then(db => {
         return
       }
       
+      if (message.data.action == 'importNews') {
+        hackernews.importNews().then(
+          r => { ws.send(JSON.stringify({ job_id: message.job_id, resolve: r })) },
+          e => { ws.send(JSON.stringify({ job_id: message.job_id, reject: e })) }
+        )
+        return
+      }
+      
       mongo[message.data.action](message.data).then(
-        r => { ws.send(JSON.stringify({ job_id: message.job_id, resolve: r })) },
-        e => { ws.send(JSON.stringify({ job_id: message.job_id, reject: e })) }
+        r => {
+          ws.send(JSON.stringify({ job_id: message.job_id, resolve: r }))
+        },
+        e => {
+          ws.send(JSON.stringify({ job_id: message.job_id, reject: e }))
+        }
       )
     })
   })

@@ -101,6 +101,10 @@ export default new Vuex.Store({
           return result
         }
       })
+    },
+
+    importNews() {
+      return api.call({ action: 'importNews' })
     }
     
   },

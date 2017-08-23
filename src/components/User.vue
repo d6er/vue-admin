@@ -22,6 +22,14 @@
         </div>
       </div>
     </div>
+    <div class="field is-horizontal">
+      <div class="field-label">
+        <label class="label">Accounts</label>
+      </div>
+      <div class="field-body">
+        <a href="/auth/google">Add a Google account</a>
+      </div>
+    </div>
     <hr/>
     <div class="field is-horizontal">
       <div class="field-label">
