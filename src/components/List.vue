@@ -125,7 +125,7 @@
           </td>
           <td v-for="column in $store.state.filter.columns">
             <template v-if="column == 'title'">
-              <router-link :to="'?id=' + item._id + '&tab=detail'">
+              <router-link :to="item._id + '/detail'">
                 {{ item[column] }}
               </router-link>
               {{ item._id }}

@@ -22,17 +22,17 @@
     </nav>
     <div class="tabs">
       <ul>
-        <li v-for="tab in tabs" :class="$route.query.tab == tab.id ? 'is-active' : ''">
-          <router-link :to="'?id=' + $route.query.id + '&tab=' + tab.id" replace>
+        <li v-for="tab in tabs" :class="$route.params.tab == tab.id ? 'is-active' : ''">
+          <router-link :to="tab.id" replace>
             <span class="icon is-small"><i class="fa" :class="tab.icon"></i></span>
             <span>{{ tab.name }}</span>
           </router-link>
         </li>
       </ul>
     </div>
-    <detail v-show="$route.query.tab == 'detail'" :item.sync="item"/>
-    <pictures v-show="$route.query.tab == 'pictures'" :item.sync="item"/>
-    <description v-show="$route.query.tab == 'description'" :item.sync="item"/>
+    <detail v-show="$route.params.tab == 'detail'" :item.sync="item"/>
+    <pictures v-show="$route.params.tab == 'pictures'" :item.sync="item"/>
+    <description v-show="$route.params.tab == 'description'" :item.sync="item"/>
   </div>
 </template>
 
@@ -56,12 +56,12 @@ export default {
       // https://github.com/vuejs/vue/issues/1056
       // https://forum.vuejs.org/t/vuex-v-model-on-property-in-nested-object/6242/2
       // POINT: disconnect item from vuex
-      const _id = this.$route.query.id
+      const _id = this.$route.params.id
       const index = this.$store.state.items.findIndex(e => { return e._id == _id })
       return Object.assign({}, this.$store.state.items[index]) // maybe mutation error later
     }
   },
-  asyncData ({ store, route: { query: { id } } }) {
+  asyncData ({ store, route: { params: { id } } }) {
     if (id != 'new') {
       return store.dispatch('callApi', { action: 'fetchItem', item_id: parseInt(id) })
     }
