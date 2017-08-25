@@ -2,71 +2,30 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import api from 'api'
 
+import config from './config'
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   
   state: {
+    
+    lists: config.lists,
+    
     user: null,
+    
     account: [ 'Account1', 'Account2', 'Account3' ],
+    
     status: [ 'published', 'unpublished', 'draft', 'trash' ],
-    fields: {
-      item: [
-        { name: 'title', type: 'text' },
-        { name: 'subtitle', type: 'text' },
-        { name: 'account', type: 'text' },
-        {
-          name: 'status',
-          type: 'select',
-          values: [ 'published', 'unpublished', 'draft', 'trash' ]
-        },
-        { name: 'updated', type: 'datetime' },
-        { name: 'created', type: 'datetime' },
-        { name: 'picture', type: 'image' }
-      ]
-    },
-    filters: {
-      item: [
-        {
-          name: 'All items',
-          parent: '',
-          foreach: '',
-          queries: [],
-          sorting: [
-            { field: 'updated', order: 'desc' },
-            { field: 'title', order: 'asc' }
-          ],
-          columns: [ 'picture', 'title', 'account', 'status', 'updated' ]
-        },
-        {
-          name: 'account',
-          parent: '',
-          foreach: 'account',
-          queries: [],
-          sorting: [
-            { field: 'updated', order: 'desc' },
-            { field: 'title', order: 'asc' }
-          ],
-          columns: [ 'picture', 'title', 'account', 'status', 'updated' ]
-        },
-        {
-          name: 'status',
-          parent: 'account',
-          foreach: 'status',
-          queries: []
-        },
-        {
-          name: 'status',
-          parent: 'All items',
-          foreach: 'status',
-          queries: []
-        }
-      ]
-    },
+    
     items: [],
+    
     messages: [],
+    
     paging: [],
+    
     filter: {},
+    
     notification: null
   },
   

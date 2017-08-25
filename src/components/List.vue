@@ -113,7 +113,7 @@
           <th>
             <input type="checkbox" v-model="checkedAll" @click="checkAll">
           </th>
-          <th v-for="column in $store.state.filter.columns">
+          <th v-for="column in $store.state.filter.columns" class="is-capitalized">
             {{ column }}
           </th>
         </tr>
@@ -159,33 +159,35 @@ export default {
       filterForm: {}
     }
   },
-  asyncData ({ store, route: { params: { filter, page } } }) {
-    let mergedFilter = this.methods.getMergedFilter(filter, store.state.filters.item)
+  asyncData ({ store, route: { params: { list, filter, page } } }) {
+    let definedFilters = store.state.lists.find(e => e.name == list).filters
+    let mergedFilter = this.methods.getMergedFilter(filter, definedFilters)
     store.commit('setFilter', mergedFilter)
     return store.dispatch('callApi', { action: 'fetchItems',
                                        filter: mergedFilter,
                                        page: page })
   },
   computed: {
+    list() {
+      return this.$store.state.lists.find(list => list.name == this.$route.params.list)
+    },
     items() {
       return this.$store.state.items
     },
     prevPage() {
       const page = this.$route.params.page ? parseInt(this.$route.params.page) : 1
-      return '/items/' + this.$route.params.filter + '/p' + (page - 1)
+      return '/' + this.list.name + '/' + this.$route.params.filter + '/p' + (page - 1)
     },
     nextPage() {
       const page = this.$route.params.page ? parseInt(this.$route.params.page) : 1
-      return '/items/' + this.$route.params.filter + '/p' + (page + 1)
+      return '/' + this.list.name + '/' + this.$route.params.filter + '/p' + (page + 1)
     }
   },
   watch: {
     '$route': 'handleRouteChange',
     filterForm: {
       handler: function() {
-        console.log('filterForm changed')
-        let mergedFilter = this.getMergedFilter(this.$route.params.filter,
-                                                this.$store.state.filters.item)
+        let mergedFilter = this.getMergedFilter(this.$route.params.filter, this.list.filters)
         this.$store.commit('setFilter', mergedFilter)
         this.fetchItems()
       },
@@ -200,7 +202,7 @@ export default {
     getMergedFilter(urlFilter, definedFilters) {
       const filter = { queries: [], sorting: [], columns: [] }
       
-      const path = urlFilter.split('/')
+      const path = urlFilter.split(',')
       for (let i in path) {
         let arr = path[i].split(/:/)
         let thisFilter = {}
@@ -238,9 +240,9 @@ export default {
     },
     
     handleRouteChange() {
-      let path = this.$route.params.filter.split('/')
+      let path = this.$route.params.filter.split(',')
       let arr = path[path.length-1].split(/:/)
-      let refFilter = this.$store.state.filters.item.find(filter => filter.name == arr[0])
+      let refFilter = this.list.filters.find(filter => filter.name == arr[0])
       let thisFilter = JSON.parse(JSON.stringify(refFilter)) // deep copy
       this.filterForm = thisFilter
     },

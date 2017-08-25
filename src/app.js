@@ -21,11 +21,14 @@ function requireAuth (to, from, next) {
 
 function checkAuth (to, from, next) {
   if (store.state.user) {
-    next({ path: '/items/All items' })
+    let path = '/' + store.state.lists[0].name + '/' + store.state.lists[0].filters[0].name
+    next({ path: path })
   } else {
     next()
   }
 }
+
+let listsRegExp = store.state.lists.map(list => list.name).join('|')
 
 // auth-flow: https://github.com/vuejs/vue-router/tree/dev/examples/auth-flow/components
 const router = new Router({
@@ -57,39 +60,32 @@ const router = new Router({
       }
     },
     {
-      path: '/items/:filter+/:id(\\d+)/:tab',
+      path: '/:list(' + listsRegExp + ')/:filter',
       beforeEnter: requireAuth,
-      components: {
-        default: () => import('./components/Detail.vue'),
-        nav: () => import('./components/Nav.vue'),
-        menu: () => import('./components/SideMenu.vue')
-      }
+      component: () => import('./components/Main.vue'),
+      children: [
+        {
+          path: 'p:page(\\d+)?',
+          alias: '', // alias for page 1
+          component: () => import('./components/List.vue')
+        },
+        {
+          path: ':id(\\d+)/:tab?',
+          components: () => import('./components/Detail.vue')
+        },
+        {
+          path: '/user',
+          components: () => import('./components/User.vue')
+        }
+      ]
     },
     {
-      path: '/items/:filter+/p:page(\\d+)',
+      path: '/:list(' + listsRegExp + ')',
       beforeEnter: requireAuth,
-      components: {
-        default: () => import('./components/List.vue'),
-        nav: () => import('./components/Nav.vue'),
-        menu: () => import('./components/SideMenu.vue')
-      }
-    },
-    {
-      path: '/items/:filter+',
-      beforeEnter: requireAuth,
-      components: {
-        default: () => import('./components/List.vue'),
-        nav: () => import('./components/Nav.vue'),
-        menu: () => import('./components/SideMenu.vue')
-      }
-    },
-    {
-      path: '/user',
-      beforeEnter: requireAuth,
-      components: {
-        default: () => import('./components/User.vue'),
-        nav: () => import('./components/Nav.vue'),
-        menu: () => import('./components/SideMenu.vue')
+      redirect: to => {
+        let list = store.state.lists.find(e => e.name == to.params.list)
+        let path = to.fullPath + '/' + list.filters[0].name
+        return path
       }
     }
   ]
