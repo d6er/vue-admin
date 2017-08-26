@@ -37,9 +37,9 @@
 </template>
 
 <script>
-import Detail from './DetailTabs/Detail.vue'
-import Pictures from './DetailTabs/Pictures.vue'
-import Description from './DetailTabs/Description.vue'
+import Detail from '../components/item/Detail.vue'
+import Pictures from '../components/item/Pictures.vue'
+import Description from '../components/item/Description.vue'
 
 export default {
   data() {

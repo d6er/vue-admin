@@ -1,5 +1,7 @@
 const config = {
   
+  tabs: [ 'detail', 'description', 'pictures' ],
+  
   fields: [
     {
       name: 'title',

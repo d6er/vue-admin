@@ -38,16 +38,16 @@ const router = new Router({
       path: '/',
       beforeEnter: checkAuth,
       components: {
-        default: () => import('./components/Home.vue'),
-        nav: () => import('./components/GuestNav.vue')
+        default: () => import('./views/Home.vue'),
+        nav: () => import('./views/GuestNav.vue')
       }
     },
     {
       path: '/login',
       beforeEnter: checkAuth,
       components: {
-        default: () => import('./components/Login.vue'),
-        nav: () => import('./components/GuestNav.vue')
+        default: () => import('./views/Login.vue'),
+        nav: () => import('./views/GuestNav.vue')
       }
     },
     {
@@ -55,27 +55,27 @@ const router = new Router({
       path: '/signup',
       beforeEnter: checkAuth,
       components: {
-        default: () => import('./components/Signup.vue'),
-        nav: () => import('./components/GuestNav.vue')
+        default: () => import('./views/Signup.vue'),
+        nav: () => import('./views/GuestNav.vue')
       }
     },
     {
       path: '/:list(' + listsRegExp + ')/:filter',
       beforeEnter: requireAuth,
-      component: () => import('./components/Main.vue'),
+      component: () => import('./views/Main.vue'),
       children: [
         {
           path: 'p:page(\\d+)?',
           alias: '', // alias for page 1
-          component: () => import('./components/List.vue')
+          component: () => import('./views/List.vue')
         },
         {
           path: ':id(\\d+)/:tab?',
-          components: () => import('./components/Detail.vue')
+          components: () => import('./views/Detail.vue')
         },
         {
           path: '/user',
-          components: () => import('./components/User.vue')
+          components: () => import('./views/User.vue')
         }
       ]
     },
