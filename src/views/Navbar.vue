@@ -27,7 +27,7 @@
           </router-link>
         </div>
         <div class="navbar-item">
-          <a class="button is-small" href="/logout">
+          <a class="button is-small" href="/auth/local/logout">
             <span class="icon is-small">
               <i class="fa fa-sign-out" aria-hidden="true"></i>
             </span>

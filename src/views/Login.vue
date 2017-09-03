@@ -2,7 +2,7 @@
   <div class="columns is-vcentered">
     <div class="column is-4 is-offset-4">
       <div class="box">
-        <form method="post" action="/login">
+        <form method="post" action="/auth/local/login">
           <div class="field">
             <label class="label">Username:</label>
             <p class="control">

@@ -60,6 +60,13 @@ const router = new Router({
       }
     },
     {
+      path: '/user',
+      beforeEnter: requireAuth,
+      components: {
+        default: () => import('./views/User.vue')
+      }
+    },
+    {
       path: '/:list(' + listsRegExp + ')/:filter',
       beforeEnter: requireAuth,
       component: () => import('./views/Main.vue'),
@@ -72,10 +79,6 @@ const router = new Router({
         {
           path: ':id(\\d+)/:tab?',
           components: () => import('./views/Detail.vue')
-        },
-        {
-          path: '/user',
-          components: () => import('./views/User.vue')
         }
       ]
     },

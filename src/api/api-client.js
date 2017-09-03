@@ -1,5 +1,5 @@
 import WebSocketPromise from './WebSocketPromise'
-import config from '../../config'
+import config from '../config'
 
 let wsp
 

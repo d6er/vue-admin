@@ -2,6 +2,8 @@ import item from './item'
 
 const config = {
   
+  websocket_url: 'ws://localhost:8181',
+  
   lists: [
     {
       name: 'items',

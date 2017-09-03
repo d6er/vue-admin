@@ -4,26 +4,24 @@ const fs = require('fs')
 const ws = require('ws')
 const url = require('url')
 const http = require('http')
+const bodyParser = require('body-parser')
+
+// Express
 const express = require('express')
 const session = require('express-session')
-const bodyParser = require('body-parser')
 const MongoStore = require('connect-mongo')(session)
 
-const config = require('./config')
-const mongo = require('./src-server/mongo')
-const passport = require('./src-server/passport')
-const hackernews = require('./src-server/hackernews')
+// Mongo
+const config = require('./server-src/config')
+const mongo = require('./server-src/mongo')
 
+// Passport
+const passport = require('./server-src/passport')
+const auth = require('./server-src/auth')
+
+// Vue
 const template = fs.readFileSync('./src/index.template.html', 'utf-8')
-//const template = fs.readFileSync('./src-uikit/index.template.html', 'utf-8')
 const { createBundleRenderer } = require('vue-server-renderer')
-
-// https://github.com/vuejs/vue-hackernews-2.0/issues/52
-//const { JSDOM } = require('jsdom')
-//const dom = new JSDOM('<!doctype html><html><body></body></html>', { url: 'http://localhost' })
-//global.window = dom.window
-//global.document = window.document
-//global.navigator = window.navigator
 
 mongo.connect(config.mongo_url).then(db => {
   
@@ -67,47 +65,16 @@ mongo.connect(config.mongo_url).then(db => {
     saveUninitialized: true
   })
   
+  // app.use
   app.use(sessionParser)
   app.use(passport.initialize())
   app.use(passport.session())
   app.use(bodyParser.urlencoded({ extended: false }))
   app.use('/dist', express.static('dist'))
   app.use('/images', express.static('images'))
+  app.use('/auth', auth)
   
-  app.get('/favicon.ico', (req, res) => {
-    res.end()
-  })
-  
-  // Username/Password
-  app.post('/login', passport.authenticate('local'), (req, res) => {
-    const path = req.body.redirect ? req.body.redirect : '/items'
-    res.redirect(path)
-  })
-  app.get('/logout', (req, res) => {
-    req.logout()
-    res.redirect('/')
-  })
-  
-  // Google
-  app.get('/auth/google',
-          passport.authenticate('google',
-                                { scope: 'https://www.googleapis.com/auth/userinfo.profile' }))
-  app.get('/auth/google/callback',
-          passport.authenticate('google', { failureRedirect: '/login?google-callback-failure' }),
-          function(req, res) {
-            console.dir(req.user)
-            res.redirect('/items?google-callback-success');
-          })
-
-  // Auth0
-  app.get('/auth/auth0',
-          passport.authenticate('auth0'))
-  app.get('/auth/auth0/callback',
-          passport.authenticate('auth0', { failureRedirect: '/login?auth0-callback-failure' }),
-          function(req, res) {
-            console.dir(req.user)
-            res.redirect('/items?auth0-callback-success');
-          })
+  app.get('/favicon.ico', (req, res) => { res.end() })
   
   // Vue SSR
   // https://forum.vuejs.org/t/accessing-current-request-context-through-vue-instance-for-server-side-rendering-to-be-able-to-access-cookies-for-initial-user-authentication/48/11
@@ -150,7 +117,7 @@ mongo.connect(config.mongo_url).then(db => {
       
       const message = JSON.parse(json)
       
-      if (message.data.action != 'createAccount') {
+      if (message.data.action != 'createUser') {
         if (!req.session.passport.hasOwnProperty('user')) {
           console.log('not auth')
           ws.send(JSON.stringify({ job_id: message.job_id, reject: 'auth error' }))
@@ -176,12 +143,8 @@ mongo.connect(config.mongo_url).then(db => {
       }
       
       mongo[message.data.action](message.data).then(
-        r => {
-          ws.send(JSON.stringify({ job_id: message.job_id, resolve: r }))
-        },
-        e => {
-          ws.send(JSON.stringify({ job_id: message.job_id, reject: e }))
-        }
+        r => { ws.send(JSON.stringify({ job_id: message.job_id, resolve: r })) },
+        e => { ws.send(JSON.stringify({ job_id: message.job_id, reject: e })) }
       )
     })
   })

@@ -1,5 +1,5 @@
-import config from '../../config'
-import mongo from '../../src-server/mongo'
+import config from '../../server-src/config'
+import mongo from '../../server-src/mongo'
 
 export default {
   call (data) {
