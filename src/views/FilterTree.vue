@@ -7,10 +7,10 @@
                      class="is-capitalized">
           {{ filter.name }}
         </router-link>
-        <SideMenuList v-if="hasChildren(filter.name) && filter.name == path[depth]"
-                      :parent="filter.name"
-                      :parentPath="parentPath + '/' + encodeURIComponent(filter.name)"
-                      :depth="parseInt(depth) + 1"/>
+        <FilterTree v-if="hasChildren(filter.name) && filter.name == path[depth]"
+                    :parent="filter.name"
+                    :parentPath="parentPath + '/' + encodeURIComponent(filter.name)"
+                    :depth="parseInt(depth) + 1"/>
       </li>
       <li v-if="filter.foreach != ''" v-for="elm in $store.state[filter.foreach]">
         <router-link :to="parentPath + '/' + filter.name + ':' + elm"
@@ -18,10 +18,10 @@
                      class="is-capitalized">
           {{ elm }}
         </router-link>
-        <SideMenuList v-if="hasChildren(filter.name) && filter.name + ':' + elm == path[depth]"
-                      :parent="filter.name"
-                      :parentPath="parentPath + '/' + filter.name + ':' + elm"
-                      :depth="parseInt(depth) + 1"/>
+        <FilterTree v-if="hasChildren(filter.name) && filter.name + ':' + elm == path[depth]"
+                    :parent="filter.name"
+                    :parentPath="parentPath + '/' + filter.name + ':' + elm"
+                    :depth="parseInt(depth) + 1"/>
       </li>
     </template>
   </ul>
@@ -30,7 +30,7 @@
 <script>
 export default {
   
-  name: 'SideMenuList', // required for recursive components
+  name: 'FilterTree', // required for recursive components
   
   props: [ 'parent', 'parentPath', 'depth' ],
   
@@ -39,6 +39,7 @@ export default {
       return this.$store.state.lists.find(list => list.name == this.$route.params.list)
     },
     filters() {
+      console.log('parent:' + this.parent)
       return this.list.filters.filter(filter => filter.parent == this.parent)
     },
     path() {

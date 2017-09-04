@@ -1,20 +1,14 @@
 <template>
-  <div>
+  <div class="container is-fluid">
     <div class="columns">
-      <div class="column">
-        <Navbar/>
+      <div class="column is-narrow">
+        <aside class="menu">
+          <p class="menu-label">
+            User Setting
+          </p>
+        </aside>
       </div>
-    </div>
-    <div class="container is-fluid">
-      <div class="columns">
-        <div class="column is-narrow">
-          <aside class="menu">
-            <p class="menu-label">
-              User Setting
-            </p>
-          </aside>
-        </div>
-        <div class="column">
+      <div class="column">
         <div>
           <h1 class="title is-5">Settings</h1>
           <hr/>
@@ -74,26 +68,25 @@
             </div>
             <div class="field-body">
               <div class="field">
-                <button @click="deleteAccount" class="button is-danger">Delete account</button>
+                <button @click="deleteUser" class="button is-danger">Delete account</button>
               </div>
             </div>
           </div>
-        </div>
         </div>
       </div>
     </div>
   </div>
 </template>
+
 <script>
-import Navbar from './Navbar.vue'
 import moment from 'moment-timezone'
 
 export default {
   
   computed: {
     username () {
-      if (this.$store.state.user.google) {
-        return this.$store.state.user.google.displayName
+      if (this.$store.state.user) {
+        return this.$store.state.user.displayName
       } else {
         return this.$store.state.user.username
       }
@@ -104,8 +97,8 @@ export default {
   },
   
   methods: {
-    deleteAccount () {
-      this.$store.dispatch('deleteAccount').then(
+    deleteUser () {
+      this.$store.dispatch('deleteUser').then(
         r => {
           // todo: go to home page
         },
@@ -114,10 +107,6 @@ export default {
         }
       )
     }
-  },
-
-  components: {
-    Navbar: Navbar
   }
 }
 </script>

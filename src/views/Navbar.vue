@@ -19,7 +19,7 @@
       </div>
       <div class="navbar-end">
         <div class="navbar-item">
-          <router-link class="button is-small" to="/user">
+          <router-link class="button is-small" to="/settings">
             <span class="icon is-small">
               <i class="fa fa-user" aria-hidden="true"></i>
             </span>

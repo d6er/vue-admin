@@ -106,7 +106,7 @@
       </div>
       <button class="modal-close is-large" @click="closeCustomize"></button>
     </div>
-    <ListFilter v-if="showFilter" :filter.sync="filterForm"/>
+    <FilterForm v-if="showFilter" :filter.sync="filterForm"/>
     <table class="table is-narrow is-fullwidth">
       <thead>
         <tr>
@@ -146,7 +146,7 @@
 </template>
 
 <script>
-import ListFilter from './ListFilter.vue'
+import FilterForm from './FilterForm.vue'
 
 export default {
   data () {
@@ -195,7 +195,7 @@ export default {
     }
   },
   components: {
-    ListFilter: ListFilter
+    FilterForm: FilterForm
   },
   methods: {
     

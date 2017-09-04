@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import App from './App.vue'
-//import App from '../src-uikit/App.vue'
 import store from './store'
 import { sync } from 'vuex-router-sync'
 
@@ -22,7 +21,7 @@ function requireAuth (to, from, next) {
 function checkAuth (to, from, next) {
   if (store.state.user) {
     let path = '/' + store.state.lists[0].name + '/' + store.state.lists[0].filters[0].name
-    next({ path: path })
+    next(path)
   } else {
     next()
   }
@@ -37,41 +36,37 @@ const router = new Router({
     {
       path: '/',
       beforeEnter: checkAuth,
-      component: () => import('./views/Main.vue'),
-      children: [
-        {
-          path: '',
-          component: () => import('./views/Home.vue')
-        },
-        {
-          path: 'login',
-          component: () => import('./views/Login.vue')
-        },
-        {
-          path: 'signup',
-          component: () => import('./views/Signup.vue')
-        }
-      ]
+      component: () => import('./views/Home.vue')
     },
     {
-      path: '/user',
+      path: '/login',
+      beforeEnter: checkAuth,
+      component: () => import('./views/Login.vue')
+    },
+    {
+      path: '/signup',
+      beforeEnter: checkAuth,
+      component: () => import('./views/Signup.vue')
+    },
+    {
+      path: '/settings',
       beforeEnter: requireAuth,
-      components: {
-        default: () => import('./views/User.vue')
-      }
+      component: () => import('./views/Settings.vue')
     },
     {
       path: '/:list(' + listsRegExp + ')/:filter',
       beforeEnter: requireAuth,
-      component: () => import('./views/Main.vue'),
+      component: () => import('./views/Container.vue'),
       children: [
         {
           path: 'p:page(\\d+)?',
           alias: '', // alias for page 1
+          beforeEnter: requireAuth,
           component: () => import('./views/List.vue')
         },
         {
           path: ':id(\\d+)/:tab?',
+          beforeEnter: requireAuth,
           components: () => import('./views/Detail.vue')
         }
       ]
