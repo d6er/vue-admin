@@ -37,27 +37,21 @@ const router = new Router({
     {
       path: '/',
       beforeEnter: checkAuth,
-      components: {
-        default: () => import('./views/Home.vue'),
-        nav: () => import('./views/GuestNav.vue')
-      }
-    },
-    {
-      path: '/login',
-      beforeEnter: checkAuth,
-      components: {
-        default: () => import('./views/Login.vue'),
-        nav: () => import('./views/GuestNav.vue')
-      }
-    },
-    {
-      // todo: check logged out
-      path: '/signup',
-      beforeEnter: checkAuth,
-      components: {
-        default: () => import('./views/Signup.vue'),
-        nav: () => import('./views/GuestNav.vue')
-      }
+      component: () => import('./views/Main.vue'),
+      children: [
+        {
+          path: '',
+          component: () => import('./views/Home.vue')
+        },
+        {
+          path: 'login',
+          component: () => import('./views/Login.vue')
+        },
+        {
+          path: 'signup',
+          component: () => import('./views/Signup.vue')
+        }
+      ]
     },
     {
       path: '/user',

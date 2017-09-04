@@ -52,8 +52,6 @@ mongo.connect(config.mongo_url).then(db => {
     })
     
     process.once('SIGUSR2', function () {
-      console.log('SIGUSR2')
-      
       process.kill(process.pid, 'SIGUSR2');
     });
   }

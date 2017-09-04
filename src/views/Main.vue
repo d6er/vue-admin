@@ -2,12 +2,13 @@
   <div>
     <div class="columns">
       <div class="column">
-        <Navbar/>
+        <Navbar v-if="$store.state.user"/>
+        <NavbarGuest v-else/>
       </div>
     </div>
     <div class="container is-fluid">
       <div class="columns">
-        <div class="column is-narrow">
+        <div v-if="$store.state.user" class="column is-narrow">
           <aside class="menu">
             <p class="menu-label">
               <span class="icon is-small">
@@ -28,11 +29,13 @@
 
 <script>
 import Navbar from './Navbar.vue'
+import NavbarGuest from './NavbarGuest.vue'
 import SideMenuList from './SideMenuList.vue'
 
 export default {
   components: {
     Navbar: Navbar,
+    NavbarGuest: NavbarGuest,
     SideMenuList: SideMenuList
   }
 }
