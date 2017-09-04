@@ -135,14 +135,6 @@ mongo.connect(config.mongo_url).then(db => {
         return
       }
       
-      if (message.data.action == 'importNews') {
-        hackernews.importNews().then(
-          r => { ws.send(JSON.stringify({ job_id: message.job_id, resolve: r })) },
-          e => { ws.send(JSON.stringify({ job_id: message.job_id, reject: e })) }
-        )
-        return
-      }
-      
       mongo[message.data.action](message.data).then(
         r => { ws.send(JSON.stringify({ job_id: message.job_id, resolve: r })) },
         e => { ws.send(JSON.stringify({ job_id: message.job_id, reject: e })) }
