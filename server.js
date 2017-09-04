@@ -93,6 +93,9 @@ mongo.connect(config.mongo_url).then(db => {
     promise.then(() => {
       renderer.renderToString(context, (err, html) => {
         res.end(html)
+        if (err) {
+          console.dir(err)
+        }
       })
     })
   })
