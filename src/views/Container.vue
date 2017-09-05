@@ -9,7 +9,7 @@
             </span>
             {{ $route.params.list }}
           </p>
-          <FilterTree parent="" :parentPath="'/' + $route.params.list" depth="0"/>
+          <FilterTree/>
         </aside>
       </div>
       <div class="column">
