@@ -87,7 +87,7 @@ export function createStore () {
         })
       },
       setItem (state, item) {
-        const index = state.items.findIndex(e => { return e._id == item._id })
+        let index = state.items.findIndex(e => e._id == item._id)
         Vue.set(state.items, index, item)
       },
       

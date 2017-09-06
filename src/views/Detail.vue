@@ -56,9 +56,8 @@ export default {
       // https://github.com/vuejs/vue/issues/1056
       // https://forum.vuejs.org/t/vuex-v-model-on-property-in-nested-object/6242/2
       // POINT: disconnect item from vuex
-      const _id = this.$route.params.id
-      const index = this.$store.state.items.findIndex(e => { return e._id == _id })
-      return Object.assign({}, this.$store.state.items[index]) // maybe mutation error later
+      const index = this.$store.state.items.findIndex(e => e._id == parseInt(this.$route.params.id))
+      return Object.assign({}, this.$store.state.items[index])
     }
   },
   asyncData ({ store, route: { params: { id } } }) {

@@ -66,7 +66,7 @@ export function createRouter (store) {
           {
             path: ':id(\\d+)/:tab?',
             beforeEnter: requireAuth,
-            components: () => import('./views/Detail.vue')
+            component: () => import('./views/Detail.vue')
           }
         ]
       },
