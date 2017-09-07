@@ -6,8 +6,8 @@ const FacebookStrategy = require('passport-facebook').Strategy;
 // Passport
 passport.use(new FacebookStrategy(
   {
-    clientID: '',
-    clientSecret: '',
+    clientID: 'dummy',
+    clientSecret: 'dummy',
     callbackURL: "http://localhost:8181/auth/facebook/callback",
     passReqToCallback: true
   },

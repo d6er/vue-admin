@@ -56,12 +56,11 @@
                   </tr>
                 </tbody>
               </table>
-              <hr/>
-              <a href="/auth/google">Add a Google account</a>
-              <a href="/auth/auth0">Add an Auth0 account</a>
-              <a href="/auth/facebook">Add an Facebook account</a>
             </div>
           </div>
+          <a href="/auth/google">Google</a>
+          / <a href="/auth/auth0">Auth0</a>
+          / <a href="/auth/facebook">Facebook</a>
           <hr/>
           <div class="field is-horizontal">
             <div class="field-label">
