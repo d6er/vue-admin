@@ -125,7 +125,7 @@
           </td>
           <td v-for="column in $store.state.filter.columns">
             <template v-if="column == 'title'">
-              <router-link :to="$route.path + '/' + item._id + '/detail'">
+              <router-link :to="getDetailLinkURL(item._id)">
                 {{ item[column] }}
               </router-link>
               {{ item._id }}
@@ -245,6 +245,10 @@ export default {
       let refFilter = this.list.filters.find(filter => filter.name == arr[0])
       let thisFilter = JSON.parse(JSON.stringify(refFilter)) // deep copy
       this.filterForm = thisFilter
+    },
+    
+    getDetailLinkURL(_id) {
+      return '/' + this.$route.params.list + '/' + this.$route.params.filter + '/' + _id + '/detail'
     },
     
     fetchItems() {
