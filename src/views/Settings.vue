@@ -59,6 +59,7 @@
               <hr/>
               <a href="/auth/google">Add a Google account</a>
               <a href="/auth/auth0">Add an Auth0 account</a>
+              <a href="/auth/facebook">Add an Facebook account</a>
             </div>
           </div>
           <hr/>
