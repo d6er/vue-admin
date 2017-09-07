@@ -34,7 +34,7 @@ router.get('/', passport.authenticate('auth0'))
 router.get('/callback',
            passport.authenticate('auth0', { failureRedirect: '/login?google-callback-failure' }),
            function(req, res) {
-             res.redirect('/user')
+             res.redirect('/settings')
            })
 
 module.exports = router

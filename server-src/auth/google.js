@@ -32,7 +32,7 @@ router.get('/',
 router.get('/callback',
            passport.authenticate('google', { failureRedirect: '/login?google-callback-failure' }),
            function(req, res) {
-             res.redirect('/user')
+             res.redirect('/settings')
            })
 
 module.exports = router

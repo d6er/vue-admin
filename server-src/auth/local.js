@@ -1,5 +1,5 @@
 const express = require('express')
-const passport = require('../passport')
+const passport = require('passport')
 const mongo = require('../mongo')
 const LocalStrategy = require('passport-local').Strategy
 

@@ -30,21 +30,22 @@ const actions = {
 
   createUser: function ({ username, password }) {
     
-    // todo: encrypt password
-    const user = {
-      username: username,
-      password: password
-    }
-    
     return db.collection('users').findOne({ username: username }).then(r => {
-      console.dir(r)
-      if (r) {
-        reject('username ' + username + ' already exists')
-      }
+      return new Promise((resolve, reject) => {
+        if (r) {
+          reject('username ' + username + ' already exists')
+        } else {
+          resolve()
+        }
+      })
     }).then(() => {
       return this.getNextId('users')
     }).then(r => {
-      payload._id = r.value.seq
+      let user = {
+        _id: r.value.seq,
+        username: username,
+        password: password // todo: encrypt password
+      }
       return db.collection('users').insertOne(user)
     })
   },

@@ -41,12 +41,13 @@ export default {
     // http://stackoverflow.com/questions/40165766/returning-promises-from-vuex-actions
     signup () {
       
-      let payload = {
+      let data = {
+        action: 'createUser',
         username: this.username,
         password: this.password
       }
       
-      this.$store.dispatch('createAccount', payload).then(
+      this.$store.dispatch('callApi', data).then(
         response => {
           console.dir(response)
           // todo: auto login

@@ -36,12 +36,12 @@ export function createStore () {
     
     actions: {
       
-      createAccount ({ commit }, data) {
-        return api.call({ action: 'createAccount', payload: data })
-      },
-      
       callApi ({ commit, state }, data) {
-        data.user_id = state.user._id
+        
+        if (data.action != 'createUser') {
+          data.user_id = state.user._id
+        }
+        
         return api.call(data).then(result => {
           // todo: map action and commit
           // https://github.com/vuejs/vuex/issues/755
@@ -62,12 +62,7 @@ export function createStore () {
             return result
           }
         })
-      },
-
-      importNews() {
-        return api.call({ action: 'importNews' })
       }
-      
     },
     
     mutations: {
