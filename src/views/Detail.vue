@@ -78,6 +78,7 @@ import Pictures from '../components/item/Pictures.vue'
 import Description from '../components/item/Description.vue'
 
 export default {
+  
   data() {
     return {
       tabs: [
@@ -87,15 +88,7 @@ export default {
       ]
     }
   },
-  computed: {
-    item() {
-      // https://github.com/vuejs/vue/issues/1056
-      // https://forum.vuejs.org/t/vuex-v-model-on-property-in-nested-object/6242/2
-      // POINT: disconnect item from vuex
-      const index = this.$store.state.items.findIndex(e => e._id == parseInt(this.$route.params.id))
-      return Object.assign({}, this.$store.state.items[index])
-    }
-  },
+  
   asyncData ({ store, route: { params: { list, filter, id } } }) {
     let definedFilters = store.state.lists.find(e => e.name == list).filters
     let mergedFilter = this.methods.getMergedFilter(filter, definedFilters)
@@ -105,6 +98,21 @@ export default {
                                          item_id: parseInt(id) })
     }
   },
+  
+  watch: {
+    $route: 'handleRouteChange'
+  },
+  
+  computed: {
+    item() {
+      // https://github.com/vuejs/vue/issues/1056
+      // https://forum.vuejs.org/t/vuex-v-model-on-property-in-nested-object/6242/2
+      // POINT: disconnect item from vuex
+      const index = this.$store.state.items.findIndex(e => e._id == parseInt(this.$route.params.id))
+      return Object.assign({}, this.$store.state.items[index])
+    }
+  },
+  
   methods: {
     save () {
       this.$store.dispatch('callApi', { action: 'saveItem', item: this.item }).then(
@@ -118,6 +126,17 @@ export default {
     },
     back () {
       this.$router.go(-1)
+    },
+    
+    handleRouteChange () {
+      let list = this.$route.params.list
+      let definedFilters = this.$store.state.lists.find(e => e.name == list).filters
+      let mergedFilter = this.getMergedFilter(this.$route.params.filter, definedFilters)
+      if (this.$route.params.id != 'new') {
+        return this.$store.dispatch('callApi', { action: 'fetchItem',
+                                                 filter: mergedFilter,
+                                                 item_id: parseInt(this.$route.params.id) })
+      }
     },
     
     // todo: same method in List.vue

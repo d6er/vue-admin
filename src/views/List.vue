@@ -82,23 +82,9 @@
         </div>
       </div>
     </nav>
-
-    <div class="modal" :class="{ 'is-active': isCustomizeActive }">
-      <div class="modal-background" @click="closeCustomize"></div>
-      <div class="modal-content">
-        <div class="box">
-          <h1 class="title is-5">Customize columns</h1>
-          <hr/>
-          <li>
-            <ul v-for="column in $store.state.filter.fields">
-              {{ column }}
-            </ul>
-          </li>
-        </div>
-      </div>
-      <button class="modal-close is-large" @click="closeCustomize"></button>
-    </div>
+    
     <FilterForm v-if="showFilter" :filter.sync="filterForm"/>
+    
     <table class="table is-narrow is-fullwidth">
       <thead>
         <tr>
@@ -141,6 +127,7 @@
 import FilterForm from './FilterForm.vue'
 
 export default {
+  
   data () {
     return {
       keyword: '',
@@ -151,6 +138,7 @@ export default {
       filterForm: {}
     }
   },
+  
   asyncData ({ store, route: { params: { list, filter, page } } }) {
     let definedFilters = store.state.lists.find(e => e.name == list).filters
     let mergedFilter = this.methods.getMergedFilter(filter, definedFilters)
@@ -159,6 +147,7 @@ export default {
                                        filter: mergedFilter,
                                        page: page })
   },
+  
   computed: {
     list() {
       return this.$store.state.lists.find(list => list.name == this.$route.params.list)
@@ -175,6 +164,7 @@ export default {
       return '/' + this.list.name + '/' + this.$route.params.filter + '/p' + (page + 1)
     }
   },
+  
   watch: {
     '$route': 'handleRouteChange',
     filterForm: {
@@ -186,9 +176,11 @@ export default {
       deep: true // https://vuejs.org/v2/api/#watch
     }
   },
+  
   components: {
     FilterForm: FilterForm
   },
+  
   methods: {
     
     getMergedFilter(urlFilter, definedFilters) {
@@ -262,15 +254,8 @@ export default {
     },
     deleteItems() {
       this.$store.dispatch('callApi', { action: 'deleteItems', item_ids: this.checkedItems })
-    },
-    
-    // Customize
-    customize() {
-      this.isCustomizeActive = !this.isCustomizeActive
-    },
-    closeCustomize() {
-      this.isCustomizeActive = false
     }
+    
   }
 }
 </script>
