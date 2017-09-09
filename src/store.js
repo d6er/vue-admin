@@ -81,9 +81,10 @@ export function createStore () {
           Vue.set(state.items, index, item)
         })
       },
-      setItem (state, item) {
-        let index = state.items.findIndex(e => e._id == item._id)
-        Vue.set(state.items, index, item)
+      setItem (state, data) {
+        state.paging = data.paging
+        let index = state.items.findIndex(e => e._id == data.item._id)
+        Vue.set(state.items, index, data.item)
       },
       
       // notification

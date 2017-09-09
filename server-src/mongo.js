@@ -98,8 +98,67 @@ const actions = {
     }
   },
   
-  fetchItem: function ({ user_id, item_id }) {
-    return db.collection('items.' + user_id).findOne({ _id: item_id })
+  fetchItem: function ({ user_id, filter, item_id }) {
+
+    filter.sorting.push({ field: '_id', order: 'desc' })
+    
+    let query = actions.convertQueries(filter.queries)
+    let sort = actions.convertSorting(filter.sorting)
+    let queriesForSort = []
+    let result = {}
+    
+    return db.collection('items.' + user_id).findOne({ _id: item_id }).then(item => {
+      
+      result.item = item
+      
+      for (let i in filter.sorting) {
+        
+        let q = {}
+        for (let j = 0; j < i; j++) {
+          let f = filter.sorting[j].field
+          q[f] = item[f]
+        }
+        
+        let s = filter.sorting[i]
+        if (s.order == 'asc') {
+          q[s.field] = { $lt: item[s.field] }
+        } else if (s.order == 'desc') {
+          q[s.field] = { $gt: item[s.field] }
+        }
+        
+        queriesForSort.push(q)
+      }
+      
+      let positionQuery = { $and: [ query, { $or: queriesForSort } ] }
+      
+      return db.collection('items.' + user_id).find(positionQuery).count()
+      
+    }).then(position => {
+      
+      result.paging = { position: position + 1 }
+      
+      let cursor = db.collection('items.' + user_id).find(query, { _id: true })
+      
+      return cursor.count().then(count => {
+        result.paging.count = count
+        
+        let skip = position ? position - 1 : 0
+        let limit = position ? 3 : 2
+        return cursor.sort(sort).skip(skip).limit(limit).toArray()
+      })
+      
+    }).then(items => {
+      
+      let idx = items.findIndex(item => item._id == item_id)
+      if (items[idx - 1]) {
+        result.paging.prevId = items[idx - 1]._id
+      }
+      if (items[idx + 1]) {
+        result.paging.nextId = items[idx + 1]._id
+      }
+      
+      return result
+    })
   },
   
   fetchItems: function ({ user_id, filter, page }) {
@@ -123,7 +182,7 @@ const actions = {
       }
       
       return cursor.sort(sort).skip(skip).limit(limit).toArray().then(items => {
-        items.forEach(actions.convertItem)
+        //items.forEach(actions.convertItem)
         return { items: items, paging: paging }
       })
     })
@@ -175,6 +234,14 @@ const actions = {
         converted[q.field] = q.value
       } else if (q.condition == 'is not equal to') {
         converted[q.field] = { $ne: q.value }
+      } else if (q.condition == 'is less than') {
+        converted[q.field] = { $lt: q.value }
+      } else if (q.condition == 'is less than or equal') {
+        converted[q.field] = { $lte: q.value }
+      } else if (q.condition == 'is greater than') {
+        converted[q.field] = { $gt: q.value }
+      } else if (q.condition == 'is greater than or equal') {
+        converted[q.field] = { $gte: q.value }
       } else if (q.condition == 'contains') {
         converted[q.field] = new RegExp(actions.escapeRegExp(q.value), 'i')
       } else if (q.condition == 'does not contain') {
@@ -186,6 +253,7 @@ const actions = {
   
   convertSorting: function (sorting) {
     let converted = []
+    
     for (var i in sorting) {
       var s = sorting[i]
       if (!s.field) continue
@@ -196,6 +264,8 @@ const actions = {
         converted.push([ s.field, -1 ])
       }
     }
+    converted.push([ '_id', -1 ])
+    
     return converted
   }
 }

@@ -80,14 +80,6 @@
             </p>
           </div>
         </div>
-        <p class="level-item">
-          <button class="button is-small" @click="customize">
-            <span class="icon is-small">
-              <i class="fa fa-cogs" aria-hidden="true"></i>
-            </span>
-            <span>Customize</span>
-          </button>
-        </p>
       </div>
     </nav>
 
