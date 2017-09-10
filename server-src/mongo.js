@@ -54,6 +54,10 @@ const actions = {
     console.log('mongo.js deleteAccount user_id: ' + user_id)
   },
   
+  getUser: function (user_id) {
+    return db.collection('users').findOne({ _id: user_id })
+  },
+  
   addAccount: function (user_id, account) {
     let users = db.collection('users')
     users.update(
@@ -96,6 +100,11 @@ const actions = {
         return db.collection(coll).insertOne(item)
       })
     }
+  },
+  
+  saveItems: function (user_id, list, items) {
+    let coll = list + '.' + user_id
+    return db.collection(coll).insertMany(items)
   },
   
   fetchItem: function ({ user_id, filter, item_id }) {

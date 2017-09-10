@@ -12,6 +12,10 @@ passport.use(new GoogleStrategy(
     passReqToCallback: true
   },
   function(req, accessToken, refreshToken, profile, done) {
+    
+    // todo: change structure, don't put accessToken to profile object
+    profile.accessToken = accessToken
+    
     if (req.user) {
       mongo.connect().then(db => {
         return mongo.addAccount(req.user._id, profile)
@@ -25,9 +29,7 @@ passport.use(new GoogleStrategy(
 // Router
 const router = express.Router();
 
-router.get('/',
-           passport.authenticate('google',
-                                 { scope: 'https://www.googleapis.com/auth/userinfo.profile' }))
+router.get('/', passport.authenticate('google', { scope: 'openid profile email https://www.googleapis.com/auth/gmail.readonly' }))
 
 router.get('/callback',
            passport.authenticate('google', { failureRedirect: '/login?google-callback-failure' }),

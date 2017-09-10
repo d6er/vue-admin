@@ -19,6 +19,8 @@ const mongo = require('./server-src/mongo')
 const passport = require('./server-src/passport')
 const auth = require('./server-src/auth')
 
+const google = require('./server-src/google')
+
 // Vue
 const template = fs.readFileSync('./src/index.template.html', 'utf-8')
 const { createBundleRenderer } = require('vue-server-renderer')
@@ -114,7 +116,7 @@ mongo.connect(config.mongo_url).then(db => {
   })
   
   wss.on('connection', (ws, req) => {
-    ws.on('message', (json) => {
+    ws.on('message', json => {
       
       const message = JSON.parse(json)
       
@@ -133,6 +135,15 @@ mongo.connect(config.mongo_url).then(db => {
         ws.send(JSON.stringify({ job_id: message.job_id,
                                  resolve: { path: '/images/' + message.data.name } }))
         return
+      }
+      
+      if (message.data.action == 'googleList') {
+        return mongo.getUser(req.session.passport.user).then(user => {
+          return google.messagesList(user.accounts[0])
+        }).then(messages => {
+          console.dir(messages, { depth: null })
+          return mongo.saveItems(req.session.passport.user, 'emails', messages)
+        })
       }
       
       mongo[message.data.action](message.data).then(

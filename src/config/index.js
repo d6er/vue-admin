@@ -1,4 +1,5 @@
 import item from './item'
+import email from './email'
 
 const config = {
   
@@ -11,8 +12,9 @@ const config = {
       filters: item.filters
     },
     {
-      name: 'orders',
-      filters: [ { name: 'orders-all' } ]
+      name: 'emails',
+      fields: email.fields,
+      filters: email.filters
     },
     {
       name: 'messages',

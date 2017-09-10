@@ -8,6 +8,7 @@ passport.serializeUser(function(user, done) {
 passport.deserializeUser(function(id, done) {
   mongo.connect().then(db => {
     db.collection('users').findOne({ _id: id, deleted: { $ne: true } }).then(doc => {
+      // todo: remove secret data (accessToken, etc)
       return done(null, doc)
     })
   })

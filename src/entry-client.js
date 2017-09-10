@@ -1,10 +1,12 @@
 import { createApp } from './app'
 
+// Vue.mixin here in hackernews example
+
 const { app, router, store } = createApp()
 
-// moved into app.js for testing
+// moved into app.js for testing. => reverted, ok?
 if (window.__INITIAL_STATE__) {
-  //store.replaceState(window.__INITIAL_STATE__)
+  store.replaceState(window.__INITIAL_STATE__)
 }
 
 router.onReady(() => {

@@ -61,6 +61,7 @@
           <a href="/auth/google">Google</a>
           / <a href="/auth/auth0">Auth0</a>
           / <a href="/auth/facebook">Facebook</a>
+          / <button @click="googleList">googleList</button>
           <hr/>
           <div class="field is-horizontal">
             <div class="field-label">
@@ -106,6 +107,9 @@ export default {
           
         }
       )
+    },
+    googleList () {
+      this.$store.dispatch('callApi', { action: 'googleList' })
     }
   }
 }
