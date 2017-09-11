@@ -175,7 +175,7 @@ const actions = {
     const query = actions.convertQueries(filter.queries)
     const sort = actions.convertSorting(filter.sorting)
     
-    const limit = 10
+    const limit = 30
     const skip = page ? limit * ( page - 1 ) : 0
     
     const cursor = db.collection(list + '.' + user_id).find(query)

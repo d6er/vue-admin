@@ -11,7 +11,7 @@ const config = {
 
   filters: [
     {
-      name: 'all-emails',
+      name: 'inbox',
       parent: '',
       foreach: '',
       queries: [],
