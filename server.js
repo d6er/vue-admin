@@ -141,7 +141,6 @@ mongo.connect(config.mongo_url).then(db => {
         return mongo.getUser(req.session.passport.user).then(user => {
           return google.messagesList(user.accounts[0])
         }).then(messages => {
-          console.dir(messages, { depth: null })
           return mongo.saveItems(req.session.passport.user, 'emails', messages)
         })
       }

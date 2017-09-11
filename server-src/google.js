@@ -1,3 +1,4 @@
+const moment = require('moment')
 const google = require('googleapis')
 const gmail = google.gmail('v1')
 
@@ -18,8 +19,7 @@ const methods = {
       
       let params = {
         auth: oauth2Client,
-        userId: 'me',
-        maxResults: 3
+        userId: 'me'
       }
       
       gmail.users.messages.list(params, function(err, response) {
@@ -34,7 +34,6 @@ const methods = {
       
       let getMessages = messages.map(message => {
         return new Promise((resolve, reject) => {
-          console.log('get: ' + message.id)
           
           let params = {
             auth: oauth2Client,
@@ -46,7 +45,17 @@ const methods = {
             if (err) {
               reject(err)
             } else {
-              console.log('got: ' + message.id)
+              
+              let headers = response.payload.headers
+              response._id = response.id
+              response.subject = headers.find(header => header.name == 'Subject').value
+              response.from = headers.find(header => header.name == 'From').value
+              response.to = headers.find(header => header.name == 'To').value
+              
+              let date = headers.find(header => header.name == 'Date').value
+              date = date.replace(', -', ' -')
+              response.date = moment(date)._d
+              
               resolve(response)
             }
           })

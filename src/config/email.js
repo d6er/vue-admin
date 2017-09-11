@@ -5,10 +5,7 @@ const config = {
   fields: [
     {
       name: 'subject',
-      type: 'text',
-      value: message => {
-        message.payload.headers.find(header => header.name == 'Subject').value
-      }
+      type: 'text'
     }
   ],
 
@@ -18,8 +15,8 @@ const config = {
       parent: '',
       foreach: '',
       queries: [],
-      sorting: [],
-      columns: [ 'subject' ]
+      sorting: [ { field: 'date', order: 'desc' } ],
+      columns: [ 'from', 'subject', 'date' ]
     }
   ]  
   

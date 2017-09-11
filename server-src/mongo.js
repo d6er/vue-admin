@@ -104,7 +104,7 @@ const actions = {
   
   saveItems: function (user_id, list, items) {
     let coll = list + '.' + user_id
-    return db.collection(coll).insertMany(items)
+    return db.collection(coll).insert(items) // todo: change to save/upsert
   },
   
   fetchItem: function ({ user_id, filter, item_id }) {
@@ -170,7 +170,7 @@ const actions = {
     })
   },
   
-  fetchItems: function ({ user_id, filter, page }) {
+  fetchItems: function ({ user_id, list, filter, page }) {
     
     const query = actions.convertQueries(filter.queries)
     const sort = actions.convertSorting(filter.sorting)
@@ -178,7 +178,7 @@ const actions = {
     const limit = 10
     const skip = page ? limit * ( page - 1 ) : 0
     
-    const cursor = db.collection('items.' + user_id).find(query)
+    const cursor = db.collection(list + '.' + user_id).find(query)
     
     return cursor.count().then(count => {
       

@@ -144,6 +144,7 @@ export default {
     let mergedFilter = this.methods.getMergedFilter(filter, definedFilters)
     store.commit('setFilter', mergedFilter)
     return store.dispatch('callApi', { action: 'fetchItems',
+                                       list: list,
                                        filter: mergedFilter,
                                        page: page })
   },
@@ -237,6 +238,7 @@ export default {
     
     fetchItems() {
       this.$store.dispatch('callApi', { action: 'fetchItems',
+                                        list: this.$route.params.list,
                                         filter: this.$store.state.filter,
                                         page: this.$route.params.page })
     },
