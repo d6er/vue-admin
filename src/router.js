@@ -27,7 +27,11 @@ export function createRouter (store) {
   }
   
   let listsRegExp = store.state.lists.map(list => list.name).join('|')
-
+  
+  // dynamic child component
+  //let tabRoutes = []
+  
+  
   // auth-flow: https://github.com/vuejs/vue-router/tree/dev/examples/auth-flow/components
   return new Router({
     mode: 'history',
@@ -64,7 +68,7 @@ export function createRouter (store) {
             component: () => import('./views/List.vue')
           },
           {
-            path: ':id(\\d+)/:tab?',
+            path: ':id(\\d\\w+)/:tab?',
             beforeEnter: requireAuth,
             component: () => import('./views/Detail.vue')
           }

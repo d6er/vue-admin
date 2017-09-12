@@ -107,16 +107,17 @@ const actions = {
     return db.collection(coll).insert(items) // todo: change to save/upsert
   },
   
-  fetchItem: function ({ user_id, filter, item_id }) {
+  fetchItem: function ({ user_id, list, filter, item_id }) {
 
     filter.sorting.push({ field: '_id', order: 'desc' })
     
+    let coll = list + '.' + user_id
     let query = actions.convertQueries(filter.queries)
     let sort = actions.convertSorting(filter.sorting)
     let queriesForSort = []
     let result = {}
     
-    return db.collection('items.' + user_id).findOne({ _id: item_id }).then(item => {
+    return db.collection(coll).findOne({ _id: item_id }).then(item => {
       
       result.item = item
       
@@ -140,13 +141,13 @@ const actions = {
       
       let positionQuery = { $and: [ query, { $or: queriesForSort } ] }
       
-      return db.collection('items.' + user_id).find(positionQuery).count()
+      return db.collection(coll).find(positionQuery).count()
       
     }).then(position => {
       
       result.paging = { position: position + 1 }
       
-      let cursor = db.collection('items.' + user_id).find(query, { _id: true })
+      let cursor = db.collection(coll).find(query, { _id: true })
       
       return cursor.count().then(count => {
         result.paging.count = count

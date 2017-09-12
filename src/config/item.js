@@ -5,7 +5,8 @@ const config = {
   fields: [
     {
       name: 'title',
-      type: 'text'
+      type: 'text',
+      linkToDetail: true
     },
     {
       name: 'subtitle',

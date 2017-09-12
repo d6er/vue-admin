@@ -5,7 +5,21 @@ const config = {
   fields: [
     {
       name: 'subject',
+      type: 'text',
+      linkToDetail: true
+    },
+    {
+      name: 'to',
       type: 'text'
+    },
+    {
+      name: 'from',
+      type: 'text',
+      value: val => val.replace(/<[^>]+>/, '')
+    },
+    {
+      name: 'date',
+      type: 'datetime'
     }
   ],
 

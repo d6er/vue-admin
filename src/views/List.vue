@@ -102,7 +102,7 @@
             <input type="checkbox" :value="item._id" v-model="checkedItems">
           </td>
           <td v-for="column in $store.state.filter.columns">
-            <template v-if="column == 'title'">
+            <template v-if="isLinkToDetail(column)">
               <router-link :to="getDetailLinkURL(item._id)">
                 {{ item[column] }}
               </router-link>
@@ -183,6 +183,11 @@ export default {
   },
   
   methods: {
+    
+    isLinkToDetail(fieldName) {
+      let field = this.list.fields.find(f => f.name == fieldName)
+      return field.linkToDetail
+    },
     
     getMergedFilter(urlFilter, definedFilters) {
       const filter = { queries: [], sorting: [], columns: [] }

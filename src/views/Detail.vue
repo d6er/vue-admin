@@ -94,6 +94,7 @@ export default {
     let mergedFilter = this.methods.getMergedFilter(filter, definedFilters)
     if (id != 'new') {
       return store.dispatch('callApi', { action: 'fetchItem',
+                                         list: list,
                                          filter: mergedFilter,
                                          item_id: parseInt(id) })
     }
