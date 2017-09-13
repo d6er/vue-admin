@@ -30,6 +30,16 @@
         </div>
       </div>
     </div>
+    <div class="field is-horizontal">
+      <div class="field-label">
+        <label class="label">Body</label>
+      </div>
+      <div class="field-body">
+        <div class="field">
+          {{ item.snippet }}
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
