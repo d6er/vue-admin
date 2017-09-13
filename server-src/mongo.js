@@ -143,7 +143,11 @@ const actions = {
       
       return db.collection(coll).find(positionQuery).count()
       
-    }).then(position => {
+    })
+      .catch(reason => {
+        console.log(reason)
+      })
+      .then(position => {
       
       result.paging = { position: position + 1 }
       

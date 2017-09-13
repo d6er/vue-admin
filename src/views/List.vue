@@ -230,6 +230,9 @@ export default {
     },
     
     handleRouteChange() {
+      
+      // todo: avoid short blink when list is changed
+      
       let path = this.$route.params.filter.split(',')
       let arr = path[path.length-1].split(/:/)
       let refFilter = this.list.filters.find(filter => filter.name == arr[0])

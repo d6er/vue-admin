@@ -76,6 +76,9 @@ export default {
     let definedFilters = store.state.lists.find(e => e.name == list).filters
     let mergedFilter = this.methods.getMergedFilter(filter, definedFilters)
     if (id != 'new') {
+      if (id.match(/^[\d]+$/)) {
+        id = parseInt(id)
+      }
       return store.dispatch('callApi', { action: 'fetchItem',
                                          list: list,
                                          filter: mergedFilter,
@@ -118,14 +121,28 @@ export default {
       this.$router.go(-1)
     },
     
-    handleRouteChange () {
+    handleRouteChange (newRoute, oldRoute) {
+      
+      // don't fetch data on tab change
+      if (newRoute.params.list == oldRoute.params.list
+          && newRoute.params.id == oldRoute.params.id) {
+        return
+      }
+      
       let list = this.$route.params.list
+      let id = this.$route.params.id
       let definedFilters = this.$store.state.lists.find(e => e.name == list).filters
       let mergedFilter = this.getMergedFilter(this.$route.params.filter, definedFilters)
+
+      if (id.match(/^[\d]+$/)) {
+        id = parseInt(id)
+      }
+      
       if (this.$route.params.id != 'new') {
         return this.$store.dispatch('callApi', { action: 'fetchItem',
+                                                 list: list,
                                                  filter: mergedFilter,
-                                                 item_id: parseInt(this.$route.params.id) })
+                                                 item_id: id })
       }
     },
     
