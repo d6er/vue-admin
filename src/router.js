@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import config from './config'
 
 Vue.use(Router)
 
@@ -28,9 +29,19 @@ export function createRouter (store) {
   
   let listsRegExp = store.state.lists.map(list => list.name).join('|')
   
-  // dynamic child component
-  //let tabRoutes = []
-  
+  // dynamic child component for detail tabs
+  let tabRoutes = []
+  config.lists.map(list => {
+    list.tabs.map(tab => {
+      let tabName = tab.charAt(0).toUpperCase() + tab.slice(1);
+      let route = {
+        path: '/:list(' + list.name + ')/:filter/:id(\\d\\w*)/:tab(' + tab + ')',
+        beforeEnter: requireAuth,
+        component: () => import('./components/' + list.name + '/' + tabName + '.vue')
+      }
+      tabRoutes.push(route)
+    })
+  })
   
   // auth-flow: https://github.com/vuejs/vue-router/tree/dev/examples/auth-flow/components
   return new Router({
@@ -68,9 +79,10 @@ export function createRouter (store) {
             component: () => import('./views/List.vue')
           },
           {
-            path: ':id(\\d\\w+)/:tab?',
+            path: ':id(\\d\\w*)',
             beforeEnter: requireAuth,
-            component: () => import('./views/Detail.vue')
+            component: () => import('./views/Detail.vue'),
+            children: tabRoutes
           }
         ]
       },

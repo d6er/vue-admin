@@ -58,36 +58,19 @@
     </nav>
     <div class="tabs">
       <ul>
-        <li v-for="tab in tabs" :class="$route.params.tab == tab.id ? 'is-active' : ''">
-          <router-link :to="tab.id" replace>
-            <span class="icon is-small"><i class="fa" :class="tab.icon"></i></span>
-            <span>{{ tab.name }}</span>
+        <li v-for="tab in tabs">
+          <router-link :to="tab" replace>
+            <span class="is-capitalized">{{ tab }}</span>
           </router-link>
         </li>
       </ul>
     </div>
-    <detail v-show="$route.params.tab == 'detail'" :item.sync="item"/>
-    <pictures v-show="$route.params.tab == 'pictures'" :item.sync="item"/>
-    <description v-show="$route.params.tab == 'description'" :item.sync="item"/>
+    <router-view :item.sync="item"></router-view>
   </div>
 </template>
 
 <script>
-import Detail from '../components/item/Detail.vue'
-import Pictures from '../components/item/Pictures.vue'
-import Description from '../components/item/Description.vue'
-
 export default {
-  
-  data() {
-    return {
-      tabs: [
-        { id: 'detail', name: 'Detail', icon: 'fa-list-alt' },
-        { id: 'pictures', name: 'Picture', icon: 'fa-picture-o' },
-        { id: 'description', name: 'Description', icon: 'fa-file-text-o' }
-      ]
-    }
-  },
   
   asyncData ({ store, route: { params: { list, filter, id } } }) {
     let definedFilters = store.state.lists.find(e => e.name == list).filters
@@ -96,7 +79,7 @@ export default {
       return store.dispatch('callApi', { action: 'fetchItem',
                                          list: list,
                                          filter: mergedFilter,
-                                         item_id: parseInt(id) })
+                                         item_id: id })
     }
   },
   
@@ -105,11 +88,17 @@ export default {
   },
   
   computed: {
+    list() {
+      return this.$store.state.lists.find(list => list.name == this.$route.params.list)
+    },
+    tabs() {
+      return this.list.tabs
+    },
     item() {
       // https://github.com/vuejs/vue/issues/1056
       // https://forum.vuejs.org/t/vuex-v-model-on-property-in-nested-object/6242/2
       // POINT: disconnect item from vuex
-      const index = this.$store.state.items.findIndex(e => e._id == parseInt(this.$route.params.id))
+      const index = this.$store.state.items.findIndex(e => e._id == this.$route.params.id)
       return Object.assign({}, this.$store.state.items[index])
     }
   },
@@ -177,11 +166,6 @@ export default {
       
       return filter
     }
-  },
-  components: {
-    Detail: Detail,
-    Pictures: Pictures,
-    Description: Description
   }
 }
 </script>

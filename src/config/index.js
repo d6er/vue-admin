@@ -8,16 +8,19 @@ const config = {
   lists: [
     {
       name: 'items',
+      tabs: item.tabs,
       fields: item.fields,
       filters: item.filters
     },
     {
       name: 'emails',
+      tabs: email.tabs,
       fields: email.fields,
       filters: email.filters
     },
     {
       name: 'messages',
+      tabs: [],
       filters: [ { name: 'messages-all' } ]
     }
   ]
