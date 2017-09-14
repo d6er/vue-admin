@@ -2,6 +2,22 @@
   <div>
     <nav class="level">
       <div class="level-left">
+        <div class="level-item">
+          <label class="checkbox">
+            <button class="button is-small">
+              <input type="checkbox" v-model="checkedAll" @click="checkAll">
+            </button>
+          </label>
+        </div>
+        <div class="level-item" v-if="!checkedItems.length">
+          <label class="checkbox">
+            <button class="button is-small">
+               <span class="icon is-small">
+                 <i class="fa fa-refresh"></i>
+               </span>
+            </button>
+          </label>
+        </div>
         <div class="level-item" v-if="checkedItems.length">
           <button @click="copyItems" class="button is-small">
             <span class="icon is-small">
@@ -13,18 +29,10 @@
         <div class="level-item" v-if="checkedItems.length">
           <button @click="deleteItems" class="button is-small">
             <span class="icon is-small">
-              <i class="fa fa-times" aria-hidden="true"></i>
+              <i class="fa fa-trash-o" aria-hidden="true"></i>
             </span>
             <span>Delete</span>
           </button>
-        </div>
-        <div class="level-item" v-if="!checkedItems.length">
-          <router-link to="?id=new&tab=detail" class="button is-small">
-            <span class="icon is-small">
-              <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-            </span>
-            <span>Create</span>
-          </router-link>
         </div>
         <div class="level-item">
           <div class="field has-addons">
@@ -89,7 +97,7 @@
       <thead>
         <tr>
           <th>
-            <input type="checkbox" v-model="checkedAll" @click="checkAll">
+            
           </th>
           <th v-for="column in $store.state.filter.columns" class="is-capitalized">
             {{ column }}
