@@ -5,7 +5,7 @@ const gmail = google.gmail('v1')
 const methods = {
   
   messagesList: function (account) {
-    console.dir(account)
+    
     // https://github.com/google/google-api-nodejs-client/#authorizing-and-authenticating
     let clientId = '1088034821843-fmeepsu3a7jqmqbcqej74qlu0em9viv4.apps.googleusercontent.com'
     let clientSecret = 'alDLTJpR550tFMFtS85-2wqQ'
@@ -27,6 +27,7 @@ const methods = {
         auth: oauth2Client,
         userId: 'me'
       }
+      
       gmail.users.messages.list(params, function(err, response) {
         if (err) {
           reject(err)
