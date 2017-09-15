@@ -5,7 +5,7 @@ const gmail = google.gmail('v1')
 const methods = {
   
   messagesList: function (account) {
-    
+    console.dir(account)
     // https://github.com/google/google-api-nodejs-client/#authorizing-and-authenticating
     let clientId = '1088034821843-fmeepsu3a7jqmqbcqej74qlu0em9viv4.apps.googleusercontent.com'
     let clientSecret = 'alDLTJpR550tFMFtS85-2wqQ'
@@ -13,7 +13,13 @@ const methods = {
     
     var OAuth2 = google.auth.OAuth2
     var oauth2Client = new OAuth2(clientId, clientSecret, redirectUrl)
-    oauth2Client.setCredentials({ access_token: account.accessToken });
+    
+    // https://github.com/google/google-api-nodejs-client/#manually-refreshing-access-token
+    oauth2Client.setCredentials({
+      access_token: account.accessToken,
+      refresh_token: account.refreshToken,
+      expiry_date: true
+    });
     
     return new Promise((resolve, reject) => {
       
@@ -21,7 +27,6 @@ const methods = {
         auth: oauth2Client,
         userId: 'me'
       }
-      
       gmail.users.messages.list(params, function(err, response) {
         if (err) {
           reject(err)
@@ -45,17 +50,7 @@ const methods = {
             if (err) {
               reject(err)
             } else {
-              
-              let headers = response.payload.headers
-              response._id = response.id
-              response.subject = headers.find(header => header.name == 'Subject').value
-              response.from = headers.find(header => header.name == 'From').value
-              response.to = headers.find(header => header.name == 'To').value
-              
-              let date = headers.find(header => header.name == 'Date').value
-              date = date.replace(', -', ' -')
-              response.date = moment(date)._d
-              
+              let converted = methods.convertMessage(response)
               resolve(response)
             }
           })
@@ -64,6 +59,22 @@ const methods = {
       
       return Promise.all(getMessages)
     })
+    
+  },
+
+  convertMessage: function (message) {
+    
+    let headers = message.payload.headers
+    message._id = message.id
+    message.subject = headers.find(header => header.name == 'Subject').value
+    message.from = headers.find(header => header.name == 'From').value.replace(/<[^>]+>/, '')
+    message.to = headers.find(header => header.name == 'To').value
+    
+    let date = headers.find(header => header.name == 'Date').value
+    date = date.replace(', -', ' -')
+    message.date = moment(date)._d
+    
+    return message
   }
   
 }

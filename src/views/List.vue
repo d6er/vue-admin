@@ -11,7 +11,7 @@
         </div>
         <div class="level-item" v-if="!checkedItems.length">
           <label class="checkbox">
-            <button class="button is-small">
+            <button @click="refreshList" class="button is-small">
                <span class="icon is-small">
                  <i class="fa fa-refresh"></i>
                </span>
@@ -114,7 +114,6 @@
               <router-link :to="getDetailLinkURL(item._id)">
                 {{ item[column] }}
               </router-link>
-              {{ item._id }}
             </template>
             <template v-else-if="column == 'picture'">
               <figure class="image is-32x32">
@@ -257,6 +256,10 @@ export default {
                                         list: this.$route.params.list,
                                         filter: this.$store.state.filter,
                                         page: this.$route.params.page })
+    },
+    
+    refreshList() {
+      this.$store.dispatch('callApi', { action: 'refreshList' })
     },
     
     // Checkbox

@@ -14,8 +14,7 @@ const config = {
     },
     {
       name: 'from',
-      type: 'text',
-      value: val => val.replace(/<[^>]+>/, '')
+      type: 'text'
     },
     {
       name: 'date',
