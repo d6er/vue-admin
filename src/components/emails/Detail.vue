@@ -2,6 +2,18 @@
   <div id="tab-detail">
     <div class="field is-horizontal">
       <div class="field-label">
+        <label class="label">Tags</label>
+      </div>
+      <div class="field-body">
+        <div class="field tags">
+          <span class="tag" v-for="labelId in item.labelIds">
+            {{ labelId }}
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="field is-horizontal">
+      <div class="field-label">
         <label class="label">Subject</label>
       </div>
       <div class="field-body">

@@ -144,7 +144,10 @@ mongo.connect(config.mongo_url).then(db => {
         }).then(messages => {
           console.log('refreshList: ' + messages.length)
           return mongo.saveItems(req.session.passport.user, 'emails', messages)
-        })
+        }).then(
+          r => { ws.send(JSON.stringify({ job_id: message.job_id, resolve: r })) },
+          e => { ws.send(JSON.stringify({ job_id: message.job_id, reject: e })) }
+        )
       }
       
       mongo[message.data.action](message.data).then(

@@ -1,6 +1,6 @@
 const config = {
   
-  tabs: [ 'detail' ],
+  tabs: [ 'detail', 'raw' ],
 
   fields: [
     {
