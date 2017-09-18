@@ -106,7 +106,9 @@ const actions = {
     let coll = list + '.' + user_id
     console.log('saveItems: ' + coll + ' ' + items.length)
     return Promise.all(items.map(item => {
-      return db.collection(coll).updateOne({ _id: item._id }, item, { upsert: true })
+      return db.collection(coll).updateOne({ _id: item._id },
+                                           { $set: item },
+                                           { upsert: true })
     }))
   },
   
