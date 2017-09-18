@@ -45,7 +45,7 @@ export function createStore () {
         return api.call(data).then(result => {
           // todo: map action and commit
           // https://github.com/vuejs/vuex/issues/755
-          if (data.action == 'fetchItems') {
+          if (data.action == 'fetchItems' || data.action == 'refreshItems') {
             commit('setItems', result)
           }
           if (data.action == 'fetchItem') {

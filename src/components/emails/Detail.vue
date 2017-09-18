@@ -34,6 +34,16 @@
     </div>
     <div class="field is-horizontal">
       <div class="field-label">
+        <label class="label">To</label>
+      </div>
+      <div class="field-body">
+        <div class="field">
+          {{ item.to }}
+        </div>
+      </div>
+    </div>
+    <div class="field is-horizontal">
+      <div class="field-label">
         <label class="label">Date</label>
       </div>
       <div class="field-body">

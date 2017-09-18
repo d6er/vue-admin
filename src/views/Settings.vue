@@ -52,6 +52,7 @@
                       {{ account.displayName }}
                     </td>
                     <td>
+                      {{ account.emails }}
                     </td>
                   </tr>
                 </tbody>

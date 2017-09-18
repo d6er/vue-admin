@@ -24,12 +24,26 @@ const config = {
 
   filters: [
     {
-      name: 'inbox',
+      name: 'all',
       parent: '',
       foreach: '',
       queries: [],
       sorting: [ { field: 'date', order: 'desc' } ],
       columns: [ 'from', 'subject', 'date' ]
+    },
+    {
+      name: 'inbox',
+      parent: 'all',
+      queries: [ { field: 'labelIds',
+                   condition: 'is equal to',
+                   value: 'INBOX' } ]
+    },
+    {
+      name: 'unread',
+      parent: 'all',
+      queries: [ { field: 'labelIds',
+                   condition: 'is equal to',
+                   value: 'UNREAD' } ]
     }
   ]  
   

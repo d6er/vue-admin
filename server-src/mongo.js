@@ -104,12 +104,10 @@ const actions = {
   
   saveItems: function (user_id, list, items) {
     let coll = list + '.' + user_id
-    
-    let updates = items.map(item => {
+    console.log('saveItems: ' + coll + ' ' + items.length)
+    return Promise.all(items.map(item => {
       return db.collection(coll).updateOne({ _id: item._id }, item, { upsert: true })
-    })
-    
-    return Promise.all(updates)
+    }))
   },
   
   fetchItem: function ({ user_id, list, filter, item_id }) {

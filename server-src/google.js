@@ -6,6 +6,8 @@ const methods = {
   
   messagesList: function (account) {
     
+    console.log('google.messagesList: ' + account.emails[0].value)
+    
     // https://github.com/google/google-api-nodejs-client/#authorizing-and-authenticating
     let clientId = '1088034821843-fmeepsu3a7jqmqbcqej74qlu0em9viv4.apps.googleusercontent.com'
     let clientSecret = 'alDLTJpR550tFMFtS85-2wqQ'

@@ -19,6 +19,7 @@ const mongo = require('./server-src/mongo')
 const passport = require('./server-src/passport')
 const auth = require('./server-src/auth')
 
+const api = require('./server-src/api')
 const google = require('./server-src/google')
 
 // Vue
@@ -138,16 +139,13 @@ mongo.connect(config.mongo_url).then(db => {
       }
       
       if (message.data.action == 'refreshList') {
-        console.log('refreshList')
-        return mongo.getUser(req.session.passport.user).then(user => {
-          return google.messagesList(user.accounts[0])
-        }).then(messages => {
-          console.log('refreshList: ' + messages.length)
-          return mongo.saveItems(req.session.passport.user, 'emails', messages)
-        }).then(
+        
+        api[message.data.action](message.data).then(
           r => { ws.send(JSON.stringify({ job_id: message.job_id, resolve: r })) },
           e => { ws.send(JSON.stringify({ job_id: message.job_id, reject: e })) }
         )
+        
+        return
       }
       
       mongo[message.data.action](message.data).then(
