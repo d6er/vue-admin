@@ -1,18 +1,10 @@
 <template>
   <div id="tab-picture">
     <div class="columns">
-      <div class="column" v-for="image in images">
+      <div class="column is-2" v-for="image in images">
         <div class="card">
-          <header class="card-header">
-            <a class="card-header-icon">
-              {{ image }}
-              <span class="icon">
-                <i class="fa fa-angle-down"></i>
-              </span>
-            </a>
-          </header>
           <div class="card-image has-text-centered">
-            <figure class="image is-128x128">
+            <figure class="image is-1by1">
               <img :src="image">
             </figure>
           </div>

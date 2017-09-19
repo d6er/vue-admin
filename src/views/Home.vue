@@ -9,7 +9,9 @@
       <div class="column is-6 is-offset-1">
         <h1 class="title is-2">Admin Dashboard</h1>
         <h2 class="subtitle is-4">This is an example application.</h2>
+        <!-- https://dansup.github.io/bulma-templates/templates/cover.html -->
       </div>
     </div>
   </div>
 </template>
+

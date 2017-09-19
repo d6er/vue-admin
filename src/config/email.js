@@ -44,6 +44,13 @@ const config = {
       queries: [ { field: 'labelIds',
                    condition: 'is equal to',
                    value: 'UNREAD' } ]
+    },
+    {
+      name: 'sent',
+      parent: 'all',
+      queries: [ { field: 'labelIds',
+                   condition: 'is equal to',
+                   value: 'SENT' } ]
     }
   ]  
   
