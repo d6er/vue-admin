@@ -19,8 +19,8 @@ const mongo = require('./server-src/mongo')
 const passport = require('./server-src/passport')
 const auth = require('./server-src/auth')
 
+// API
 const api = require('./server-src/api')
-const google = require('./server-src/google')
 
 // Vue
 const template = fs.readFileSync('./src/index.template.html', 'utf-8')
@@ -129,29 +129,17 @@ mongo.connect(config.mongo_url).then(db => {
         }
       }
       
-      if (message.data.action == 'uploadImage') {
-        console.dir(message)
-        const buffer = Buffer.from(message.data.file, 'base64');
-        fs.writeFileSync('./images/' + message.data.name, buffer)
-        ws.send(JSON.stringify({ job_id: message.job_id,
-                                 resolve: { path: '/images/' + message.data.name } }))
-        return
-      }
-      
-      if (message.data.action == 'refreshList') {
-        
+      if (api[message.data.action]) {
         api[message.data.action](message.data).then(
           r => { ws.send(JSON.stringify({ job_id: message.job_id, resolve: r })) },
           e => { ws.send(JSON.stringify({ job_id: message.job_id, reject: e })) }
         )
-        
-        return
+      } else {
+        mongo[message.data.action](message.data).then(
+          r => { ws.send(JSON.stringify({ job_id: message.job_id, resolve: r })) },
+          e => { ws.send(JSON.stringify({ job_id: message.job_id, reject: e })) }
+        )
       }
-      
-      mongo[message.data.action](message.data).then(
-        r => { ws.send(JSON.stringify({ job_id: message.job_id, resolve: r })) },
-        e => { ws.send(JSON.stringify({ job_id: message.job_id, reject: e })) }
-      )
     })
   })
   

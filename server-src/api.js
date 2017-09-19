@@ -1,3 +1,4 @@
+const fs = require('fs')
 const mongo = require('./mongo')
 const google = require('./google')
 
@@ -22,6 +23,19 @@ const methods = {
                                 list: list,
                                 filter: filter,
                                 page: page })
+    })
+  },
+  
+  uploadImage: ({ name, file }) => {
+    const buffer = Buffer.from(file, 'base64');
+    return new Promise((resolve, reject) => {
+      fs.writeFile('./images/' + name, buffer, (err) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve({ path: '/images/' + name })
+        }
+      })
     })
   }
   

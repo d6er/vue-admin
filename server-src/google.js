@@ -31,7 +31,6 @@ const methods = {
       }
       
       gmail.users.messages.list(params, function(err, response) {
-        console.dir(response)
         if (err) {
           reject(err)
         } else {
