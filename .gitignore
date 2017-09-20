@@ -1,3 +1,4 @@
+config/server.js
 dist
 node_modules
 images
