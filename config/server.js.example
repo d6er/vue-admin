@@ -4,18 +4,23 @@ const config = {
   
   mongo_url: 'mongodb://localhost:27017/vue-admin',
   
-  // auth0
+  // Auth0
   AUTH0_DOMAIN: '',
   AUTH0_CLIENT_ID: '',
   AUTH0_CLIENT_SECRET: '',
   
-  // google
+  // Google
   GOOGLE_CLIENT_ID: '',
   GOOGLE_CLIENT_SECRET: '',
   
-  // facebook
+  // Twitter
+  TWITTER_CONSUMER_KEY: '',
+  TWITTER_CONSUMER_SECRET: '',
+  
+  // Facebook
   FACEBOOK_APP_ID: '',
-  FACEBOOK_APP_SECRET: '',
+  FACEBOOK_APP_SECRET: ''
+  
 }
 
 module.exports = config

@@ -41,28 +41,28 @@
                 <thead>
                   <th>Account type</th>
                   <th>Name</th>
-                  <th>Time</th>
+                  <th>Email</th>
                 </thead>
                 <tbody>
                   <tr v-for="account in $store.state.user.accounts">
-                    <td>
+                    <td class="is-capitalized">
                       {{ account.provider }}
                     </td>
                     <td>
                       {{ account.displayName }}
                     </td>
-                    <td>
-                      {{ account.emails }}
+                    <td v-if="account.emails">
+                      {{ account.emails[0].value }}
                     </td>
                   </tr>
                 </tbody>
               </table>
             </div>
           </div>
-          <a href="/auth/google">Google</a>
-          / <a href="/auth/auth0">Auth0</a>
+          <a href="/auth/auth0">Auth0</a>
+          / <a href="/auth/google">Google</a>
+          / <a href="/auth/twitter">Twitter</a>
           / <a href="/auth/facebook">Facebook</a>
-          / <button @click="googleList">googleList</button>
           <hr/>
           <div class="field is-horizontal">
             <div class="field-label">
