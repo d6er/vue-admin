@@ -1,13 +1,14 @@
 const express = require('express');
 const passport = require('passport')
+const config = require('../../config/server')
 const mongo = require('../mongo')
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 // Passport
 passport.use(new GoogleStrategy(
   {
-    clientID: '1088034821843-fmeepsu3a7jqmqbcqej74qlu0em9viv4.apps.googleusercontent.com',
-    clientSecret: 'alDLTJpR550tFMFtS85-2wqQ',
+    clientID: config.GOOGLE_CLIENT_ID,
+    clientSecret: config.GOOGLE_CLIENT_SECRET,
     callbackURL: "http://localhost:8181/auth/google/callback",
     passReqToCallback: true
   },

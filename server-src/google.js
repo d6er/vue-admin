@@ -1,3 +1,4 @@
+const config = require('../config/server')
 const moment = require('moment')
 const google = require('googleapis')
 const gmail = google.gmail('v1')
@@ -9,8 +10,8 @@ const methods = {
     console.log('google.messagesList: ' + account.emails[0].value)
     
     // https://github.com/google/google-api-nodejs-client/#authorizing-and-authenticating
-    let clientId = '1088034821843-fmeepsu3a7jqmqbcqej74qlu0em9viv4.apps.googleusercontent.com'
-    let clientSecret = 'alDLTJpR550tFMFtS85-2wqQ'
+    let clientId = config.GOOGLE_CLIENT_ID
+    let clientSecret = config.GOOGLE_CLIENT_SECRET
     let redirectUrl = "http://localhost:8181/auth/google/callback"
     
     var OAuth2 = google.auth.OAuth2

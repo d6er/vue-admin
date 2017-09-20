@@ -1,14 +1,15 @@
 const express = require('express');
 const passport = require('passport')
+const config = require('../../config/server')
 const mongo = require('../mongo')
 const Auth0Strategy = require('passport-auth0').Strategy;
 
 // Passport
 passport.use(new Auth0Strategy(
   {
-    domain: 'd6er.auth0.com',
-    clientID: 'FJJtRAN2B45f6SigcjeyiNF_0TX-Qjav',
-    clientSecret: 'f8Fw4LAuZBGLJ344ROLJJQHFNEbXU7tdjS02HKZIQfEiDUcsGtVRB9rW2zCIP5_7',
+    domain: config.AUTH0_DOMAIN,
+    clientID: config.AUTH0_CLIENT_ID,
+    clientSecret: config.AUTH0_CLIENT_SECRET,
     callbackURL: 'http://localhost:8181/auth/auth0/callback',
     passReqToCallback: true
   },
