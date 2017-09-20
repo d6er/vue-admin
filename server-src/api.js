@@ -4,6 +4,10 @@ const google = require('./google')
 
 const methods = {
   
+  fetchItems: ({ user_id, list, filter, page }) => {
+    return mongo.fetchItems({ user_id, list, filter, page })
+  },
+  
   refreshList: ({ user_id, list, filter, page }) => {
     
     return mongo.getUser(user_id).then(user => {

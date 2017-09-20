@@ -1,4 +1,4 @@
-import config from '../../server-src/config'
+import config from '../../config/server'
 import mongo from '../../server-src/mongo'
 
 export default {

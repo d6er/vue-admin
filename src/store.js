@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import api from 'api'
 
-import config from './config'
+import config from '../config/client'
 
 Vue.use(Vuex)
 

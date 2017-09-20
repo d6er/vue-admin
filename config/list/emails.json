@@ -1,0 +1,71 @@
+{
+  "name": "emails",
+  
+  "tabs": [ "detail", "raw" ],
+  
+  "fields": [
+    {
+      "name": "subject",
+      "type": "text",
+      "linkToDetail": true
+    },
+    {
+      "name": "to",
+      "type": "text"
+    },
+    {
+      "name": "from",
+      "type": "text"
+    },
+    {
+      "name": "date",
+      "type": "datetime"
+    }
+  ],
+  
+  "filters": [
+    {
+      "name": "inbox",
+      "parent": "",
+      "queries": [
+        {
+          "field": "labelIds",
+          "condition": "is equal to",
+          "value": "INBOX"
+        }
+      ],
+      "sorting": [ { "field": "date", "order": "desc" } ],
+      "columns": [ "from", "subject", "date" ]
+    },
+    {
+      "name": "all",
+      "parent": "",
+      "foreach": "",
+      "queries": [],
+      "sorting": [ { "field": "date", "order": "desc" } ],
+      "columns": [ "from", "subject", "date" ]
+    },
+    {
+      "name": "unread",
+      "parent": "all",
+      "queries": [
+        {
+          "field": "labelIds",
+          "condition": "is equal to",
+          "value": "UNREAD"
+        }
+      ]
+    },
+    {
+      "name": "sent",
+      "parent": "all",
+      "queries": [
+        {
+          "field": "labelIds",
+          "condition": "is equal to",
+          "value": "SENT"
+        }
+      ]
+    }
+  ]
+}

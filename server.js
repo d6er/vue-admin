@@ -12,7 +12,7 @@ const session = require('express-session')
 const MongoStore = require('connect-mongo')(session)
 
 // Mongo
-const config = require('./server-src/config')
+const config = require('./config/server')
 const mongo = require('./server-src/mongo')
 
 // Passport
