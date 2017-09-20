@@ -1,8 +1,8 @@
-const express = require('express');
+const express = require('express')
 const passport = require('passport')
 const config = require('../../config/server')
 const mongo = require('../mongo')
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const GoogleStrategy = require('passport-google-oauth20').Strategy
 
 // Passport
 passport.use(new GoogleStrategy(
@@ -29,7 +29,7 @@ passport.use(new GoogleStrategy(
 ))
 
 // Router
-const router = express.Router();
+const router = express.Router()
 
 // https://github.com/jaredhanson/passport-google-oauth2/issues/27#issuecomment-313969184
 router.get('/', passport.authenticate('google', {

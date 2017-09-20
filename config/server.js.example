@@ -11,7 +11,11 @@ const config = {
   
   // google
   GOOGLE_CLIENT_ID: '',
-  GOOGLE_CLIENT_SECRET: ''
+  GOOGLE_CLIENT_SECRET: '',
+  
+  // facebook
+  FACEBOOK_APP_ID: '',
+  FACEBOOK_APP_SECRET: '',
 }
 
 module.exports = config

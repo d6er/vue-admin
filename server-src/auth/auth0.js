@@ -1,8 +1,8 @@
-const express = require('express');
+const express = require('express')
 const passport = require('passport')
 const config = require('../../config/server')
 const mongo = require('../mongo')
-const Auth0Strategy = require('passport-auth0').Strategy;
+const Auth0Strategy = require('passport-auth0').Strategy
 
 // Passport
 passport.use(new Auth0Strategy(
@@ -28,7 +28,7 @@ passport.use(new Auth0Strategy(
 ))
 
 // Router
-const router = express.Router();
+const router = express.Router()
 
 router.get('/', passport.authenticate('auth0'))
 

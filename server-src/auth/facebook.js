@@ -1,14 +1,19 @@
-const express = require('express');
+const express = require('express')
 const passport = require('passport')
+const config = require('../../config/server')
 const mongo = require('../mongo')
-const FacebookStrategy = require('passport-facebook').Strategy;
+const FacebookStrategy = require('passport-facebook').Strategy
 
 // Passport
 passport.use(new FacebookStrategy(
   {
-    clientID: 'dummy',
-    clientSecret: 'dummy',
+    clientID: config.FACEBOOK_APP_ID,
+    clientSecret: config.FACEBOOK_APP_SECRET,
     callbackURL: "http://localhost:8181/auth/facebook/callback",
+    
+    // https://developers.facebook.com/docs/graph-api/reference/v2.5/user
+    profileFields: ['id', 'displayName', 'photos', 'email'],
+    
     passReqToCallback: true
   },
   function(req, accessToken, refreshToken, profile, cb) {
@@ -24,9 +29,12 @@ passport.use(new FacebookStrategy(
 ));
 
 // Router
-const router = express.Router();
+const router = express.Router()
 
-router.get('/', passport.authenticate('facebook'))
+// https://developers.facebook.com/docs/facebook-login/permissions/overview
+router.get('/', passport.authenticate('facebook', {
+  scope: [ 'email' ]
+}))
 
 router.get('/callback',
            passport.authenticate('facebook', { failureRedirect: '/login?facebook-failure' }),

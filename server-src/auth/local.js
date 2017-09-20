@@ -18,7 +18,7 @@ passport.use(new LocalStrategy(
 ))
 
 // Router
-const router = express.Router();
+const router = express.Router()
 
 router.post('/login', passport.authenticate('local'), (req, res) => {
   const path = req.body.redirect ? req.body.redirect : '/'
