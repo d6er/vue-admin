@@ -1,11 +1,27 @@
 const fs = require('fs')
+const moment = require('moment')
 const mongo = require('./mongo')
 const google = require('./google')
+const config_client = require('../config/client')
 
 const methods = {
   
   fetchItems: ({ user_id, list, filter, page }) => {
-    return mongo.fetchItems({ user_id, list, filter, page })
+    return mongo.fetchItems({ user_id, list, filter, page }).then(result => {
+      
+      let listConfig = config_client.lists.find(l => l.name == list)
+      
+      filter.columns.map(column => {
+        let fieldConfig = listConfig.fields.find(field => field.name == column)
+        if (fieldConfig.type == 'datetime') {
+          result.items.forEach(item => {
+            item[column] = moment(item[column]).format('MMM D HH:mm')
+          })
+        }
+      })
+      
+      return result
+    })
   },
   
   refreshList: ({ user_id, list, filter, page }) => {
