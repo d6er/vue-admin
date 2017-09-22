@@ -27,13 +27,21 @@
     {
       "name": "inbox",
       "parent": "",
-      "queries": [
-        {
-          "field": "labelIds",
-          "condition": "is equal to",
-          "value": "INBOX"
-        }
-      ],
+      "queries": [ { "field": "labelIds", "condition": "is equal to", "value": "INBOX" } ],
+      "sorting": [ { "field": "date", "order": "desc" } ],
+      "columns": [ "from", "subject", "date" ]
+    },
+    {
+      "name": "sent",
+      "parent": "",
+      "queries": [ { "field": "labelIds", "condition": "is equal to", "value": "SENT" } ],
+      "sorting": [ { "field": "date", "order": "desc" } ],
+      "columns": [ "from", "subject", "date" ]
+    },
+    {
+      "name": "unread",
+      "parent": "",
+      "queries": [ { "field": "labelIds", "condition": "is equal to", "value": "UNREAD" } ],
       "sorting": [ { "field": "date", "order": "desc" } ],
       "columns": [ "from", "subject", "date" ]
     },
@@ -44,28 +52,6 @@
       "queries": [],
       "sorting": [ { "field": "date", "order": "desc" } ],
       "columns": [ "from", "subject", "date" ]
-    },
-    {
-      "name": "unread",
-      "parent": "all",
-      "queries": [
-        {
-          "field": "labelIds",
-          "condition": "is equal to",
-          "value": "UNREAD"
-        }
-      ]
-    },
-    {
-      "name": "sent",
-      "parent": "all",
-      "queries": [
-        {
-          "field": "labelIds",
-          "condition": "is equal to",
-          "value": "SENT"
-        }
-      ]
     }
   ]
 }

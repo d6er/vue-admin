@@ -1,5 +1,5 @@
 const fs = require('fs')
-const moment = require('moment')
+const moment = require('moment-timezone')
 const mongo = require('./mongo')
 const google = require('./google')
 const config_client = require('../config/client')
@@ -7,6 +7,9 @@ const config_client = require('../config/client')
 const methods = {
   
   fetchItems: ({ user_id, list, filter, page }) => {
+    
+    let zone = moment.tz.guess()
+    
     return mongo.fetchItems({ user_id, list, filter, page }).then(result => {
       
       let listConfig = config_client.lists.find(l => l.name == list)
@@ -15,7 +18,7 @@ const methods = {
         let fieldConfig = listConfig.fields.find(field => field.name == column)
         if (fieldConfig.type == 'datetime') {
           result.items.forEach(item => {
-            item[column] = moment(item[column]).format('MMM D HH:mm')
+            item[column] = moment(item[column]).tz(zone).format('MMM D HH:mm')
           })
         }
       })

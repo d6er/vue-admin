@@ -75,8 +75,7 @@ const methods = {
     message.to = headers.find(header => header.name == 'To').value
     
     let date = headers.find(header => header.name == 'Date').value
-    date = date.replace(', -', ' -')
-    message.date = moment(date)._d
+    message.date = moment(date, "ddd, DD MMM YYYY HH:mm:ss ZZ").toDate()
     
     return message
   }
