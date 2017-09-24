@@ -28,6 +28,8 @@ export function createStore () {
       
       filter: {},
       
+      filterForm: {},
+      
       notification: null
     },
     
@@ -69,6 +71,54 @@ export function createStore () {
       
       // filter
       setFilter (state, filter) {
+        state.filter = filter
+      },
+      setFilterForm (state, filterForm) {
+        state.filterForm = filterForm
+      },
+      
+      setFilter2 (state, filterForm) {
+        
+        
+        let filter = { queries: [], sorting: [], columns: [] }
+        let listName = state.route.params.list
+        let definedFilters = state.lists.find(e => e.name == listName).filters
+        let path = state.route.params.filter.split(',')
+        
+        for (let i in path) {
+          let arr = path[i].split(/:/)
+          
+          let thisFilter = {}
+          if (filterForm && arr[0] == filterForm.name) {
+            thisFilter = filterForm
+          } else {
+            let refFilter = definedFilters.find(filter => filter.name == arr[0])
+            thisFilter = JSON.parse(JSON.stringify(refFilter)) // deep copy
+          }
+          
+          // queries
+          if (arr.length == 2) {
+            filter.queries.push({
+              field: thisFilter.foreach,
+              condition: 'is equal to',
+              value: arr[1]
+            })
+          }
+          if (thisFilter.queries) {
+            filter.queries.push.apply(filter.queries, thisFilter.queries)
+          }
+          
+          // sorting
+          if (thisFilter.sorting) {
+            filter.sorting = thisFilter.sorting
+          }
+          
+          // columns
+          if (thisFilter.columns) {
+            filter.columns = thisFilter.columns
+          }
+        }
+        
         state.filter = filter
       },
       

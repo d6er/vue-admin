@@ -40,7 +40,7 @@
             <span class="select is-small">
               <select v-model="q.field">
                 <option value="" disabled hidden>(field)</option>
-                <option v-for="field in $store.state.fields.item">
+                <option v-for="field in list.fields">
                   {{ field.name }}
                 </option>
               </select>
@@ -77,7 +77,7 @@
             <span class="select is-small">
               <select v-model="s.field">
                 <option value="" disabled hidden>(field)</option>
-                <option v-for="field in $store.state.fields.item">
+                <option v-for="field in list.fields">
                   {{ field.name }}
                 </option>
               </select>
@@ -108,7 +108,7 @@
             <span class="select is-small">
               <select v-model="filter.columns[idx]">
                 <option value="" disabled hidden>(field)</option>
-                <option v-for="field in $store.state.fields.item">
+                <option v-for="field in list.fields">
                   {{ field.name }}
                 </option>
               </select>
@@ -167,12 +167,49 @@
 
 <script>
 export default {
-  props: ['filter'],
+  
+  data () {
+    return {
+      filter: {
+        name: ''
+      }
+    }
+  },
+  
+  computed: {
+    list() {
+      return this.$store.state.lists.find(list => list.name == this.$route.params.list)
+    }
+  },
+  
+  created () {
+    this.handleRouteChange()
+  },
+  
+  watch: {
+    $route: 'handleRouteChange',
+    filter: {
+      handler: function () {
+        this.$store.commit('setFilter2', JSON.parse(JSON.stringify(this.filter)))
+      },
+      deep: true // https://vuejs.org/v2/api/#watch
+    }
+  },
+  
   methods: {
+    
+    handleRouteChange() {
+      let path = this.$route.params.filter.split(',')
+      let arr = path[path.length-1].split(/:/)
+      let refFilter = this.list.filters.find(filter => filter.name == arr[0])
+      this.filter = JSON.parse(JSON.stringify(refFilter)) // deep copy
+    },
+    
     saveFilter() {
     },
     deleteFilter() {
     },
+    
     addQuery() {
       const idx = this.filter.queries.length
       this.$set(this.filter.queries, idx, { field: '', condition: '', value: '' })
@@ -185,6 +222,7 @@ export default {
       const idx = this.filter.columns.length
       this.$set(this.filter.columns, idx, '')
     },
+    
     deleteQuery(idx) {
       this.$delete(this.filter.queries, idx)
     },
