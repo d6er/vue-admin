@@ -145,10 +145,9 @@ export default {
   },
   
   asyncData ({ store, route: { params: { list, filter, page } } }) {
-    store.commit('setFilter2')
     return store.dispatch('callApi', { action: 'fetchItems',
                                        list: list,
-                                       filter: store.state.filter,
+                                       filter: filter,
                                        page: page })
   },
   
@@ -188,7 +187,6 @@ export default {
     },
     
     handleRouteChange() {
-      this.$store.commit('setFilter2')
       this.fetchItems()
     },
     
@@ -199,7 +197,7 @@ export default {
     fetchItems() {
       this.$store.dispatch('callApi', { action: 'fetchItems',
                                         list: this.$route.params.list,
-                                        filter: this.$store.state.filter,
+                                        filter: this.$route.params.filter,
                                         page: this.$route.params.page })
     },
     

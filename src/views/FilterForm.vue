@@ -190,7 +190,7 @@ export default {
     $route: 'handleRouteChange',
     filter: {
       handler: function () {
-        this.$store.commit('setFilter2', JSON.parse(JSON.stringify(this.filter)))
+        //this.$store.commit('setFilter2', JSON.parse(JSON.stringify(this.filter)))
       },
       deep: true // https://vuejs.org/v2/api/#watch
     }
