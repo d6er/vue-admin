@@ -33,6 +33,7 @@ const methods = {
       
       gmail.users.messages.list(params, function(err, response) {
         if (err) {
+          console.dir(err)
           reject(err)
         } else {
           resolve(response.messages)
@@ -41,7 +42,7 @@ const methods = {
       
     }).then(messages => {
       
-      let getMessages = messages.map(message => {
+      let getMessages = messages.map((message, idx) => {
         return new Promise((resolve, reject) => {
           
           let params = {
@@ -50,14 +51,19 @@ const methods = {
             id: message.id
           }
           
-          gmail.users.messages.get(params, function(err, response) {
-            if (err) {
-              reject(err)
-            } else {
-              let converted = methods.convertMessage(response)
-              resolve(response)
-            }
-          })
+          setTimeout(() => {
+            gmail.users.messages.get(params, function(err, response) {
+              if (err) {
+                console.log(idx + ' ' + message.id)
+                console.dir(err)
+                reject(err)
+              } else {
+                console.log(idx + ' ' + message.id)
+                let converted = methods.convertMessage(response)
+                resolve(response)
+              }
+            })
+          }, idx * 1000)
         })
       })
       
