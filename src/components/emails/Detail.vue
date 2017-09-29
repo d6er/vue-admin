@@ -57,8 +57,10 @@
         <label class="label">Body</label>
       </div>
       <div class="field-body">
-        <div class="field">
+        <div class="field" style="max-width:1000px;">
           {{ item.snippet }}
+          <hr/>
+          <pre>{{ item.body }}</pre>
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
 <template>
   <div id="tab-raw" class="columns">
-    <div class="column is-12">
+    <div class="column" style="max-width:1000px;">
       <pre>{{ item }}</pre>
     </div>
   </div>

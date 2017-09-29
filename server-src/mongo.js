@@ -124,6 +124,11 @@ const actions = {
     
     return db.collection(coll).findOne({ _id: item_id }).then(item => {
       
+      if (item.payload.mimeType == 'text/plain') {
+        item.body = Buffer.from(item.payload.body.data, 'base64').toString()
+      } else if (item.payload.mimeType == 'multipart/alternative') {
+        item.body = Buffer.from(item.payload.parts[0].body.data, 'base64').toString()
+      }
       result.item = item
       
       for (let i in filter.sorting) {

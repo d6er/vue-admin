@@ -26,9 +26,11 @@ const methods = {
     
     return new Promise((resolve, reject) => {
       
+      // https://developers.google.com/gmail/api/v1/reference/users/messages/list
       let params = {
         auth: oauth2Client,
-        userId: 'me'
+        userId: 'me',
+        maxResults: 100
       }
       
       gmail.users.messages.list(params, function(err, response) {

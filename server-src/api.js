@@ -27,6 +27,14 @@ const methods = {
       
       result.mergedFilter = mergedFilter
       
+      result.items.forEach(item => {
+        console.log(item.payload.mimeType)
+        if (item.payload.mimeType == 'text/plain') {
+          item.body = Buffer.from(item.payload.body.data, 'base64').toString()
+          console.log(item.body)
+        }
+      })
+
       return result
     })
   },
