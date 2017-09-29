@@ -159,7 +159,7 @@ export default {
       return this.$store.state.items
     },
     filter () {
-      return this.$store.state.filter
+      return this.$store.state.mergedFilter
     },
     prevPage () {
       const page = this.$route.params.page ? parseInt(this.$route.params.page) : 1

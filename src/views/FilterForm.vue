@@ -190,7 +190,11 @@ export default {
     $route: 'handleRouteChange',
     filter: {
       handler: function () {
-        //this.$store.commit('setFilter2', JSON.parse(JSON.stringify(this.filter)))
+        this.$store.dispatch('callApi', { action: 'fetchItems',
+                                          list: this.$route.params.list,
+                                          filter: this.$route.params.filter,
+                                          filterForm: this.filter,
+                                          page: 1 })
       },
       deep: true // https://vuejs.org/v2/api/#watch
     }

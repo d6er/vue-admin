@@ -26,7 +26,7 @@ export function createStore () {
       
       paging: [],
       
-      filter: {},
+      mergedFilter: {},
       
       filterForm: {},
       
@@ -78,6 +78,7 @@ export function createStore () {
       // todo: use constant for function names. https://vuex.vuejs.org/en/mutations.html
       setItems (state, data) {
         state.paging = data.paging
+        state.mergedFilter = data.mergedFilter
         state.items = []
         data.items.forEach((item, index) => {
           Vue.set(state.items, index, item)

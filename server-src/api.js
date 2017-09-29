@@ -6,10 +6,9 @@ const config_client = require('../config/client')
 
 const methods = {
   
-  fetchItems: ({ user_id, list, filter, page }) => {
+  fetchItems: ({ user_id, list, filter, filterForm, page }) => {
     
-    let mergedFilter = methods.getMergedFilter(list, filter)
-    console.dir(mergedFilter)
+    let mergedFilter = methods.getMergedFilter(list, filter, filterForm)
     
     let zone = moment.tz.guess()
     
@@ -25,6 +24,8 @@ const methods = {
           })
         }
       })
+      
+      result.mergedFilter = mergedFilter
       
       return result
     })
@@ -66,9 +67,6 @@ const methods = {
   },
   
   getMergedFilter: (listName, urlFilter, filterForm) => {
-    
-    console.log('server api.js getMergedFilter()')
-    console.log(listName + ' ' + urlFilter)
     
     let filter = { queries: [], sorting: [], columns: [] }
     let definedFilters = config_client.lists.find(e => e.name == listName).filters
