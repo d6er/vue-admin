@@ -4,9 +4,9 @@ import { createApp } from './app'
 
 const { app, router, store } = createApp()
 
-// moved into app.js for testing. => reverted, ok?
+// moved into app.js due to initial requireAuth failure at client.
 if (window.__INITIAL_STATE__) {
-  store.replaceState(window.__INITIAL_STATE__)
+  //store.replaceState(window.__INITIAL_STATE__)
 }
 
 router.onReady(() => {

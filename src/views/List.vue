@@ -151,10 +151,22 @@ export default {
                                        page: page })
   },
   
+  // https://router.vuejs.org/en/advanced/data-fetching.html
+  beforeRouteUpdate (to, from, next) {
+    
+    let apiData = {
+      action: 'fetchItems',
+      list: to.params.list,
+      filter: to.params.filter,
+      page: to.params.page
+    }
+    
+    this.$store.dispatch('callApi', apiData).then(r => {
+      next()
+    })
+  },
+    
   computed: {
-    list () {
-      return this.$store.state.lists.find(list => list.name == this.$route.params.list)
-    },
     items () {
       return this.$store.state.items
     },
@@ -162,17 +174,13 @@ export default {
       return this.$store.state.mergedFilter
     },
     prevPage () {
-      const page = this.$route.params.page ? parseInt(this.$route.params.page) : 1
-      return '/' + this.list.name + '/' + this.$route.params.filter + '/p' + (page - 1)
+      let page = this.$route.params.page ? parseInt(this.$route.params.page) : 1
+      return '/' + this.$route.params.list + '/' + this.$route.params.filter + '/p' + (page - 1)
     },
     nextPage () {
-      const page = this.$route.params.page ? parseInt(this.$route.params.page) : 1
-      return '/' + this.list.name + '/' + this.$route.params.filter + '/p' + (page + 1)
+      let page = this.$route.params.page ? parseInt(this.$route.params.page) : 1
+      return '/' + this.$route.params.list + '/' + this.$route.params.filter + '/p' + (page + 1)
     }
-  },
-  
-  watch: {
-    $route: 'handleRouteChange',
   },
   
   components: {
@@ -182,12 +190,8 @@ export default {
   methods: {
     
     isLinkToDetail(fieldName) {
-      let field = this.list.fields.find(f => f.name == fieldName)
+      let field = this.$store.state.currentList.fields.find(f => f.name == fieldName)
       return field.linkToDetail
-    },
-    
-    handleRouteChange() {
-      this.fetchItems()
     },
     
     getDetailLinkURL(_id) {
@@ -195,10 +199,10 @@ export default {
     },
     
     fetchItems() {
-      this.$store.dispatch('callApi', { action: 'fetchItems',
-                                        list: this.$route.params.list,
-                                        filter: this.$route.params.filter,
-                                        page: this.$route.params.page })
+      return this.$store.dispatch('callApi', { action: 'fetchItems',
+                                               list: this.$route.params.list,
+                                               filter: this.$route.params.filter,
+                                               page: this.$route.params.page })
     },
     
     refreshList() {

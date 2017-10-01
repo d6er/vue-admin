@@ -11,10 +11,10 @@ export function createApp () {
   
   sync(store, router)
   
-  // moved from entry-client.js for testing. => reverted ok?
+  // moved from entry-client.js due to initial requireAuth failure at client.
   if (typeof window !== 'undefined') {
     if (window.__INITIAL_STATE__) {
-      //store.replaceState(window.__INITIAL_STATE__)
+      store.replaceState(window.__INITIAL_STATE__)
     }
   }
   

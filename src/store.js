@@ -30,6 +30,8 @@ export function createStore () {
       
       filterForm: {},
       
+      currentList: {},
+
       notification: null
     },
     
@@ -45,6 +47,9 @@ export function createStore () {
         }
         
         return api.call(data).then(result => {
+          
+          result.callData = data
+          
           // todo: map action and commit
           // https://github.com/vuejs/vuex/issues/755
           if (data.action == 'fetchItems' || data.action == 'refreshItems') {
@@ -61,8 +66,9 @@ export function createStore () {
           }
           if (data.action == 'uploadImage') {
             //console.dir(result)
-            return result
           }
+          
+          return result
         })
       }
     },
@@ -74,9 +80,16 @@ export function createStore () {
         state.filterForm = filterForm
       },
       
+      setCurrentList(state, list) {
+        state.currentList = list
+      },
+      
       // item
-      // todo: use constant for function names. https://vuex.vuejs.org/en/mutations.html
+      // todo: use constant for function names.
+      // https://vuex.vuejs.org/en/mutations.html
       setItems (state, data) {
+        // todo: set current list
+        state.currentList = state.lists.find(l => l.name == data.callData.list)
         state.paging = data.paging
         state.mergedFilter = data.mergedFilter
         state.items = []
@@ -84,6 +97,11 @@ export function createStore () {
           Vue.set(state.items, index, item)
         })
       },
+      
+      clearItems (state) {
+        state.items = []
+      },
+      
       setItem (state, data) {
         state.paging = data.paging
         let index = state.items.findIndex(e => e._id == data.item._id)
@@ -94,6 +112,7 @@ export function createStore () {
       setNotification (state, message) {
         state.notification = message
       },
+      
       clearNotification (state) {
         state.notification = null
       }
