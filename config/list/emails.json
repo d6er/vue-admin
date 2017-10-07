@@ -24,6 +24,11 @@
     {
       "name": "labelIds",
       "type": "array"
+    },
+    {
+      "name": "mimeType",
+      "field": "payload.mimeType",
+      "type": "text"
     }
   ],
   
@@ -33,7 +38,7 @@
       "parent": "",
       "queries": [ { "field": "labelIds", "condition": "is equal to", "value": "INBOX" } ],
       "sorting": [ { "field": "date", "order": "desc" } ],
-      "columns": [ "from", "subject", "date" ]
+      "columns": [ "from", "subject", "mimeType", "date" ]
     },
     {
       "name": "sent",

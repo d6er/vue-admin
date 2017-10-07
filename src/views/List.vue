@@ -110,18 +110,18 @@
             <input type="checkbox" :value="item._id" v-model="checkedItems">
           </td>
           <td v-for="column in filter.columns">
-            <template v-if="isLinkToDetail(column)">
-              <router-link :to="getDetailLinkURL(item._id)">
-                {{ item[column] }}
-              </router-link>
-            </template>
-            <template v-else-if="column == 'picture'">
+            <template v-if="column == 'picture'">
               <figure class="image is-32x32">
                 <img src="http://bulma.io/images/placeholders/32x32.png">
               </figure>
             </template>
+            <template v-else-if="isLinkToDetail(column)">
+              <router-link :to="getDetailLinkURL(item._id)">
+                {{ getFieldValue(item, column) }}
+              </router-link>
+            </template>
             <template v-else>
-              {{ item[column] }}
+              {{ getFieldValue(item, column) }}
             </template>
           </td>
         </tr>
@@ -192,6 +192,20 @@ export default {
     isLinkToDetail(fieldName) {
       let field = this.$store.state.currentList.fields.find(f => f.name == fieldName)
       return field.linkToDetail
+    },
+    
+    getFieldValue(item, fieldName) {
+      let field = this.$store.state.currentList.fields.find(f => f.name == fieldName)
+      if (field.field) {
+        let arr = field.field.split('.')
+        let obj = item[arr[0]]
+        for (let i = 1; i < arr.length; i++) {
+          obj = obj[arr[i]]
+        }
+        return obj
+      } else {
+        return item[fieldName]
+      }
     },
     
     getDetailLinkURL(_id) {
