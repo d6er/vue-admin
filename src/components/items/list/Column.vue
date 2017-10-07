@@ -5,13 +5,10 @@
         <img src="http://bulma.io/images/placeholders/32x32.png">
       </figure>
     </template>
-    <template v-else-if="column == 'subject'">
+    <template v-else-if="column == 'title'">
       <router-link :to="getDetailLinkURL(item._id)">
         {{ item[column] }}
       </router-link>
-    </template>
-    <template v-else-if="column == 'mimeType'">
-      {{ item.payload.mimeType }}
     </template>
     <template v-else>
       {{ item[column] }}

@@ -1,15 +1,35 @@
 {
   "name": "items",
-  
-  "tabs": [ "detail", "description", "pictures" ],
-  
+  "tabs": [
+    "detail",
+    "description",
+    "pictures"
+  ],
   "fields": [
-    { "name": "title", "type": "text", "linkToDetail": true },
-    { "name": "subtitle", "type": "text" },
-    { "name": "account", "type": "text" },
-    { "name": "updated", "type": "datetime" },
-    { "name": "created", "type": "datetime" },
-    { "name": "picture", "type": "image" },
+    {
+      "name": "title",
+      "type": "text"
+    },
+    {
+      "name": "subtitle",
+      "type": "text"
+    },
+    {
+      "name": "account",
+      "type": "text"
+    },
+    {
+      "name": "updated",
+      "type": "datetime"
+    },
+    {
+      "name": "created",
+      "type": "datetime"
+    },
+    {
+      "name": "picture",
+      "type": "image"
+    },
     {
       "name": "status",
       "type": "select",
@@ -28,10 +48,22 @@
       "foreach": "",
       "queries": [],
       "sorting": [
-        { "field": "updated", "order": "desc" },
-        { "field": "title", "order": "asc" }
+        {
+          "field": "updated",
+          "order": "desc"
+        },
+        {
+          "field": "title",
+          "order": "asc"
+        }
       ],
-      "columns": [ "picture", "title", "account", "status", "updated" ]
+      "columns": [
+        "picture",
+        "title",
+        "account",
+        "status",
+        "updated"
+      ]
     },
     {
       "name": "account",
