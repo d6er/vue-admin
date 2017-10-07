@@ -33,6 +33,17 @@ export function createRouter (store) {
   
   let listsRegExp = store.state.lists.map(list => list.name).join('|')
   
+  // dynamic child component for list
+  let listRoutes = []
+  config.lists.map(list => {
+    let route = {
+      path: '/:list(' + list.name + ')/:filter/p:page(\\d+)?',
+      beforeEnter: requireAuth,
+      component: () => import('./components/' + list.name + '/list/Column.vue')
+    }
+    listRoutes.push(route)
+  })
+  
   // dynamic child component for detail tabs
   let tabRoutes = []
   config.lists.map(list => {
@@ -41,7 +52,7 @@ export function createRouter (store) {
       let route = {
         path: '/:list(' + list.name + ')/:filter/:id(\\d\\w*)/:tab(' + tab + ')',
         beforeEnter: requireAuth,
-        component: () => import('./components/' + list.name + '/' + tabName + '.vue')
+        component: () => import('./components/' + list.name + '/detail/' + tabName + '.vue')
       }
       tabRoutes.push(route)
     })
@@ -80,7 +91,8 @@ export function createRouter (store) {
             path: 'p:page(\\d+)?',
             alias: '', // alias for page 1
             beforeEnter: requireAuth,
-            component: () => import('./views/List.vue')
+            component: () => import('./views/List.vue'),
+            children: listRoutes
           },
           {
             path: ':id(\\d\\w*)',
