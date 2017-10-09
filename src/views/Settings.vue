@@ -42,6 +42,7 @@
                   <th>Account type</th>
                   <th>Name</th>
                   <th>Email</th>
+                  <th></th>
                 </thead>
                 <tbody>
                   <tr v-for="account in $store.state.user.accounts">
@@ -53,6 +54,11 @@
                     </td>
                     <td v-if="account.emails">
                       {{ account.emails[0].value }}
+                    </td>
+                    <td>
+                      <button @click="deleteAccount" class="button is-small">
+                        <span>Remove</span>
+                      </button>
                     </td>
                   </tr>
                 </tbody>
@@ -108,6 +114,9 @@ export default {
           
         }
       )
+    },
+    deleteAccount (provider, id) {
+      
     },
     googleList () {
       this.$store.dispatch('callApi', { action: 'googleList' })
