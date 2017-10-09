@@ -18,21 +18,24 @@
         </router-link>
       </div>
       <div class="navbar-end">
-        <div class="navbar-item">
-          <router-link class="button is-small" to="/settings">
-            <span class="icon is-small">
-              <i class="fa fa-user" aria-hidden="true"></i>
-            </span>
-            <span>{{ username }}</span>
-          </router-link>
-        </div>
-        <div class="navbar-item">
-          <a class="button is-small" href="/auth/local/logout">
-            <span class="icon is-small">
-              <i class="fa fa-sign-out" aria-hidden="true"></i>
-            </span>
-            <span>Logout</span>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link is-small">
+            {{ username }}
           </a>
+          <div class="navbar-dropdown">
+            <router-link class="navbar-item" to="/settings">
+              <span class="icon is-small">
+                <i class="fa fa-cogs" aria-hidden="true"></i>
+              </span>
+              Settings
+            </router-link>
+            <a class="navbar-item" href="/auth/local/logout">
+              <span class="icon is-small">
+                <i class="fa fa-sign-out" aria-hidden="true"></i>
+              </span>
+              Logout
+            </a>
+          </div>
         </div>
       </div>
     </div>
