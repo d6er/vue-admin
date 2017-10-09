@@ -40,12 +40,71 @@ const methods = {
     }).then(googleAccounts => {
       
       return Promise.all(googleAccounts.map(account => {
-        return google.messagesList(account).then(messages => {
-          return mongo.saveItems(user_id, list, messages)
+        
+        let oauth2Client = google.getOAuth2Client(account)
+        
+        return mongo.getMaxHistoryId(user_id, list, account).then(r => {
+          return google.historyList(oauth2Client, r.historyId)
+        }).then(r => {
+          if (!r.history) return
+          
+          let message_ids = []
+          r.history.map(e => {
+            e.messages.map(message => {
+              message_ids.push(message.id)
+            })
+          })
+          message_ids = [...new Set(message_ids)]
+          
+          console.log(account.emails[0].value + ' : ' + message_ids.length)
+          
+          return Promise.all(message_ids.map((message_id, idx) => {
+            
+            return new Promise((resolve, reject) => {
+              setTimeout(() => {
+                console.log(idx)
+                return google.messagesGet(oauth2Client, message_id).then(responseMessage => {
+                  let converted = google.convertMessage(responseMessage)
+                  converted.account = account.emails[0].value
+                  return mongo.saveItem({ user_id: user_id,
+                                          list: list,
+                                          item: converted })
+                }).then(r => {
+                  resolve()
+                })
+              }, idx * 500)
+            })
+            
+          }))
         })
       }))
       
+      /*
+      return Promise.all(googleAccounts.map(account => {
+        
+        let oauth2Client = google.getOAuth2Client(account)
+        
+        return google.messagesList(oauth2Client).then(response => {
+          
+          return Promise.all(response.messages.map((message, idx) => {
+            setTimeout(() => {
+              return google.messagesGet(oauth2Client, message.id).then(responseMessage => {
+                let converted = google.convertMessage(responseMessage)
+                converted.account = account.emails[0].value
+                return mongo.saveItem({ user_id: user_id,
+                                        list: list,
+                                        item: converted })
+              })
+            }, idx * 500)
+          }))
+        })
+        
+      }))
+      */
+      
     }).then(savedResults => {
+      console.log('savedResults')
+      console.dir(savedResults)
       return mongo.fetchItems({ user_id: user_id,
                                 list: list,
                                 filter: filter,

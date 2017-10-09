@@ -84,15 +84,12 @@ const actions = {
     })
   },
   
-  saveItem: function({ user_id, item }) {
-    
-    item.updated = new Date()
-    
-    const coll = 'items.' + user_id
-    
+  saveItem: function({ user_id, list, item }) {
+    let coll = list + '.' + user_id
     if (item._id) {
-      // existing item
-      return db.collection(coll).updateOne({ _id: item._id }, item)
+      return db.collection(coll).updateOne({ _id: item._id },
+                                           { $set: item},
+                                           { upsert: true })
     } else {
       // new item
       return this.getNextId(coll).then(r => {
@@ -291,7 +288,16 @@ const actions = {
     converted.push([ '_id', -1 ])
     
     return converted
+  },
+
+  // for gmail
+  getMaxHistoryId: function (user_id, list, account) {
+    const coll = list + '.' + user_id
+    return db.collection(coll).findOne({ account: account.emails[0].value },
+                                       { fields: { 'historyId': 1 },
+                                         sort: [[ 'historyId', 'descending' ]] })
   }
+  
 }
 
 module.exports = actions

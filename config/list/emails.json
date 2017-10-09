@@ -29,6 +29,14 @@
       "name": "mimeType",
       "field": "payload.mimeType",
       "type": "text"
+    },
+    {
+      "name": "historyId",
+      "type": "text"
+    },
+    {
+      "name": "account",
+      "type": "text"
     }
   ],
   "filters": [
@@ -50,8 +58,9 @@
       ],
       "columns": [
         "from",
+        "account",
         "subject",
-        "mimeType",
+        "historyId",
         "date"
       ]
     },

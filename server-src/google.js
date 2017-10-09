@@ -5,9 +5,7 @@ const gmail = google.gmail('v1')
 
 const methods = {
   
-  messagesList: function (account) {
-    
-    console.log('google.messagesList: ' + account.emails[0].value)
+  getOAuth2Client: function (account) {
     
     // https://github.com/google/google-api-nodejs-client/#authorizing-and-authenticating
     let clientId = config.GOOGLE_CLIENT_ID
@@ -24,56 +22,62 @@ const methods = {
       expiry_date: true
     });
     
+    return oauth2Client
+  },
+  
+  // https://developers.google.com/gmail/api/v1/reference/users/messages/list
+  messagesList: function (oauth2Client) {
+    let params = {
+      auth: oauth2Client,
+      userId: 'me',
+      maxResults: 500
+    }
     return new Promise((resolve, reject) => {
-      
-      // https://developers.google.com/gmail/api/v1/reference/users/messages/list
-      let params = {
-        auth: oauth2Client,
-        userId: 'me',
-        maxResults: 100
-      }
-      
       gmail.users.messages.list(params, function(err, response) {
         if (err) {
-          console.dir(err)
           reject(err)
         } else {
-          resolve(response.messages)
+          resolve(response)
         }
       })
-      
-    }).then(messages => {
-      
-      let getMessages = messages.map((message, idx) => {
-        return new Promise((resolve, reject) => {
-          
-          let params = {
-            auth: oauth2Client,
-            userId: 'me',
-            id: message.id
-          }
-          
-          setTimeout(() => {
-            gmail.users.messages.get(params, function(err, response) {
-              if (err) {
-                console.log(idx + ' ' + message.id)
-                console.dir(err)
-                reject(err)
-              } else {
-                console.log(idx + ' ' + message.id)
-                let converted = methods.convertMessage(response)
-                resolve(response)
-              }
-            })
-          }, idx * 1000)
-        })
-      })
-      
-      return Promise.all(getMessages)
     })
-    
   },
-
+  
+  messagesGet: function (oauth2Client, id) {
+    let params = {
+      auth: oauth2Client,
+      userId: 'me',
+      id: id
+    }
+    return new Promise((resolve, reject) => {
+      gmail.users.messages.get(params, function(err, response) {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(response)
+        }
+      })
+    })
+  },
+  
+  // https://developers.google.com/gmail/api/v1/reference/users/history/list
+  historyList: function (oauth2Client, historyId) {
+    let params = {
+      auth: oauth2Client,
+      userId: 'me',
+      startHistoryId: historyId
+    }
+    return new Promise((resolve, reject) => {
+      gmail.users.history.list(params, function(err, response) {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(response)
+        }
+      })
+    })
+  },
+  
   convertMessage: function (message) {
     
     let headers = message.payload.headers
@@ -84,6 +88,8 @@ const methods = {
     
     let date = headers.find(header => header.name == 'Date').value
     message.date = moment(date, "ddd, DD MMM YYYY HH:mm:ss ZZ").toDate()
+    
+    message.historyId = parseInt(message.historyId)
     
     return message
   }
