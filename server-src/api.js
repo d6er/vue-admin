@@ -83,7 +83,6 @@ const methods = {
             
             return new Promise((resolve, reject) => {
               setTimeout(() => {
-                console.log(idx)
                 return google.messagesGet(oauth2Client, message_id).then(responseMessage => {
                   let converted = google.convertMessage(responseMessage)
                   converted.account = account.emails[0].value
