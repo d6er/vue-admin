@@ -44,17 +44,38 @@ const methods = {
         let oauth2Client = google.getOAuth2Client(account)
         
         return mongo.getMaxHistoryId(user_id, list, account).then(r => {
-          return google.historyList(oauth2Client, r.historyId)
-        }).then(r => {
-          if (!r.history) return
           
-          let message_ids = []
-          r.history.map(e => {
-            e.messages.map(message => {
-              message_ids.push(message.id)
+          if (r && r.historyId) {
+            
+            // partial sync
+            return google.historyList(oauth2Client, r.historyId).then(r => {
+              let message_ids = []
+              if (r.history) {
+                r.history.map(e => {
+                  if (e.messages) {
+                    e.messages.map(message => {
+                      message_ids.push(message.id)
+                    })
+                  }
+                })
+              }
+              message_ids = [...new Set(message_ids)]
+              return message_ids
             })
-          })
-          message_ids = [...new Set(message_ids)]
+            
+          } else {
+            
+            // full sync
+            return google.messagesList(oauth2Client).then(r => {
+              let message_ids = []
+              r.messages.map(message => {
+                message_ids.push(message.id)
+              })
+              return message_ids
+            })
+          }
+          
+        }).then(message_ids => {
           
           console.log(account.emails[0].value + ' : ' + message_ids.length)
           
@@ -76,35 +97,13 @@ const methods = {
             })
             
           }))
+        }).catch(e => {
+          console.dir(e)
+          return
         })
       }))
-      
-      /*
-      return Promise.all(googleAccounts.map(account => {
-        
-        let oauth2Client = google.getOAuth2Client(account)
-        
-        return google.messagesList(oauth2Client).then(response => {
-          
-          return Promise.all(response.messages.map((message, idx) => {
-            setTimeout(() => {
-              return google.messagesGet(oauth2Client, message.id).then(responseMessage => {
-                let converted = google.convertMessage(responseMessage)
-                converted.account = account.emails[0].value
-                return mongo.saveItem({ user_id: user_id,
-                                        list: list,
-                                        item: converted })
-              })
-            }, idx * 500)
-          }))
-        })
-        
-      }))
-      */
       
     }).then(savedResults => {
-      console.log('savedResults')
-      console.dir(savedResults)
       return mongo.fetchItems({ user_id: user_id,
                                 list: list,
                                 filter: filter,

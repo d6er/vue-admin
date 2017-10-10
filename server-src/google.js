@@ -30,7 +30,7 @@ const methods = {
     let params = {
       auth: oauth2Client,
       userId: 'me',
-      maxResults: 500
+      maxResults: 5
     }
     return new Promise((resolve, reject) => {
       gmail.users.messages.list(params, function(err, response) {
