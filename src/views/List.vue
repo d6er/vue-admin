@@ -185,7 +185,7 @@ export default {
     refreshList() {
       this.$store.dispatch('callApi', { action: 'refreshList',
                                         list: this.$route.params.list,
-                                        filter: this.$store.state.filter,
+                                        filter: this.$route.params.filter,
                                         page: this.$route.params.page })
     },
     

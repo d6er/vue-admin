@@ -79,6 +79,10 @@ const methods = {
           
           console.log(account.emails[0].value + ' : ' + message_ids.length)
           
+          if (message_ids.length == 0) {
+            return
+          }
+          
           return Promise.all(message_ids.map((message_id, idx) => {
             
             return new Promise((resolve, reject) => {
@@ -90,7 +94,12 @@ const methods = {
                                           list: list,
                                           item: converted })
                 }).then(r => {
+                  console.log('resolve ' + account.emails[0].value + ' ' + idx)
                   resolve()
+                }).catch(e => {
+                  console.log('reject ' + account.emails[0].value + ' ' + idx)
+                  console.dir(e)
+                  reject()
                 })
               }, idx * 500)
             })
@@ -103,10 +112,10 @@ const methods = {
       }))
       
     }).then(savedResults => {
-      return mongo.fetchItems({ user_id: user_id,
-                                list: list,
-                                filter: filter,
-                                page: page })
+      return methods.fetchItems({ user_id: user_id,
+                                  list: list,
+                                  filter: filter,
+                                  page: page })
     })
   },
   

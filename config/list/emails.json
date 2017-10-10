@@ -58,9 +58,7 @@
       ],
       "columns": [
         "from",
-        "account",
         "subject",
-        "historyId",
         "date"
       ]
     },

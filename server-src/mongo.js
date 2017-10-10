@@ -184,6 +184,10 @@ const actions = {
   
   fetchItems: function ({ user_id, list, filter, page }) {
     
+    console.log(user_id + ' ' + list)
+    console.dir(filter)
+    console.log(page)
+    
     const query = actions.convertQueries(filter.queries)
     const sort = actions.convertSorting(filter.sorting)
     
@@ -193,6 +197,8 @@ const actions = {
     const cursor = db.collection(list + '.' + user_id).find(query)
     
     return cursor.count().then(count => {
+      
+      console.log(count)
       
       const paging = {
         start: skip + 1,
@@ -206,6 +212,8 @@ const actions = {
         //items.forEach(actions.convertItem)
         return { items: items, paging: paging }
       })
+    }).catch(e => {
+      console.dir(e)
     })
   },
   
