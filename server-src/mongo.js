@@ -20,6 +20,10 @@ const actions = {
     })
   },
   
+  getConnection: function () {
+    return db
+  },
+  
   getNextId: function (name) {
     return db.collection('counters').findOneAndUpdate(
       { _id: name },

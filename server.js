@@ -116,6 +116,9 @@ mongo.connect(config.mongo_url).then(db => {
     server
   })
   
+  const api2 = require('./server-src/api/index.js')
+  console.dir(api2)
+  
   wss.on('connection', (ws, req) => {
     ws.on('message', json => {
       
@@ -129,7 +132,13 @@ mongo.connect(config.mongo_url).then(db => {
         }
       }
       
-      if (api[message.data.action]) {
+      if (api2[message.data.action]) {
+        console.log('[API2] ' + message.data.action)
+        api2[message.data.action](message.data).then(
+          r => { ws.send(JSON.stringify({ job_id: message.job_id, resolve: r })) },
+          e => { ws.send(JSON.stringify({ job_id: message.job_id, reject: e })) }
+        )
+      } else if (api[message.data.action]) {
         api[message.data.action](message.data).then(
           r => { ws.send(JSON.stringify({ job_id: message.job_id, resolve: r })) },
           e => { ws.send(JSON.stringify({ job_id: message.job_id, reject: e })) }
@@ -144,7 +153,7 @@ mongo.connect(config.mongo_url).then(db => {
   })
   
   // Start web server
-  server.listen(config.server_port, function listening() {
+  server.listen(config.server_port, function () {
     console.log('Listening on %d', server.address().port);
   })
   
