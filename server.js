@@ -129,17 +129,10 @@ mongo.connect(config.mongo_url).then(db => {
         }
       }
       
-      if (api[message.data.action]) {
-        api[message.data.action](message.data).then(
-          r => { ws.send(JSON.stringify({ job_id: message.job_id, resolve: r })) },
-          e => { ws.send(JSON.stringify({ job_id: message.job_id, reject: e })) }
-        )
-      } else {
-        mongo[message.data.action](message.data).then(
-          r => { ws.send(JSON.stringify({ job_id: message.job_id, resolve: r })) },
-          e => { ws.send(JSON.stringify({ job_id: message.job_id, reject: e })) }
-        )
-      }
+      api[message.data.action](message.data).then(
+        r => { ws.send(JSON.stringify({ job_id: message.job_id, resolve: r })) },
+        e => { ws.send(JSON.stringify({ job_id: message.job_id, reject: e })) }
+      )
     })
   })
   

@@ -42,6 +42,7 @@ export function createStore () {
       
       callApi ({ commit, state }, data) {
         
+        // todo: handle 'auth error'
         if (data.action != 'createUser') {
           data.user_id = state.user._id
         }
