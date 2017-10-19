@@ -6,13 +6,13 @@ let db
 
 const actions = {
   
-  connect: function (url, options, callback) {
+  connect: function (url) {
     return new Promise((resolve, reject) => {
       if (db) {
         resolve(db)
       } else {
-        console.log('[MONGO] CONNECT')
-        return MongoClient.connect(url, options, callback).then(dbobj => {
+        console.log('mongo.connect() ' + url)
+        return MongoClient.connect(url).then(dbobj => {
           db = dbobj
           resolve(db)
         })
