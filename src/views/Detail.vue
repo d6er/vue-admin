@@ -73,23 +73,31 @@
 export default {
   
   asyncData ({ store, route: { params: { list, filter, id } } }) {
-    let definedFilters = store.state.lists.find(e => e.name == list).filters
-    let mergedFilter = this.methods.getMergedFilter(filter, definedFilters)
-    if (id != 'new') {
-      if (id.match(/^[\d]+$/)) {
-        id = parseInt(id)
-      }
-      return store.dispatch('callApi', { action: 'fetchItem',
-                                         list: list,
-                                         filter: mergedFilter,
-                                         item_id: id })
+    if (id == 'new') {
+      return
     }
+    let apiData = {
+      action: 'fetchItem',
+      list: list,
+      filter: filter,
+      item_id: id
+    }
+    return store.dispatch('callApi', apiData)
   },
   
-  watch: {
-    $route: 'handleRouteChange'
+  // https://router.vuejs.org/en/advanced/data-fetching.html
+  beforeRouteUpdate (to, from, next) {
+    let apiData = {
+      action: 'fetchItem',
+      list: to.params.list,
+      filter: to.params.filter,
+      item_id: to.params.id
+    }
+    this.$store.dispatch('callApi', apiData).then(r => {
+      next()
+    })
   },
-  
+   
   computed: {
     list() {
       return this.$store.state.lists.find(list => list.name == this.$route.params.list)
@@ -108,80 +116,17 @@ export default {
   
   methods: {
     save () {
-      this.$store.dispatch('callApi', { action: 'saveItem', item: this.item }).then(
-        r => {
-          this.$router.go(-1)
-        },
-        e => {
-          console.dir(e)
-        }
-      )
+      let apiData = {
+        action: 'saveItem',
+        item: this.item
+      }
+      this.$store.dispatch('callApi', apiData).then(r => {
+        this.$router.go(-1)
+      })
     },
+    
     back () {
       this.$router.go(-1)
-    },
-    
-    handleRouteChange (newRoute, oldRoute) {
-      
-      // don't fetch data on tab change
-      if (newRoute.params.list == oldRoute.params.list
-          && newRoute.params.id == oldRoute.params.id) {
-        return
-      }
-      
-      let list = this.$route.params.list
-      let id = this.$route.params.id
-      let definedFilters = this.$store.state.lists.find(e => e.name == list).filters
-      let mergedFilter = this.getMergedFilter(this.$route.params.filter, definedFilters)
-
-      if (id.match(/^[\d]+$/)) {
-        id = parseInt(id)
-      }
-      
-      if (this.$route.params.id != 'new') {
-        return this.$store.dispatch('callApi', { action: 'fetchItem',
-                                                 list: list,
-                                                 filter: mergedFilter,
-                                                 item_id: id })
-      }
-    },
-    
-    // todo: same method in List.vue
-    getMergedFilter(urlFilter, definedFilters) {
-      const filter = { queries: [], sorting: [], columns: [] }
-      
-      const path = urlFilter.split(',')
-      for (let i in path) {
-        let arr = path[i].split(/:/)
-        let thisFilter = {}
-        
-        let refFilter = definedFilters.find(filter => filter.name == arr[0])
-        thisFilter = JSON.parse(JSON.stringify(refFilter)) // deep copy
-        
-        // queries
-        if (arr.length == 2) {
-          filter.queries.push({
-            field: thisFilter.foreach,
-            condition: 'is equal to',
-            value: arr[1]
-          })
-        }
-        if (thisFilter.queries) {
-          filter.queries.push.apply(filter.queries, thisFilter.queries)
-        }
-        
-        // sorting
-        if (thisFilter.sorting) {
-          filter.sorting = thisFilter.sorting
-        }
-        
-        // columns
-        if (thisFilter.columns) {
-          filter.columns = thisFilter.columns
-        }
-      }
-      
-      return filter
     }
   }
 }

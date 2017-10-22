@@ -131,10 +131,13 @@ export default {
   },
   
   asyncData ({ store, route: { params: { list, filter, page } } }) {
-    return store.dispatch('callApi', { action: 'fetchItems',
-                                       list: list,
-                                       filter: filter,
-                                       page: page })
+    let apiData = {
+      action: 'fetchItems',
+      list: list,
+      filter: filter,
+      page: page
+    }
+    return store.dispatch('callApi', apiData)
   },
   
   // https://router.vuejs.org/en/advanced/data-fetching.html
@@ -175,21 +178,6 @@ export default {
   
   methods: {
     
-    fetchItems() {
-      return this.$store.dispatch('callApi', { action: 'fetchItems',
-                                               list: this.$route.params.list,
-                                               filter: this.$route.params.filter,
-                                               page: this.$route.params.page })
-    },
-    
-    refreshList() {
-      this.$store.dispatch('callApi', { action: 'refreshList',
-                                        list: this.$route.params.list,
-                                        filter: this.$route.params.filter,
-                                        page: this.$route.params.page })
-    },
-    
-    // Checkbox
     checkAll() {
       if (this.checkedAll) {
         this.checkedItems = Object.keys(this.items).map(i => this.items[i]._id)
@@ -197,11 +185,41 @@ export default {
         this.checkedItems = []
       }
     },
-    copyItems() {
-      this.$store.dispatch('callApi', { action: 'copyItems', item_ids: this.checkedItems })
+    
+    fetchItems() {
+      let apiData = {
+        action: 'fetchItems',
+        list: this.$route.params.list,
+        filter: this.$route.params.filter,
+        page: this.$route.params.page
+      }
+      return this.$store.dispatch('callApi', apiData)
     },
+    
+    refreshList() {
+      let apiData = {
+        action: 'refreshList',
+        list: this.$route.params.list,
+        filter: this.$route.params.filter,
+        page: this.$route.params.page
+      }
+      this.$store.dispatch('callApi', apiData)
+    },
+    
+    copyItems() {
+      let apiData = {
+        action: 'copyItems',
+        item_ids: this.checkedItems
+      }
+      this.$store.dispatch('callApi', apiData)
+    },
+    
     deleteItems() {
-      this.$store.dispatch('callApi', { action: 'deleteItems', item_ids: this.checkedItems })
+      let apiData = {
+        action: 'deleteItems',
+        item_ids: this.checkedItems
+      }
+      this.$store.dispatch('callApi', apiData)
     }
     
   }

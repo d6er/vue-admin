@@ -19,9 +19,6 @@ const mongo = require('./server-src/mongo')
 const passport = require('./server-src/passport')
 const auth = require('./server-src/auth')
 
-// API
-const api = require('./server-src/api')
-
 // Vue
 const template = fs.readFileSync('./src/index.template.html', 'utf-8')
 const { createBundleRenderer } = require('vue-server-renderer')
@@ -116,8 +113,8 @@ mongo.connect(config.mongo_url).then(db => {
     server
   })
   
-  const api2 = require('./server-src/api/index.js')
-  console.dir(api2)
+  const api = require('./server-src/api/index.js')
+  console.dir(api)
   
   wss.on('connection', (ws, req) => {
     ws.on('message', json => {
@@ -132,23 +129,10 @@ mongo.connect(config.mongo_url).then(db => {
         }
       }
       
-      if (api2[message.data.action]) {
-        console.log('[API2] ' + message.data.action)
-        api2[message.data.action](message.data).then(
-          r => { ws.send(JSON.stringify({ job_id: message.job_id, resolve: r })) },
-          e => { ws.send(JSON.stringify({ job_id: message.job_id, reject: e })) }
-        )
-      } else if (api[message.data.action]) {
-        api[message.data.action](message.data).then(
-          r => { ws.send(JSON.stringify({ job_id: message.job_id, resolve: r })) },
-          e => { ws.send(JSON.stringify({ job_id: message.job_id, reject: e })) }
-        )
-      } else {
-        mongo[message.data.action](message.data).then(
-          r => { ws.send(JSON.stringify({ job_id: message.job_id, resolve: r })) },
-          e => { ws.send(JSON.stringify({ job_id: message.job_id, reject: e })) }
-        )
-      }
+      api[message.data.action](message.data).then(
+        r => { ws.send(JSON.stringify({ job_id: message.job_id, resolve: r })) },
+        e => { ws.send(JSON.stringify({ job_id: message.job_id, reject: e })) }
+      )
     })
   })
   
