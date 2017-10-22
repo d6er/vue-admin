@@ -3,7 +3,6 @@ const moment = require('moment-timezone')
 const config_client = require('../../config/client')
 const apiUser = require('./user')
 const google = require('./google')
-const apiItem = require('./item')
 const mongo = require('../mongo')
 const db = mongo.getConnection()
 
@@ -69,9 +68,9 @@ const methods = {
                 return google.messagesGet(oauth2Client, message_id).then(responseMessage => {
                   let converted = google.convertMessage(responseMessage)
                   converted.account = account.emails[0].value
-                  return apiItem.saveItem({ user_id: user_id,
-                                         list: list,
-                                         item: converted })
+                  return methods.saveItem({ user_id: user_id,
+                                            list: list,
+                                            item: converted })
                 }).then(r => {
                   console.log('resolve ' + account.emails[0].value + ' ' + idx)
                   resolve()
