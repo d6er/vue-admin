@@ -1,11 +1,14 @@
-const config = require('../../config/server')
 const moment = require('moment')
 const google = require('googleapis')
 const gmail = google.gmail('v1')
 
+const config = require('../../config/server')
+const mongo = require('../mongo')
+const db = mongo.getConnection()
+
 const methods = {
   
-  getOAuth2Client: function (account) {
+  getOAuth2Client: account => {
     
     // https://github.com/google/google-api-nodejs-client/#authorizing-and-authenticating
     let clientId = config.GOOGLE_CLIENT_ID
@@ -26,7 +29,7 @@ const methods = {
   },
   
   // https://developers.google.com/gmail/api/v1/reference/users/messages/list
-  messagesList: function (oauth2Client) {
+  messagesList: oauth2Client => {
     let params = {
       auth: oauth2Client,
       userId: 'me',
@@ -43,14 +46,14 @@ const methods = {
     })
   },
   
-  messagesGet: function (oauth2Client, id) {
+  messagesGet: (oauth2Client, id) => {
     let params = {
       auth: oauth2Client,
       userId: 'me',
       id: id
     }
     return new Promise((resolve, reject) => {
-      gmail.users.messages.get(params, function(err, response) {
+      gmail.users.messages.get(params, (err, response) => {
         if (err) {
           reject(err)
         } else {
@@ -61,14 +64,14 @@ const methods = {
   },
   
   // https://developers.google.com/gmail/api/v1/reference/users/history/list
-  historyList: function (oauth2Client, historyId) {
+  historyList: (oauth2Client, historyId) => {
     let params = {
       auth: oauth2Client,
       userId: 'me',
       startHistoryId: historyId
     }
     return new Promise((resolve, reject) => {
-      gmail.users.history.list(params, function(err, response) {
+      gmail.users.history.list(params, (err, response) => {
         if (err) {
           reject(err)
         } else {
@@ -78,7 +81,14 @@ const methods = {
     })
   },
   
-  convertMessage: function (message) {
+  getMaxHistoryId: (user_id, list, account) => {
+    const coll = list + '.' + user_id
+    return db.collection(coll).findOne({ account: account.emails[0].value },
+                                       { fields: { 'historyId': 1 },
+                                         sort: [[ 'historyId', 'descending' ]] })
+  },
+  
+  convertMessage: message => {
     
     let headers = message.payload.headers
     message._id = message.id

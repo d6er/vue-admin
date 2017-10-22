@@ -1,6 +1,5 @@
 // https://team.goodeggs.com/export-this-interface-design-patterns-for-node-js-modules-b48a3b1f8f40
 const MongoClient = require('mongodb').MongoClient
-const moment = require('moment')
 
 let db
 

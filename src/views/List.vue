@@ -142,14 +142,12 @@ export default {
   
   // https://router.vuejs.org/en/advanced/data-fetching.html
   beforeRouteUpdate (to, from, next) {
-    
     let apiData = {
       action: 'fetchItems',
       list: to.params.list,
       filter: to.params.filter,
       page: to.params.page
     }
-    
     this.$store.dispatch('callApi', apiData).then(r => {
       next()
     })

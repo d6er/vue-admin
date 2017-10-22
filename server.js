@@ -2,7 +2,6 @@
 
 const fs = require('fs')
 const ws = require('ws')
-const url = require('url')
 const http = require('http')
 const bodyParser = require('body-parser')
 
@@ -102,7 +101,6 @@ mongo.connect(config.mongo_url).then(db => {
   
   const server = http.createServer(app);
   
-  // WebSocket
   // https://github.com/websockets/ws/blob/master/examples/express-session-parse/index.js
   const wss = new ws.Server({
     verifyClient: (info, done) => {
@@ -114,7 +112,6 @@ mongo.connect(config.mongo_url).then(db => {
   })
   
   const api = require('./server-src/api/index.js')
-  console.dir(api)
   
   wss.on('connection', (ws, req) => {
     ws.on('message', json => {
@@ -142,7 +139,5 @@ mongo.connect(config.mongo_url).then(db => {
   })
   
 }).catch(err => {
-  
-  console.log(err.message)
-  
+  console.dir(err)
 })
