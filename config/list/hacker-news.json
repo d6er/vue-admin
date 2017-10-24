@@ -1,0 +1,33 @@
+{
+  "name": "hacker-news",
+  "tabs": [
+    "detail"
+  ],
+  "fields": [
+    {
+      "name": "title",
+      "type": "text"
+    }
+  ],
+  "filters": [
+    {
+      "name": "all",
+      "parent": "",
+      "foreach": "",
+      "queries": [],
+      "sorting": [
+        {
+          "field": "updated",
+          "order": "desc"
+        },
+        {
+          "field": "title",
+          "order": "asc"
+        }
+      ],
+      "columns": [
+        "title"
+      ]
+    }
+  ]
+}

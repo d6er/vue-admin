@@ -195,6 +195,8 @@ export default {
     },
     
     refreshList() {
+      console.log('list:' + this.$route.params.list)
+      return
       let apiData = {
         action: 'refreshList',
         list: this.$route.params.list,

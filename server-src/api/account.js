@@ -32,6 +32,10 @@ const methods = {
     
   },
   
+  removeAccount: function (user_id, account) {
+    
+  }
+  
 }
 
 module.exports = methods

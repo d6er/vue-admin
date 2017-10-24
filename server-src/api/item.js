@@ -2,7 +2,7 @@ const moment = require('moment-timezone')
 
 const config_client = require('../../config/client')
 const apiUser = require('./user')
-const google = require('./google')
+const gmail = require('./gmail')
 const mongo = require('../mongo')
 const db = mongo.getConnection()
 
@@ -19,14 +19,14 @@ const methods = {
       
       return Promise.all(googleAccounts.map(account => {
         
-        let oauth2Client = google.getOAuth2Client(account)
+        let oauth2Client = gmail.getOAuth2Client(account)
         
-        return google.getMaxHistoryId(user_id, list, account).then(r => {
+        return gmail.getMaxHistoryId(user_id, list, account).then(r => {
           
           if (r && r.historyId) {
             
             // partial sync
-            return google.historyList(oauth2Client, r.historyId).then(r => {
+            return gmail.historyList(oauth2Client, r.historyId).then(r => {
               let message_ids = []
               if (r.history) {
                 r.history.map(e => {
@@ -44,7 +44,7 @@ const methods = {
           } else {
             
             // full sync
-            return google.messagesList(oauth2Client).then(r => {
+            return gmail.messagesList(oauth2Client).then(r => {
               let message_ids = []
               r.messages.map(message => {
                 message_ids.push(message.id)
@@ -65,8 +65,8 @@ const methods = {
             
             return new Promise((resolve, reject) => {
               setTimeout(() => {
-                return google.messagesGet(oauth2Client, message_id).then(responseMessage => {
-                  let converted = google.convertMessage(responseMessage)
+                return gmail.messagesGet(oauth2Client, message_id).then(responseMessage => {
+                  let converted = gmail.convertMessage(responseMessage)
                   converted.account = account.emails[0].value
                   return methods.saveItem({ user_id: user_id,
                                             list: list,
