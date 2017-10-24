@@ -7,6 +7,10 @@
     {
       "name": "title",
       "type": "text"
+    },
+    {
+      "name": "score",
+      "type": "text"
     }
   ],
   "filters": [
@@ -17,16 +21,12 @@
       "queries": [],
       "sorting": [
         {
-          "field": "updated",
-          "order": "desc"
-        },
-        {
-          "field": "title",
+          "field": "idx",
           "order": "asc"
         }
       ],
       "columns": [
-        "title"
+        "title", "score"
       ]
     }
   ]

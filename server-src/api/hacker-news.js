@@ -16,6 +16,7 @@ const methods = {
           return axios.get(url).then(res => {
             let item = res.data
             item._id = item.id
+            item.idx = idx
             return db.collection('hacker-news.' + user_id).updateOne({ _id: item._id },
                                                                      { $set: item},
                                                                      { upsert: true })
