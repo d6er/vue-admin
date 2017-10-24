@@ -3,6 +3,8 @@ const moment = require('moment-timezone')
 const config_client = require('../../config/client')
 const apiUser = require('./user')
 const gmail = require('./gmail')
+const hackerNews = require('./hacker-news')
+
 const mongo = require('../mongo')
 const db = mongo.getConnection()
 
@@ -10,6 +12,10 @@ const methods = {
   
   // todo: change method name to syncItems
   refreshList: ({ user_id, list, filter, page }) => {
+    
+    if (list == 'hacker-news') {
+      return hackerNews.syncTopStories(user_id)
+    }
     
     return apiUser.getUser(user_id).then(user => {
       
