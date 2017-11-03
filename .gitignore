@@ -2,4 +2,5 @@ config/server.js
 dist
 node_modules
 images
+logs
 package-lock.json
