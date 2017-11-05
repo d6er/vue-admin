@@ -18,6 +18,8 @@ const mongo = require('./server-src/mongo')
 const passport = require('./server-src/passport')
 const auth = require('./server-src/auth')
 
+const wsPool = require('./server-src/websocket-pool')
+
 // Vue
 const template = fs.readFileSync('./src/index.template.html', 'utf-8')
 const { createBundleRenderer } = require('vue-server-renderer')
@@ -115,6 +117,11 @@ mongo.connect(config.mongo_url).then(db => {
   console.dir(api)
   
   wss.on('connection', (ws, req) => {
+    
+    if (req.session.passport && req.session.passport.hasOwnProperty('user')) {
+      wsPool.add(req.sessionID, req.session.passport.user, ws)
+    }
+    
     ws.on('message', json => {
       
       const message = JSON.parse(json)

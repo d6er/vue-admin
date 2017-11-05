@@ -4,6 +4,7 @@ const config_client = require('../../config/client')
 const apiUser = require('./user')
 const gmail = require('./gmail')
 const hackerNews = require('./hacker-news')
+const wsPool = require('../websocket-pool')
 
 const mongo = require('../mongo')
 const db = mongo.getConnection()
@@ -61,7 +62,8 @@ const methods = {
           
         }).then(message_ids => {
           
-          console.log(account.emails[0].value + ' : ' + message_ids.length)
+          let message = account.emails[0].value + ' : ' + message_ids.length
+          wsPool.send(user_id, message)
           
           if (message_ids.length == 0) {
             return
