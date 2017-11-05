@@ -40,6 +40,12 @@ export function createStore () {
     
     actions: {
       
+      setApiListener () {
+        api.setJob(0, message => {
+          commit('setNotification', message)
+        })
+      },
+      
       callApi ({ commit, state }, data) {
         
         // todo: handle 'auth error'

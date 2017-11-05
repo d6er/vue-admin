@@ -16,6 +16,9 @@
                      class="navbar-item is-tab is-capitalized">
           {{ list.name }}
         </router-link>
+        <div class="navbar-item" v-if="notification">
+          <span class="tag is-dark is-rounded">{{ notification }}</span>
+        </div>
       </div>
       <div class="navbar-end">
         <div class="navbar-item has-dropdown is-hoverable">

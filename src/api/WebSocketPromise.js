@@ -11,9 +11,13 @@ class WebSocketPromise extends WebSocket {
     this.job_id = 0
     this.jobs = []
     
-    super.onmessage = function (event) {
+    super.onmessage = event => {
       const data = JSON.parse(event.data)
-      if (data.resolve) {
+      
+      if (data.message) {
+        console.dir(data)
+        this.jobs[data.job_id](data.message)
+      } else if (data.resolve) {
         this.jobs[data.job_id].resolve(data.resolve)
       } else if (data.reject) {
         this.jobs[data.job_id].reject(data.reject)
@@ -36,6 +40,11 @@ class WebSocketPromise extends WebSocket {
       }
     })
   }
+  
+  setJob (job_id, cb) {
+    this.jobs[job_id] = cb
+  }
+  
 }
 
 export default WebSocketPromise
