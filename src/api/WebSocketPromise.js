@@ -15,7 +15,6 @@ class WebSocketPromise extends WebSocket {
       const data = JSON.parse(event.data)
       
       if (data.message) {
-        console.dir(data)
         this.jobs[data.job_id](data.message)
       } else if (data.resolve) {
         this.jobs[data.job_id].resolve(data.resolve)
