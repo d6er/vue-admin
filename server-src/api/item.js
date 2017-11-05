@@ -80,11 +80,10 @@ const methods = {
                                             list: list,
                                             item: converted })
                 }).then(r => {
-                  console.log('resolve ' + account.emails[0].value + ' ' + idx)
+                  wsPool.send(user_id, 'resolve ' + account.emails[0].value + ' ' + idx)
                   resolve()
                 }).catch(e => {
-                  console.log('reject ' + account.emails[0].value + ' ' + idx)
-                  console.dir(e)
+                  wsPool.send(user_id, 'reject ' + account.emails[0].value + ' ' + idx)
                   reject()
                 })
               }, idx * 500)

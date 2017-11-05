@@ -17,7 +17,7 @@
           {{ list.name }}
         </router-link>
         <div class="navbar-item" v-if="notification">
-          <span class="tag is-dark is-rounded">{{ notification }}</span>
+          <span class="tag is-dark">{{ notification }}</span>
         </div>
       </div>
       <div class="navbar-end">
