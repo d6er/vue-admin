@@ -14,6 +14,8 @@ const methods = {
   // todo: change method name to syncItems
   refreshList: ({ user_id, list, filter, page }) => {
     
+    wsPool.send(user_id, 'Refreshing...')
+    
     if (list == 'hacker-news') {
       return hackerNews.syncTopStories(user_id)
     }
@@ -62,9 +64,6 @@ const methods = {
           
         }).then(message_ids => {
           
-          let message = account.emails[0].value + ' : ' + message_ids.length
-          wsPool.send(user_id, message)
-          
           if (message_ids.length == 0) {
             return
           }
@@ -73,6 +72,10 @@ const methods = {
             
             return new Promise((resolve, reject) => {
               setTimeout(() => {
+                
+                let count = '(' + idx + '/' + message_ids.length + ')'
+                wsPool.send(user_id, 'Refreshing ' + account.emails[0].value + ' ' + count)
+                
                 return gmail.messagesGet(oauth2Client, message_id).then(responseMessage => {
                   let converted = gmail.convertMessage(responseMessage)
                   converted.account = account.emails[0].value
@@ -80,13 +83,11 @@ const methods = {
                                             list: list,
                                             item: converted })
                 }).then(r => {
-                  wsPool.send(user_id, 'resolve ' + account.emails[0].value + ' ' + idx)
                   resolve()
                 }).catch(e => {
-                  wsPool.send(user_id, 'reject ' + account.emails[0].value + ' ' + idx)
                   reject()
                 })
-              }, idx * 500)
+              }, idx * 2000)
             })
             
           }))
@@ -97,6 +98,7 @@ const methods = {
       }))
       
     }).then(savedResults => {
+      wsPool.send(user_id, 'Refreshed.')
       return methods.fetchItems({ user_id: user_id,
                                   list: list,
                                   filter: filter,
