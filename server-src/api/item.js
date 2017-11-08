@@ -87,7 +87,7 @@ const methods = {
                 }).catch(e => {
                   reject()
                 })
-              }, idx * 2000)
+              }, idx * 200)
             })
             
           }))
