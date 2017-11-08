@@ -20,6 +20,10 @@ const methods = {
       return hackerNews.syncTopStories(user_id)
     }
     
+    if (list == 'emails') {
+      
+    }
+    
     return apiUser.getUser(user_id).then(user => {
       
       return user.accounts.filter(account => account.provider == 'google')
@@ -27,6 +31,8 @@ const methods = {
     }).then(googleAccounts => {
       
       return Promise.all(googleAccounts.map(account => {
+        
+        gmail.syncItems(user_id, account)
         
         let oauth2Client = gmail.getOAuth2Client(account)
         
@@ -85,7 +91,7 @@ const methods = {
                 }).then(r => {
                   resolve()
                 }).catch(e => {
-                  reject()
+                  resolve()
                 })
               }, idx * 200)
             })

@@ -85,7 +85,7 @@ const methods = {
     const coll = list + '.' + user_id
     return db.collection(coll).findOne({ account: account.emails[0].value },
                                        { fields: { 'historyId': 1 },
-                                         sort: [[ 'historyId', 'descending' ]] })
+                                         sort: [ [ 'historyId', 'descending' ] ] })
   },
   
   convertMessage: message => {
@@ -102,6 +102,17 @@ const methods = {
     message.historyId = parseInt(message.historyId)
     
     return message
+  },
+  
+  syncItems: (user_id, account) => {
+    
+    let oauth2Client = methods.getOAuth2Client(account)
+    
+    return methods.getMaxHistoryId(user_id, 'emails', account).then(r => {
+      console.log('historyId: ' + account.emails[0].value)
+      console.dir(r)
+    })
+    
   }
   
 }
