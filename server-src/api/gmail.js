@@ -75,6 +75,7 @@ const methods = {
         if (err) {
           reject(err)
         } else {
+          console.dir(response, {depth:null})
           resolve(response)
         }
       })
