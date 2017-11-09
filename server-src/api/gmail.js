@@ -112,6 +112,17 @@ const methods = {
     return methods.getMaxHistoryId(user_id, 'emails', account).then(r => {
       console.log('historyId: ' + account.emails[0].value)
       console.dir(r)
+      r.history.map(h => {
+        if (h.hasOwnProperty('messagesAdded')) {
+          
+        } else if (h.hasOwnProperty('messagesDeleted')) {
+          
+        } else if (h.hasOwnProperty('labelsAdded')) {
+          
+        } else if (h.hasOwnProperty('labelsRemoved')) {
+          
+        }
+      })
     })
     
   }
