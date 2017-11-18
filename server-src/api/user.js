@@ -32,15 +32,12 @@ const methods = {
   },
   
   deleteUser: function ({ user_id }) {
-    
     console.log('mongo.js deleteAccount user_id: ' + user_id)
-    
   },
   
   getUser: function (user_id) {
-    
+    // todo: check deleted flag
     return db.collection('users').findOne({ _id: user_id })
-    
   }
 }
 

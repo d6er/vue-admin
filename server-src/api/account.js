@@ -7,7 +7,7 @@ const methods = {
     
     let users = db.collection('users')
     
-    users.update(
+    return users.update(
       {
         _id: user_id,
         accounts: {
@@ -28,6 +28,7 @@ const methods = {
           { safe: true }
         )
       }
+      return r;
     })
     
   },

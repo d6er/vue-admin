@@ -1,7 +1,7 @@
 const express = require('express')
 const passport = require('passport')
 const config = require('../../config/server')
-const mongo = require('../mongo')
+const apiAccount = require('../api/account')
 const GoogleStrategy = require('passport-google-oauth20').Strategy
 
 // Passport
@@ -19,9 +19,7 @@ passport.use(new GoogleStrategy(
     profile.refreshToken = refreshToken
     
     if (req.user) {
-      mongo.connect().then(db => {
-        return mongo.addAccount(req.user._id, profile)
-      }).then(r => {
+      apiAccount.addAccount(req.user._id, profile).then(r => {
         cb(null, req.user)
       })
     }

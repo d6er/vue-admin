@@ -14,10 +14,6 @@ const MongoStore = require('connect-mongo')(session)
 const config = require('./config/server')
 const mongo = require('./server-src/mongo')
 
-// Passport
-const passport = require('./server-src/passport')
-const auth = require('./server-src/auth')
-
 const wsPool = require('./server-src/websocket-pool')
 
 // Vue
@@ -25,6 +21,10 @@ const template = fs.readFileSync('./src/index.template.html', 'utf-8')
 const { createBundleRenderer } = require('vue-server-renderer')
 
 mongo.connect(config.mongo_url).then(db => {
+  
+  // Passport (need db connection)
+  const passport = require('./server-src/passport')
+  const auth = require('./server-src/auth')
   
   const app = express()
   
