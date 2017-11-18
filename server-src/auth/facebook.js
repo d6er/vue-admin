@@ -1,7 +1,7 @@
 const express = require('express')
 const passport = require('passport')
 const config = require('../../config/server')
-const mongo = require('../mongo')
+const apiAccount = require('../api/account')
 const FacebookStrategy = require('passport-facebook').Strategy
 
 // Passport
@@ -19,9 +19,7 @@ passport.use(new FacebookStrategy(
   function(req, accessToken, refreshToken, profile, cb) {
     console.dir(profile)
     if (req.user) {
-      mongo.connect().then(db => {
-        return mongo.addAccount(req.user._id, profile)
-      }).then(r => {
+      apiAccount.addAccount(req.user._id, profile).then(r => {
         cb(null, req.user)
       })
     }

@@ -1,7 +1,7 @@
 const express = require('express')
 const passport = require('passport')
 const config = require('../../config/server')
-const mongo = require('../mongo')
+const apiAccount = require('../api/account')
 const Auth0Strategy = require('passport-auth0').Strategy
 
 // Passport
@@ -13,15 +13,13 @@ passport.use(new Auth0Strategy(
     callbackURL: 'http://localhost:8181/auth/auth0/callback',
     passReqToCallback: true
   },
-  function(req, accessToken, refreshToken, extraParams, profile, done) {
+  function(req, accessToken, refreshToken, extraParams, profile, cb) {
     // accessToken is the token to call Auth0 API (not needed in the most cases)
     // extraParams.id_token has the JSON Web Token
     // profile has all the information from the user
     if (req.user) {
-      mongo.connect().then(db => {
-        return mongo.addAccount(req.user._id, profile)
-      }).then(r => {
-        done(null, req.user)
+      apiAccount.addAccount(req.user._id, profile).then(r => {
+        cb(null, req.user)
       })
     }
   }
