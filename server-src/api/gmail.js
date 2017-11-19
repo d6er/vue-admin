@@ -75,7 +75,6 @@ const methods = {
         if (err) {
           reject(err)
         } else {
-          console.dir(response, {depth:null})
           resolve(response)
         }
       })
@@ -110,19 +109,58 @@ const methods = {
     let oauth2Client = methods.getOAuth2Client(account)
     
     return methods.getMaxHistoryId(user_id, 'emails', account).then(r => {
-      console.log('historyId: ' + account.emails[0].value)
-      console.dir(r)
-      r.history.map(h => {
+      return methods.historyList(oauth2Client, r.historyId)
+    }).then(r => {
+      
+      console.log(account.emails[0].value)
+      if (!r.hasOwnProperty('history')) {
+        return
+      }
+      
+      let coll = db.collection('emails.' + user_id)
+      
+      return Promise.all(r.history.map(h => {
+        
+        console.dir(h, { depth: null })
+        
         if (h.hasOwnProperty('messagesAdded')) {
+          
+          return Promise.all(h.messagesAdded.map(m => {
+            return methods.messagesGet(oauth2Client, m.message.id).then(responseMessage => {
+              
+              let converted = methods.convertMessage(responseMessage)
+              converted.account = account.emails[0].value
+              
+              return coll.updateOne({ _id: converted._id },
+                                    { $set: converted },
+                                    { upsert: true })
+            })
+          }))
           
         } else if (h.hasOwnProperty('messagesDeleted')) {
           
+          return Promise.all(h.messagesDeleted.map(m => {
+            return coll.deleteOne({ _id: m.message.id })
+          }))
+          
         } else if (h.hasOwnProperty('labelsAdded')) {
+          
+          return Promise.all(h.labelsAdded.map(m => {
+            return coll.updateOne({ _id: m.message.id },
+                                  { $set: { labelIds: m.message.labelIds } })
+          }))
           
         } else if (h.hasOwnProperty('labelsRemoved')) {
           
+          return Promise.all(h.labelsRemoved.map(m => {
+            return coll.updateOne({ _id: m.message.id },
+                                  { $set: { labelIds: m.message.labelIds } })
+          }))
+          
         }
-      })
+        
+      }))
+      
     })
     
   }

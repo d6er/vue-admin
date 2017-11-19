@@ -21,7 +21,6 @@ const methods = {
     }
     
     if (list == 'emails') {
-      
     }
     
     return apiUser.getUser(user_id).then(user => {
@@ -31,8 +30,11 @@ const methods = {
     }).then(googleAccounts => {
       
       return Promise.all(googleAccounts.map(account => {
-        
-        gmail.syncItems(user_id, account)
+        return gmail.syncItems(user_id, account)
+      }))
+      
+      /*
+      return Promise.all(googleAccounts.map(account => {
         
         let oauth2Client = gmail.getOAuth2Client(account)
         
@@ -102,6 +104,7 @@ const methods = {
           return
         })
       }))
+      */
       
     }).then(savedResults => {
       wsPool.send(user_id, 'Refreshed.')
