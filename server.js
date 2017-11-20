@@ -114,7 +114,6 @@ mongo.connect(config.mongo_url).then(db => {
   })
   
   const api = require('./server-src/api/index.js')
-  console.dir(api)
   
   wss.on('connection', (ws, req) => {
     

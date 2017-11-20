@@ -64,12 +64,16 @@ const methods = {
   },
   
   // https://developers.google.com/gmail/api/v1/reference/users/history/list
-  historyList: (oauth2Client, historyId) => {
+  historyList: (oauth2Client, historyId, pageToken) => {
     let params = {
       auth: oauth2Client,
       userId: 'me',
       startHistoryId: historyId
     }
+    if (pageToken) {
+      params.pageToken = pageToken
+    }
+    
     return new Promise((resolve, reject) => {
       gmail.users.history.list(params, (err, response) => {
         if (err) {
@@ -94,7 +98,11 @@ const methods = {
     message._id = message.id
     message.subject = headers.find(header => header.name == 'Subject').value
     message.from = headers.find(header => header.name == 'From').value.replace(/<[^>]+>/, '')
-    message.to = headers.find(header => header.name == 'To').value
+    
+    let to = headers.find(header => header.name == 'To')
+    if (to) {
+      message.to = headers.find(header => header.name == 'To').value
+    }
     
     let date = headers.find(header => header.name == 'Date').value
     message.date = moment(date, "ddd, DD MMM YYYY HH:mm:ss ZZ").toDate()
@@ -113,15 +121,19 @@ const methods = {
     }).then(r => {
       
       console.log(account.emails[0].value)
+      //console.dir(r, { depth: null })
+      
       if (!r.hasOwnProperty('history')) {
         return
       }
       
+      console.log('length: ' + r.history.length)
+      console.log('next: ' + r.nextPageToken)
+      console.log('historyId: ' + r.historyId)
+      
       let coll = db.collection('emails.' + user_id)
       
       return Promise.all(r.history.map(h => {
-        
-        console.dir(h, { depth: null })
         
         if (h.hasOwnProperty('messagesAdded')) {
           
