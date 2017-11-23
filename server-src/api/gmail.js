@@ -113,68 +113,74 @@ const methods = {
   },
   
   syncItems: (user_id, account) => {
-    
     let oauth2Client = methods.getOAuth2Client(account)
-    
     return methods.getMaxHistoryId(user_id, 'emails', account).then(r => {
-      return methods.historyList(oauth2Client, r.historyId)
-    }).then(r => {
+      return methods.syncItems2(user_id, account, oauth2Client, r.historyId)
+    })
+  },
+  
+  syncItems2: (user_id, account, oauth2Client, historyId, pageToken) => {
+    
+    console.log(account.emails[0].value + ' ' + historyId + ' ' + pageToken)
+    
+    return methods.historyList(oauth2Client, historyId, pageToken).then(r => {
       
-      console.log(account.emails[0].value)
-      //console.dir(r, { depth: null })
+      if (!r.hasOwnProperty('history')) return
       
-      if (!r.hasOwnProperty('history')) {
-        return
-      }
-      
-      console.log('length: ' + r.history.length)
-      console.log('next: ' + r.nextPageToken)
-      console.log('historyId: ' + r.historyId)
-      
-      let coll = db.collection('emails.' + user_id)
-      
-      return Promise.all(r.history.map(h => {
+      return Promise.all(r.history.map(historyItem => {
         
-        if (h.hasOwnProperty('messagesAdded')) {
-          
-          return Promise.all(h.messagesAdded.map(m => {
-            return methods.messagesGet(oauth2Client, m.message.id).then(responseMessage => {
-              
-              let converted = methods.convertMessage(responseMessage)
-              converted.account = account.emails[0].value
-              
-              return coll.updateOne({ _id: converted._id },
-                                    { $set: converted },
-                                    { upsert: true })
-            })
-          }))
-          
-        } else if (h.hasOwnProperty('messagesDeleted')) {
-          
-          return Promise.all(h.messagesDeleted.map(m => {
-            return coll.deleteOne({ _id: m.message.id })
-          }))
-          
-        } else if (h.hasOwnProperty('labelsAdded')) {
-          
-          return Promise.all(h.labelsAdded.map(m => {
-            return coll.updateOne({ _id: m.message.id },
-                                  { $set: { labelIds: m.message.labelIds } })
-          }))
-          
-        } else if (h.hasOwnProperty('labelsRemoved')) {
-          
-          return Promise.all(h.labelsRemoved.map(m => {
-            return coll.updateOne({ _id: m.message.id },
-                                  { $set: { labelIds: m.message.labelIds } })
-          }))
-          
-        }
+        return methods.processHistory(user_id, account, oauth2Client, historyItem)
         
+      })).then(processResult => {
+        
+        if (!r.hasOwnProperty('nextPageToken')) return
+        return methods.syncItems2(user_id, account, oauth2Client, historyId, r.nextPageToken)
+        
+      })
+    })
+  },
+  
+  processHistory: (user_id, account, oauth2Client, historyItem) => {
+    
+    let coll = db.collection('emails.' + user_id)
+    
+    if (historyItem.hasOwnProperty('messagesAdded')) {
+      
+      return Promise.all(historyItem.messagesAdded.map(m => {
+        return methods.messagesGet(oauth2Client, m.message.id).then(responseMessage => {
+          
+          let converted = methods.convertMessage(responseMessage)
+          converted.account = account.emails[0].value
+          
+          return coll.updateOne({ _id: converted._id },
+                                { $set: converted },
+                                { upsert: true })
+        })
       }))
       
-    })
+    } else if (historyItem.hasOwnProperty('messagesDeleted')) {
+      
+      return Promise.all(historyItem.messagesDeleted.map(m => {
+        return coll.deleteOne({ _id: m.message.id })
+      }))
+      
+    } else if (historyItem.hasOwnProperty('labelsAdded')) {
+      
+      return Promise.all(historyItem.labelsAdded.map(m => {
+        return coll.updateOne({ _id: m.message.id },
+                              { $set: { labelIds: m.message.labelIds } })
+      }))
+      
+    } else if (historyItem.hasOwnProperty('labelsRemoved')) {
+      
+      return Promise.all(historyItem.labelsRemoved.map(m => {
+        return coll.updateOne({ _id: m.message.id },
+                              { $set: { labelIds: m.message.labelIds } })
+      }))
+      
+    }
     
+    return
   }
   
 }
