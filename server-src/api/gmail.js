@@ -121,8 +121,6 @@ const methods = {
   
   syncItems2: (user_id, account, oauth2Client, historyId, pageToken) => {
     
-    console.log(account.emails[0].value + ' ' + historyId + ' ' + pageToken)
-    
     return methods.historyList(oauth2Client, historyId, pageToken).then(r => {
       
       if (!r.hasOwnProperty('history')) return
