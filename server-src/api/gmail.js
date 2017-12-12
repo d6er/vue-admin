@@ -38,6 +38,7 @@ const methods = {
     return new Promise((resolve, reject) => {
       gmail.users.messages.list(params, function(err, response) {
         if (err) {
+          console.dir(err)
           reject(err)
         } else {
           resolve(response)
@@ -115,26 +116,65 @@ const methods = {
   syncItems: (user_id, account) => {
     let oauth2Client = methods.getOAuth2Client(account)
     return methods.getMaxHistoryId(user_id, 'emails', account).then(r => {
+      console.log('syncItems: ' + account.emails[0].value)
       return methods.syncItems2(user_id, account, oauth2Client, r.historyId)
+    }).catch(e => {
+      return methods.fullSyncItems(user_id, account, oauth2Client)
+    }).catch(e => {
+      console.dir(e)
     })
   },
   
   syncItems2: (user_id, account, oauth2Client, historyId, pageToken) => {
     
     return methods.historyList(oauth2Client, historyId, pageToken).then(r => {
-      
       if (!r.hasOwnProperty('history')) return
       
       return Promise.all(r.history.map(historyItem => {
-        
         return methods.processHistory(user_id, account, oauth2Client, historyItem)
-        
       })).then(processResult => {
-        
         if (!r.hasOwnProperty('nextPageToken')) return
         return methods.syncItems2(user_id, account, oauth2Client, historyId, r.nextPageToken)
-        
       })
+    })
+  },
+  
+  fullSyncItems: (user_id, account, oauth2Client) => {
+    
+    console.log('fullSyncItems: ' + account.emails[0].value)
+    
+    return methods.messagesList(oauth2Client).then(r => {
+      let message_ids = []
+      r.messages.map(message => {
+        message_ids.push(message.id)
+      })
+      return message_ids
+    }).then(message_ids => {
+          
+      if (message_ids.length == 0) return
+          
+      return Promise.all(message_ids.map((message_id, idx) => {
+        
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            
+            let count = '(' + idx + '/' + message_ids.length + ')'
+            
+            return methods.messagesGet(oauth2Client, message_id).then(responseMessage => {
+              let converted = methods.convertMessage(responseMessage)
+              converted.account = account.emails[0].value
+              return methods.saveItem({ user_id: user_id,
+                                        list: list,
+                                        item: converted })
+            }).then(r => {
+              resolve()
+            }).catch(e => {
+              resolve()
+            })
+          }, idx * 200)
+        })
+      }))
+      
     })
   },
   
