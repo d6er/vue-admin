@@ -150,7 +150,7 @@ const methods = {
       })
       return message_ids
     }).then(message_ids => {
-          
+      
       if (message_ids.length == 0) return
           
       return Promise.all(message_ids.map((message_id, idx) => {
@@ -161,20 +161,27 @@ const methods = {
             let count = '(' + idx + '/' + message_ids.length + ')'
             
             return methods.messagesGet(oauth2Client, message_id).then(responseMessage => {
+              
               let converted = methods.convertMessage(responseMessage)
               converted.account = account.emails[0].value
-              return methods.saveItem({ user_id: user_id,
-                                        list: list,
-                                        item: converted })
+              
+              let coll = db.collection('emails.' + user_id)
+              return coll.updateOne({ _id: converted._id },
+                                    { $set: converted},
+                                    { upsert: true })
+              
             }).then(r => {
               resolve()
             }).catch(e => {
+              console.dir(e)
               resolve()
             })
           }, idx * 200)
         })
       }))
       
+    }).catch(e => {
+      console.dir(e)
     })
   },
   
