@@ -19,7 +19,7 @@
     "moment": "^2.21.0",
     "moment-timezone": "^0.5.14",
     "mongodb": "^2.2.35",
-    "node-sass": "^4.8.2",
+    "node-sass": "^4.8.3",
     "passport": "^0.4.0",
     "passport-auth0": "^0.6.1",
     "passport-facebook": "^2.1.1",
@@ -39,7 +39,7 @@
     "xml2js": "^0.4.19"
   },
   "devDependencies": {
-    "css-loader": "^0.28.10",
+    "css-loader": "^0.28.11",
     "vue-loader": "^12.2.2",
     "vue-template-compiler": "^2.5.16",
     "webpack": "^3.11.0",
