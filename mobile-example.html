@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Hello Bulma!</title>
+    <title>Mobile Example</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
     <script defer src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
   </head>
@@ -19,14 +19,53 @@
           <span aria-hidden="true"></span>
         </a>
       </div>
-    </nav>
-    <section class="section">
-      <div class="container">
-        <h1 class="title">
-          Mobile Example
-        </h1>
+      <div class="navbar-menu">
+        <div class="navbar-start">
+          <a class="navbar-item">Home</a>
+          <a class="navbar-item">MENU1</a>
+        </div>
+        <div class="navbar-end">
+          <a class="navbar-item">MENU2</a>
+          <a class="navbar-item">MENU3</a>
+          <div class="navbar-item has-dropdown">
+            <a class="navbar-link">Docs</a>
+            <div class="navbar-dropdown">
+              <a class="navbar-link">Child1</a>
+              <a class="navbar-link">Child2</a>
+              <a class="navbar-link">Child3</a>
+            </div>
+          </div>
+        </div>
       </div>
-    </section>
+    </nav>
+      <div class="container">
+        <table class="table">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Title</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><input type="checkbox"></td>
+              <td>Drone Photography and Video Masterclass by Fergus Kennedy (2017, Paperback)</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox"></td>
+              <td>Senran Kagura Peach Beach Splash: No Shirt, No Shoes, All Service Edition (Sony PlayStation 4, 2017)</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox"></td>
+              <td>The Sisterhood of the Traveling Pants 2 (DVD, 2008)</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox"></td>
+              <td>Item title 4</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     
   </body>
 </html>

@@ -1,7 +1,7 @@
 <template>
   <div class="container is-fluid">
     <div class="columns">
-      <div v-if="$store.state.user" class="column is-narrow">
+      <div v-if="$store.state.user" class="column is-narrow is-hidden-mobile">
         <aside class="menu">
           <button class="button is-small is-fullwidth">
             <span class="icon is-small">
