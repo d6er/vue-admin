@@ -2,11 +2,9 @@
   <div id="app">
     <Navbar v-if="$store.state.user"/>
     <NavbarGuest v-else/>
-    <div class="columns">
-      <div class="column">
-      </div>
-    </div>
-    <router-view></router-view>
+    <section class="section">
+      <router-view></router-view>
+    </section>
   </div>
 </template>
 
@@ -26,5 +24,10 @@ export default {
   @import "~bulma/sass/utilities/initial-variables.sass"
   $navbar-background-color: $white-bis
   $link: $blue
+
+  $section-padding: 1.5rem 1.5rem
+  $section-padding-medium: 1.5rem 1.5rem
+  $section-padding-large: 1.5rem 1.5rem
+
   @import "~bulma/bulma.sass"
 </style>
