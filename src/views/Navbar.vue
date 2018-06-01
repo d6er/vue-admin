@@ -1,10 +1,7 @@
 <template>
   <nav class="navbar">
     <div class="navbar-brand">
-      <router-link class="navbar-item" to="/">
-        Home
-      </router-link>
-      <div class="navbar-burger">
+      <div class="navbar-burger" style="margin-left: 0;">
         <span></span>
         <span></span>
         <span></span>
@@ -12,6 +9,9 @@
     </div>
     <div class="navbar-menu">
       <div class="navbar-start">
+        <router-link class="navbar-item" to="/">
+          Home
+        </router-link>
         <router-link v-for="list in $store.state.lists" :key="list.name" :to="'/' + list.name"
                      class="navbar-item is-tab is-capitalized">
           {{ list.name }}

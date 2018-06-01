@@ -1,9 +1,9 @@
 <template>
   <div id="app">
+    <Navbar v-if="$store.state.user"/>
+    <NavbarGuest v-else/>
     <div class="columns">
       <div class="column">
-        <Navbar v-if="$store.state.user"/>
-        <NavbarGuest v-else/>
       </div>
     </div>
     <router-view></router-view>

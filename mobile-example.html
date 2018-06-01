@@ -11,7 +11,7 @@
     <nav class="navbar" role="navigation" aria-label="main navigation">
       <div class="navbar-brand">
         <a class="navbar-item" href="/">
-          INBOX
+          Home
         </a>
         <a role="button" class="navbar-burger left" aria-label="menu" aria-expanded="false">
           <span aria-hidden="true"></span>
@@ -19,53 +19,82 @@
           <span aria-hidden="true"></span>
         </a>
       </div>
-      <div class="navbar-menu">
+      <div class="navbar-menu is-active">
         <div class="navbar-start">
-          <a class="navbar-item">Home</a>
-          <a class="navbar-item">MENU1</a>
+          <a class="navbar-item">Emails</a>
+          <a class="navbar-item">Items</a>
+          <a class="navbar-item">Hacker-News</a>
         </div>
         <div class="navbar-end">
-          <a class="navbar-item">MENU2</a>
-          <a class="navbar-item">MENU3</a>
-          <div class="navbar-item has-dropdown">
-            <a class="navbar-link">Docs</a>
-            <div class="navbar-dropdown">
-              <a class="navbar-link">Child1</a>
-              <a class="navbar-link">Child2</a>
-              <a class="navbar-link">Child3</a>
-            </div>
-          </div>
+          <a class="navbar-item">Settings</a>
+          <a class="navbar-item">Logout</a>
         </div>
       </div>
     </nav>
-      <div class="container">
-        <table class="table">
-          <thead>
-            <tr>
-              <th></th>
-              <th>Title</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><input type="checkbox"></td>
-              <td>Drone Photography and Video Masterclass by Fergus Kennedy (2017, Paperback)</td>
-            </tr>
-            <tr>
-              <td><input type="checkbox"></td>
-              <td>Senran Kagura Peach Beach Splash: No Shirt, No Shoes, All Service Edition (Sony PlayStation 4, 2017)</td>
-            </tr>
-            <tr>
-              <td><input type="checkbox"></td>
-              <td>The Sisterhood of the Traveling Pants 2 (DVD, 2008)</td>
-            </tr>
-            <tr>
-              <td><input type="checkbox"></td>
-              <td>Item title 4</td>
-            </tr>
-          </tbody>
-        </table>
+    <div class="container is-fluid">
+      <div class="columns">
+        <div class="column is-narrow">
+          
+          <aside class="menu">
+            <p class="menu-label">
+              General
+            </p>
+            <ul class="menu-list">
+              <li><a>Dashboard</a></li>
+              <li><a>Customers</a></li>
+            </ul>
+            <p class="menu-label">
+              Administration
+            </p>
+            <ul class="menu-list">
+              <li><a>Team Settings</a></li>
+              <li>
+                <a class="is-active">Manage Your Team</a>
+                <ul>
+                  <li><a>Members</a></li>
+                  <li><a>Plugins</a></li>
+                  <li><a>Add a member</a></li>
+                </ul>
+              </li>
+              <li><a>Invitations</a></li>
+              <li><a>Cloud Storage</a></li>
+              <li><a>Authentication</a></li>
+            </ul>
+          </aside>
+
+        </div>
+        <div class="column">
+          
+          <table class="table is-fullwidth">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Title</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><input type="checkbox"></td>
+                <td>Drone Photography and Video Masterclass by Fergus Kennedy (2017, Paperback)</td>
+              </tr>
+              <tr>
+                <td><input type="checkbox"></td>
+                <td>Senran Kagura Peach Beach Splash: No Shirt, No Shoes, All Service Edition (Sony PlayStation 4, 2017)</td>
+              </tr>
+              <tr>
+                <td><input type="checkbox"></td>
+                <td>The Sisterhood of the Traveling Pants 2 (DVD, 2008)</td>
+              </tr>
+              <tr>
+                <td><input type="checkbox"></td>
+                <td>Item title 4</td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
       </div>
+    </div>
     
   </body>
 </html>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav class="level">
+    <nav class="level is-mobile">
       <div class="level-left">
         <div class="level-item">
           <label class="checkbox">
@@ -99,7 +99,8 @@
           <th>
             
           </th>
-          <th v-for="column in filter.columns" class="is-capitalized">
+          <th v-for="column in filter.columns" class="is-capitalized"
+              :class="{ 'is-hidden-mobile': column != 'subject' }">
             {{ column }}
           </th>
         </tr>
@@ -113,6 +114,7 @@
         </tr>
       </tbody>
     </table>
+
   </div>
 </template>
 

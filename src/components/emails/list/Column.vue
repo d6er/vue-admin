@@ -1,5 +1,5 @@
 <template>
-  <td>
+  <td :class="{ 'is-hidden-mobile': column != 'subject' }">
     <template v-if="column == 'picture'">
       <figure class="image is-32x32">
         <img src="http://bulma.io/images/placeholders/32x32.png">
