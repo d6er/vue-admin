@@ -25,9 +25,9 @@ export default {
   $navbar-background-color: $white-bis
   $link: $blue
 
-  $section-padding: 1.5rem 1.5rem
-  $section-padding-medium: 1.5rem 1.5rem
-  $section-padding-large: 1.5rem 1.5rem
+  $section-padding: 1rem 1rem
+  $section-padding-medium: 1rem 1rem
+  $section-padding-large: 1rem 1rem
   $gap: 0
 
   @import "~bulma/bulma.sass"

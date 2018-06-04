@@ -11,8 +11,7 @@
         <span class="tag is-dark">{{ notification }}</span>
       </div>
     </div>
-    <div class="navbar-menu"
-         :class="{ 'is-active': $store.state.isNavBarActive }">
+    <div class="navbar-menu">
       <div class="navbar-start">
         <router-link class="navbar-item" to="/">
           Home

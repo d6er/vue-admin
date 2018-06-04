@@ -1,6 +1,6 @@
 <template>
   <div class="container is-fluid">
-    <div class="columns">
+    <div class="columns is-mobile">
       <div v-if="$store.state.user" class="column is-narrow"
            :class="{ 'is-hidden-mobile': !$store.state.isNavBarActive }">
         <aside class="menu">
