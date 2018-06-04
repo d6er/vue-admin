@@ -32,6 +32,8 @@ export function createStore () {
       
       currentList: {},
 
+      isNavBarActive: false,
+      
       notification: null
     },
     
@@ -113,6 +115,10 @@ export function createStore () {
         state.paging = data.paging
         let index = state.items.findIndex(e => e._id == data.item._id)
         Vue.set(state.items, index, data.item)
+      },
+      
+      toggleNavBar (state) {
+        state.isNavBarActive = !state.isNavBarActive
       },
       
       // notification

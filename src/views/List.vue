@@ -34,7 +34,7 @@
             <span>Delete</span>
           </button>
         </div>
-        <div class="level-item">
+        <div class="level-item is-hidden-mobile">
           <div class="field has-addons">
             <p class="control">
               <input @keyup="fetchItems" v-model="keyword" class="input is-small"
@@ -47,7 +47,7 @@
             </p>
           </div>
         </div>
-        <div class="level-item">
+        <div class="level-item is-hidden-mobile">
           <button @click="showFilterForm=!showFilterForm" class="button is-link is-small">
             Search option
           </button>

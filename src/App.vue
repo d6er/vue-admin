@@ -28,6 +28,7 @@ export default {
   $section-padding: 1.5rem 1.5rem
   $section-padding-medium: 1.5rem 1.5rem
   $section-padding-large: 1.5rem 1.5rem
+  $gap: 0
 
   @import "~bulma/bulma.sass"
 </style>

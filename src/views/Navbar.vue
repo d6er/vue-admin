@@ -1,13 +1,18 @@
 <template>
-  <nav class="navbar">
+  <nav class="navbar is-fixed-top">
     <div class="navbar-brand">
-      <div class="navbar-burger" style="margin-left: 0;">
+      <div class="navbar-burger" style="margin-left: 0;" @click="toggleNavBar()"
+           :class="{ 'is-active': $store.state.isNavBarActive }">
         <span></span>
         <span></span>
         <span></span>
       </div>
+      <div class="navbar-item" v-if="notification">
+        <span class="tag is-dark">{{ notification }}</span>
+      </div>
     </div>
-    <div class="navbar-menu">
+    <div class="navbar-menu"
+         :class="{ 'is-active': $store.state.isNavBarActive }">
       <div class="navbar-start">
         <router-link class="navbar-item" to="/">
           Home
@@ -16,9 +21,6 @@
                      class="navbar-item is-tab is-capitalized">
           {{ list.name }}
         </router-link>
-        <div class="navbar-item" v-if="notification">
-          <span class="tag is-dark">{{ notification }}</span>
-        </div>
       </div>
       <div class="navbar-end">
         <div class="navbar-item has-dropdown is-hoverable">
@@ -47,11 +49,6 @@
 
 <script>
 export default {
-  data () {
-    return {
-      toggleActive: false
-    }
-  },
   computed: {
     username () {
       if (this.$store.state.user.google) {
@@ -65,9 +62,8 @@ export default {
     }
   },
   methods: {
-    toggle () {
-      this.toggleActive = !this.toggleActive
-      console.log('toggle: ' + this.toggleActive)
+    toggleNavBar () {
+      this.$store.commit('toggleNavBar')
     },
     clearNotification () {
       this.$store.commit('clearNotification')
