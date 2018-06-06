@@ -13,7 +13,7 @@
           <label class="checkbox">
             <button @click="refreshList" class="button is-small">
                <span class="icon is-small">
-                 <i class="fa fa-refresh"></i>
+                 <i class="fa fa-sync"></i>
                </span>
             </button>
           </label>
