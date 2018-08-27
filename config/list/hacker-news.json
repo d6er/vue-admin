@@ -1,5 +1,6 @@
 {
   "name": "hacker-news",
+  "icon": "fab fa-hacker-news",
   "tabs": [
     "detail"
   ],

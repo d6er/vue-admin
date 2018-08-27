@@ -1,5 +1,6 @@
 {
   "name": "emails",
+  "icon": "far fa-envelope",
   "tabs": [
     "detail",
     "raw"

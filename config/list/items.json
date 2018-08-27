@@ -1,5 +1,6 @@
 {
   "name": "items",
+  "icon": "fas fa-clipboard-check",
   "tabs": [
     "detail",
     "description",
