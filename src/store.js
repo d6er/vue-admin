@@ -32,7 +32,9 @@ export function createStore () {
       
       currentList: {},
 
-      isNavBarActive: false,
+      isNavBarActive: false, // todo: delete
+      
+      isDropdownActive: false,
       
       notification: null
     },
@@ -117,8 +119,13 @@ export function createStore () {
         Vue.set(state.items, index, data.item)
       },
       
+      // todo: delete
       toggleNavBar (state) {
         state.isNavBarActive = !state.isNavBarActive
+      },
+      
+      toggleDropdown (state) {
+        state.isDropdownActive = !state.isDropdownActive
       },
       
       // notification
