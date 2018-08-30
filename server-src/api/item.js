@@ -339,6 +339,7 @@ const methods = {
     for (var i in queries) {
       var q = queries[i]
       if (!q.field) continue
+      if (!q.value) continue
       
       // todo: AND for multiple queries
       if (q.condition == 'is equal to') {
@@ -354,9 +355,9 @@ const methods = {
       } else if (q.condition == 'is greater than or equal') {
         converted[q.field] = { $gte: q.value }
       } else if (q.condition == 'contains') {
-        converted[q.field] = new RegExp(actions.escapeRegExp(q.value), 'i')
+        converted[q.field] = new RegExp(methods.escapeRegExp(q.value), 'i')
       } else if (q.condition == 'does not contain') {
-        converted[q.field] = { $ne: new RegExp(actions.escapeRegExp(q.value), 'i') }
+        converted[q.field] = { $ne: new RegExp(methods.escapeRegExp(q.value), 'i') }
       }
     }
     return converted

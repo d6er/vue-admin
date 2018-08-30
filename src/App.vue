@@ -23,7 +23,6 @@ export default {
 <style lang="sass">
   @import "~bulma/sass/utilities/initial-variables.sass"
   $navbar-background-color: $white-bis
-  $link: $blue
 
   $section-padding: 1rem 1rem
   $section-padding-medium: 1rem 1rem

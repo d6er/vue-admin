@@ -1,38 +1,6 @@
 <template>
   <div class="box" id="filterFormBox">
     <div class="columns">
-      <div class="column is-narrow">
-        <div class="field">
-          <label class="label">Filter name</label>
-          <div class="control">
-            <input class="input is-small" type="text" v-model="filter.name">
-          </div>
-        </div>
-        <div class="field">
-          <label class="label">Parent filter</label>
-          <div class="control">
-            <span class="select is-small">
-              <select v-model="filter.parent">
-                <option value="">(none)</option>
-                <option>account</option>
-                <option>status</option>
-              </select>
-            </span>
-          </div>
-        </div>
-        <div class="field">
-          <label class="label">Apply to each</label>
-          <div class="control">
-            <span class="select is-small">
-              <select v-model="filter.foreach">
-                <option value="">(none)</option>
-                <option>account</option>
-                <option>status</option>
-              </select>
-            </span>
-          </div>
-        </div>
-      </div>
       <div class="column field is-narrow">
         <label class="label">Queries</label>
         <div class="field has-addons" v-for="(q, idx) in filter.queries">
@@ -138,6 +106,38 @@
         </div>
         <a @click="addColumn" class="button is-link is-small">Add column</a>
         
+      </div>
+      <div class="column is-narrow">
+        <div class="field">
+          <label class="label">Filter name</label>
+          <div class="control">
+            <input class="input is-small" type="text" v-model="filter.name">
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Parent filter</label>
+          <div class="control">
+            <span class="select is-small">
+              <select v-model="filter.parent">
+                <option value="">(field)</option>
+                <option>account</option>
+                <option>status</option>
+              </select>
+            </span>
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Apply to each</label>
+          <div class="control">
+            <span class="select is-small">
+              <select v-model="filter.foreach">
+                <option value="">(field)</option>
+                <option>account</option>
+                <option>status</option>
+              </select>
+            </span>
+          </div>
+        </div>
       </div>
     </div>
     <nav class="level">
