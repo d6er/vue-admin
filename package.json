@@ -34,7 +34,7 @@
     "vue2-editor": "^2.6.6",
     "vuex": "^2.5.0",
     "vuex-router-sync": "^4.3.2",
-    "webpack-sources": "^1.1.0",
+    "webpack-sources": "^1.2.0",
     "ws": "^3.3.3",
     "xml2js": "^0.4.19"
   },

@@ -2,7 +2,7 @@
   <div class="box" id="filterFormBox">
     <div class="columns">
       <div class="column field is-narrow">
-        <label class="label">Queries</label>
+        <label class="label">Filter by</label>
         <div class="field has-addons" v-for="(q, idx) in filter.queries">
           <p class="control">
             <span class="select is-small">
@@ -39,7 +39,7 @@
         <a @click="addQuery" class="button is-link is-small">Add query</a>
       </div>
       <div class="column field is-narrow">
-        <label class="label">Sorting</label>
+        <label class="label">Sort by</label>
         <div class="field has-addons" v-for="(s, idx) in filter.sorting">
           <p class="control">
             <span class="select is-small">
@@ -70,7 +70,7 @@
         <a @click="addSorting" class="button is-link is-small">Add sorting</a>
       </div>
       <div class="column field is-narrow">
-        <label class="label">Columns</label>
+        <label class="label">Columns to display</label>
         <div class="field has-addons" v-for="(c, idx) in filter.columns">
           <p class="control">
             <span class="select is-small">
@@ -156,9 +156,9 @@
           </button>
         </div>
         <div class="level-item">
-          <button @click="deleteFilter" class="button is-link is-small">
+          <a @click="deleteFilter" class="button is-text is-small">
             Delete this filter
-          </button>
+          </a>
         </div>
       </div>
     </nav>
