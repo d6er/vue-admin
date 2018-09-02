@@ -32,7 +32,7 @@ const methods = {
   },
   
   deleteUser: function ({ user_id }) {
-    console.log('mongo.js deleteAccount user_id: ' + user_id)
+    console.log('user.js deleteAccount user_id: ' + user_id)
   },
   
   getUser: function (user_id) {

@@ -211,6 +211,13 @@ export default {
     },
     
     saveFilter() {
+      let apiData = {
+        action: 'saveFilter',
+        filter: this.filter
+      }
+      this.$store.dispatch('callApi', apiData).then(r => {
+        
+      })
     },
     deleteFilter() {
     },

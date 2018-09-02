@@ -240,7 +240,7 @@ const methods = {
                                            { upsert: true })
     } else {
       // new item
-      return this.getNextId(coll).then(r => {
+      return mongo.getNextId(coll).then(r => {
         item._id = r.value.seq
         return db.collection(coll).insertOne(item)
       })
@@ -256,7 +256,7 @@ const methods = {
     return db.collection(coll).find(query).toArray().then(docs => {
       
       const copies = docs.map(doc => {
-        return this.getNextId(coll).then(r => {
+        return mongo.getNextId(coll).then(r => {
           const copied = Object.assign({}, doc)
           copied._id = r.value.seq
           return copied
@@ -328,6 +328,21 @@ const methods = {
     }
     
     return filter
+  },
+  
+  saveFilter: ({ user_id, list, filter }) => {
+    let coll = 'filters.' + user_id
+    if (filter._id) {
+      return db.collection(coll).updateOne({ _id: filter._id },
+                                           { $set: filter},
+                                           { upsert: true })
+    } else {
+      // new item
+      return mongo.getNextId(coll).then(r => {
+        filter._id = r.value.seq
+        return db.collection(coll).insertOne(filter)
+      })
+    }
   },
   
   escapeRegExp: str => {
