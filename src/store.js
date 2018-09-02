@@ -36,6 +36,8 @@ export function createStore () {
       
       isDropdownActive: false,
       
+      isFilterFormActive: false,
+      
       notification: null
     },
     
@@ -126,6 +128,10 @@ export function createStore () {
       
       toggleDropdown (state) {
         state.isDropdownActive = !state.isDropdownActive
+      },
+      
+      toggleFilterForm (state) {
+        state.isFilterFormActive = !state.isFilterFormActive
       },
       
       // notification

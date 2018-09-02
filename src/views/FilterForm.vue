@@ -1,5 +1,6 @@
 <template>
   <div class="box" id="filterFormBox">
+    <a @click="toggleFilterForm" class="delete is-pulled-right"></a>
     <div class="columns">
       <div class="column field is-narrow">
         <label class="label">Filter by</label>
@@ -151,7 +152,7 @@
           </button>
         </div>
         <div class="level-item">
-          <button class="button is-light is-small">
+          <button @click="toggleFilterForm" class="button is-light is-small">
             <span>Cancel</span>
           </button>
         </div>
@@ -235,6 +236,9 @@ export default {
     },
     deleteColumn(idx) {
       this.$delete(this.filter.columns, idx)
+    },
+    toggleFilterForm () {
+      this.$store.commit('toggleFilterForm')
     }
   }
 }

@@ -48,7 +48,7 @@
           </div>
         </div>
         <div class="level-item is-hidden-mobile">
-          <button @click="showFilterForm=!showFilterForm" class="button is-link is-small">
+          <button @click="toggleFilterForm" class="button is-link is-small">
             Search option
           </button>
         </div>
@@ -91,7 +91,7 @@
       </div>
     </nav>
     
-    <FilterForm v-if="showFilterForm"/>
+    <FilterForm v-if="$store.state.isFilterFormActive"/>
     
     <table class="table is-narrow is-fullwidth">
       <thead>
@@ -127,8 +127,7 @@ export default {
     return {
       keyword: '',
       checkedItems: [],
-      checkedAll: false,
-      showFilterForm: false
+      checkedAll: false
     }
   },
   
@@ -220,8 +219,11 @@ export default {
         item_ids: this.checkedItems
       }
       this.$store.dispatch('callApi', apiData)
-    }
+    },
     
+    toggleFilterForm () {
+      this.$store.commit('toggleFilterForm')
+    }
   }
 }
 </script>
