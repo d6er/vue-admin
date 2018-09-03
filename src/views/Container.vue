@@ -59,9 +59,19 @@
 import FilterTree from './FilterTree.vue'
 
 export default {
+
   components: {
     FilterTree: FilterTree
   },
+
+  asyncData ({ store, route: { params: { list } } }) {
+    let apiData = {
+      action: 'fetchFilters',
+      list: list
+    }
+    return store.dispatch('callApi', apiData)
+  },
+
   computed: {
     username () {
       if (this.$store.state.user.google) {
