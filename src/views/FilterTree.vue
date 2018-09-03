@@ -36,6 +36,15 @@ export default {
     }
   },
   
+  asyncData ({ store, route: { params: { list } } }) {
+    let apiData = {
+      action: 'fetchFilters',
+      list: list
+    }
+    console.dir(apiData)
+    return store.dispatch('callApi', apiData)
+  },
+  
   computed: {
     depth () {
       return this.arrPath.length
