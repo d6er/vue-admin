@@ -104,10 +104,10 @@ export function createStore () {
         state.paging = data.paging
         state.mergedFilter = data.mergedFilter
         
-        let currentList = state.lists.find(l => l.name == data.callData.list)
-        currentList.items = []
+        let list = state.lists.find(l => l.name == data.callData.list)
+        list.items = []
         data.items.forEach((item, index) => {
-          Vue.set(currentList.items, index, item)
+          Vue.set(list.items, index, item)
         })
       },
       
@@ -122,7 +122,11 @@ export function createStore () {
       },
       
       setFilters (state, data) {
-        state.filters = data
+        console.dir(data)
+        let list = state.lists.find(l => l.name == data.callData.list)
+        data.forEach((filter, index) => {
+          Vue.set(list.filters, index, filter)
+        })
       },
       
       // todo: delete

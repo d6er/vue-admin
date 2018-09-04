@@ -347,6 +347,7 @@ const methods = {
   
   fetchFilters: ({ user_id, list }) => {
     let coll = 'filters.' + user_id
+    console.log('fetchFilters ' + coll)
     return db.collection(coll).find().toArray()
   },
   
