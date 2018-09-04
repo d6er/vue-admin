@@ -156,7 +156,7 @@ export default {
     
   computed: {
     items () {
-      return this.$store.state.items
+      return this.$store.state.lists.find(l => l.name == this.$route.params.list).items
     },
     filter () {
       return this.$store.state.mergedFilter

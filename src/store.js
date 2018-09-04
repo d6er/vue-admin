@@ -16,13 +16,9 @@ export function createStore () {
       
       user: null,
       
-      account: [ 'Account1', 'Account2', 'Account3' ],
+      accounts: [ 'Account1', 'Account2', 'Account3' ],
       
       status: [ 'published', 'unpublished', 'draft', 'trash' ],
-      
-      items: [],
-      
-      messages: [],
       
       paging: [],
       
@@ -102,12 +98,13 @@ export function createStore () {
       // https://vuex.vuejs.org/en/mutations.html
       setItems (state, data) {
         // todo: set current list
-        state.currentList = state.lists.find(l => l.name == data.callData.list)
         state.paging = data.paging
         state.mergedFilter = data.mergedFilter
-        state.items = []
+        
+        let currentList = state.lists.find(l => l.name == data.callData.list)
+        currentList.items = []
         data.items.forEach((item, index) => {
-          Vue.set(state.items, index, item)
+          Vue.set(currentList.items, index, item)
         })
       },
       

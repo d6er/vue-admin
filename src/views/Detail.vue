@@ -109,8 +109,8 @@ export default {
       // https://github.com/vuejs/vue/issues/1056
       // https://forum.vuejs.org/t/vuex-v-model-on-property-in-nested-object/6242/2
       // POINT: disconnect item from vuex
-      const index = this.$store.state.items.findIndex(e => e._id == this.$route.params.id)
-      return Object.assign({}, this.$store.state.items[index])
+      let index = this.list.items.findIndex(e => e._id == this.$route.params.id)
+      return Object.assign({}, this.list.items[index])
     }
   },
   
