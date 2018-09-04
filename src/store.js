@@ -76,6 +76,9 @@ export function createStore () {
           if (data.action == 'uploadImage') {
             //console.dir(result)
           }
+          if (data.action == 'fetchFilters') {
+            commit('setFilters', result)
+          }
           
           return result
         })
@@ -116,6 +119,10 @@ export function createStore () {
         state.paging = data.paging
         let index = state.items.findIndex(e => e._id == data.item._id)
         Vue.set(state.items, index, data.item)
+      },
+      
+      setFilters (state, data) {
+        state.filters = data
       },
       
       // todo: delete

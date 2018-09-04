@@ -345,6 +345,11 @@ const methods = {
     }
   },
   
+  fetchFilters: ({ user_id, list }) => {
+    let coll = 'filters.' + user_id
+    return db.collection(coll).find().toArray()
+  },
+  
   escapeRegExp: str => {
     return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&")
   },
