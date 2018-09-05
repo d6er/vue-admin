@@ -290,7 +290,8 @@ const methods = {
   getMergedFilter: (listName, urlFilter, filterForm) => {
     
     let filter = { queries: [], sorting: [], columns: [] }
-    let definedFilters = config_client.lists.find(e => e.name == listName).filters
+    //let definedFilters = config_client.lists.find(e => e.name == listName).filters
+    let definedFilters = config_client.lists[0].filters
     let path = urlFilter.split(',')
     
     for (let i in path) {

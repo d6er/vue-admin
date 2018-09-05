@@ -3,7 +3,12 @@
     <a @click="toggleFilterForm" class="delete is-pulled-right"></a>
     <div class="columns">
       <div class="column field is-narrow">
-        <label class="label">Filter by</label>
+        <label class="label">
+          <span class="icon is-small">
+            <i class="fas fa-filter"></i>
+          </span>
+          Filter by
+        </label>
         <div class="field has-addons" v-for="(q, idx) in filter.queries">
           <p class="control">
             <span class="select is-small">
@@ -37,10 +42,15 @@
             </button>
           </p>
         </div>
-        <a @click="addQuery" class="button is-link is-small">Add query</a>
+        <a @click="addQuery" class="button is-link is-small">Add filter</a>
       </div>
       <div class="column field is-narrow">
-        <label class="label">Sort by</label>
+        <label class="label">
+          <span class="icon is-small">
+            <i class="fas fa-sort-amount-down"></i>
+          </span>
+          Sort by
+        </label>
         <div class="field has-addons" v-for="(s, idx) in filter.sorting">
           <p class="control">
             <span class="select is-small">
@@ -71,7 +81,12 @@
         <a @click="addSorting" class="button is-link is-small">Add sorting</a>
       </div>
       <div class="column field is-narrow">
-        <label class="label">Columns to display</label>
+        <label class="label">
+          <span class="icon is-small">
+            <i class="fas fa-columns"></i>
+          </span>
+          Columns to display
+        </label>
         <div class="field has-addons" v-for="(c, idx) in filter.columns">
           <p class="control">
             <span class="select is-small">
@@ -82,20 +97,6 @@
                 </option>
               </select>
             </span>
-          </p>
-          <p class="control">
-            <button class="button is-small">
-              <span class="icon is-small">
-                <i class="fa fa-arrow-up" aria-hidden="true"></i>
-              </span>
-            </button>
-          </p>
-          <p class="control">
-            <button class="button is-small">
-              <span class="icon is-small">
-                <i class="fa fa-arrow-down" aria-hidden="true"></i>
-              </span>
-            </button>
           </p>
           <p class="control">
             <button @click="deleteColumn(idx)"class="button is-small">
@@ -110,25 +111,7 @@
       </div>
       <div class="column is-narrow">
         <div class="field">
-          <label class="label">Filter name</label>
-          <div class="control">
-            <input class="input is-small" type="text" v-model="filter.name">
-          </div>
-        </div>
-        <div class="field">
-          <label class="label">Parent filter</label>
-          <div class="control">
-            <span class="select is-small">
-              <select v-model="filter.parent">
-                <option value="">(field)</option>
-                <option>account</option>
-                <option>status</option>
-              </select>
-            </span>
-          </div>
-        </div>
-        <div class="field">
-          <label class="label">Apply to each</label>
+          <label class="label">Sub filter</label>
           <div class="control">
             <span class="select is-small">
               <select v-model="filter.foreach">
@@ -137,6 +120,14 @@
                 <option>status</option>
               </select>
             </span>
+          </div>
+        </div>
+      </div>
+      <div class="column is-narrow">
+        <div class="field">
+          <label class="label">Filter name</label>
+          <div class="control">
+            <input class="input is-small" type="text" v-model="filter.name">
           </div>
         </div>
       </div>

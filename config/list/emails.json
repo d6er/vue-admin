@@ -43,7 +43,6 @@
   "filters": [
     {
       "name": "inbox",
-      "parent": "",
       "queries": [
         {
           "field": "labelIds",
@@ -65,7 +64,6 @@
     },
     {
       "name": "sent",
-      "parent": "",
       "queries": [
         {
           "field": "labelIds",
@@ -87,7 +85,6 @@
     },
     {
       "name": "unread",
-      "parent": "",
       "queries": [
         {
           "field": "labelIds",
@@ -109,7 +106,6 @@
     },
     {
       "name": "all",
-      "parent": "",
       "foreach": "",
       "queries": [],
       "sorting": [
