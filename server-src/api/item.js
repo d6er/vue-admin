@@ -190,6 +190,44 @@ const methods = {
   
   fetchItems: ({ user_id, list, filter, filterForm, page }) => {
     
+    let limit = 30
+    let skip = page ? limit * ( page - 1 ) : 0
+    
+    return db.collection('filters.' + user_id).findOne({
+      //user_id: user_id,
+      //list: list,
+      name: filter
+    }).then(filterObj => {
+      console.log(filter)
+      console.dir(filterObj)
+      let query = methods.convertQueries(filterObj.queries)
+      let sort = methods.convertSorting(filterObj.sorting)
+      let cursor = db.collection(list + '.' + user_id).find(query)
+      
+      return cursor.sort(sort).skip(skip).limit(limit).toArray().then(items => {
+        return cursor.count().then(count => {
+          
+          const paging = {
+            start: skip + 1,
+            end: (skip + limit < count) ? (skip + limit) : count,
+            count: count,
+            hasPrev: (page > 1),
+            hasNext: (skip + limit < count)
+          }
+          
+          return {
+            items: items,
+            paging: paging,
+            mergedFilter: filterObj
+          }
+        })
+      })
+    })
+    
+  },
+  
+  fetchItems0: ({ user_id, list, filter, filterForm, page }) => {
+    
     let mergedFilter = methods.getMergedFilter(list, filter, filterForm)
     let query = methods.convertQueries(mergedFilter.queries)
     let sort = methods.convertSorting(mergedFilter.sorting)
