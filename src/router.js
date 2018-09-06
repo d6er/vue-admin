@@ -22,6 +22,7 @@ export function createRouter (store) {
   function checkAuth (to, from, next) {
     if (store.state.user) {
       let path = '/' + store.state.lists[0].name + '/' + store.state.lists[0].filters[0].name
+      console.log('router.js ' + path)
       next(path)
     } else {
       console.log('checkAuth NG')
@@ -30,6 +31,7 @@ export function createRouter (store) {
   }
   
   let listsRegExp = store.state.lists.map(list => list.name).join('|')
+  console.dir(listsRegExp)
   
   // dynamic child component for list
   let listRoutes = []
@@ -105,7 +107,13 @@ export function createRouter (store) {
         beforeEnter: requireAuth,
         redirect: to => {
           let list = store.state.lists.find(e => e.name == to.params.list)
-          let path = to.fullPath + '/' + list.filters[0].name
+          console.dir(list.filters)
+          let path = to.fullPath
+          if (list.filters[0]) {
+            path += '/' + list.filters[0].name
+          } else {
+            path += '/all' // todo: this is temporary path
+          }
           return path
         }
       }

@@ -12,26 +12,42 @@ export default context => {
       //const { app, router, store } = createApp()
       const { app, router, store } = require('./app').createApp()
       
-      store.state.user = context.user
-      
-      router.push(context.url)
-      
-      router.onReady(() => {
+      // fetch filter data and set to store (for redirect from / path)
+      let query = {
+        user_id: context.user._id,
+      }
+      // todo: exclude user_id from result
+      db.collection('filters').find(query).toArray().then(filters => {
+        store.state.lists.forEach(list => {
+          console.log(list.name)
+          list.filters = filters.filter(f => f.list == list.name)
+        })
+      }).then(() => {
         
-        const matchedComponents = router.getMatchedComponents()
-        if (!matchedComponents.length) {
-          reject({ code: 404 })
-        }
+        console.log('entry-server')
+        store.state.user = context.user
         
-        Promise.all(matchedComponents.map(Component => {
-          if (Component.asyncData) {
-            return Component.asyncData({ store, route: router.currentRoute })
+        router.push(context.url)
+        
+        router.onReady(() => {
+          
+          const matchedComponents = router.getMatchedComponents()
+          if (!matchedComponents.length) {
+            reject({ code: 404 })
           }
-        })).then(() => {
-          context.state = store.state
-          resolve(app)
-        }).catch(reject)
-      }, reject)
+          
+          Promise.all(matchedComponents.map(Component => {
+            if (Component.asyncData) {
+              return Component.asyncData({ store, route: router.currentRoute })
+            }
+          })).then(() => {
+            console.log('resolve app')
+            context.state = store.state
+            resolve(app)
+          }).catch(reject)
+        }, reject)
+        
+      })
       
     })
     

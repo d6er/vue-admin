@@ -42,7 +42,7 @@
       ]
     }
   ],
-  "filters": [
+  "defaultFilters": [
     {
       "name": "all",
       "parent": "",

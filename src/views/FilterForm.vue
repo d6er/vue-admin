@@ -204,6 +204,7 @@ export default {
     saveFilter() {
       let apiData = {
         action: 'saveFilter',
+        list: this.list.name,
         filter: this.filter
       }
       this.$store.dispatch('callApi', apiData).then(r => {

@@ -65,11 +65,14 @@ export default {
   },
 
   asyncData ({ store, route: { params: { list } } }) {
+    console.log('Container.vue asyncData()')
+    /*
     let apiData = {
       action: 'fetchFilters',
       list: list
     }
     return store.dispatch('callApi', apiData)
+    */
   },
 
   computed: {

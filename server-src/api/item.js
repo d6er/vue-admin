@@ -193,13 +193,12 @@ const methods = {
     let limit = 30
     let skip = page ? limit * ( page - 1 ) : 0
     
-    return db.collection('filters.' + user_id).findOne({
-      //user_id: user_id,
-      //list: list,
+    return db.collection('filters').findOne({
+      user_id: user_id,
+      list: list,
       name: filter
     }).then(filterObj => {
-      console.log(filter)
-      console.dir(filterObj)
+      
       let query = methods.convertQueries(filterObj.queries)
       let sort = methods.convertSorting(filterObj.sorting)
       let cursor = db.collection(list + '.' + user_id).find(query)
@@ -370,7 +369,12 @@ const methods = {
   },
   
   saveFilter: ({ user_id, list, filter }) => {
-    let coll = 'filters.' + user_id
+    
+    filter.user_id = user_id
+    filter.list = list
+    
+    //let coll = 'filters.' + user_id
+    let coll = 'filters'
     if (filter._id) {
       return db.collection(coll).updateOne({ _id: filter._id },
                                            { $set: filter},
@@ -385,9 +389,11 @@ const methods = {
   },
   
   fetchFilters: ({ user_id, list }) => {
-    let coll = 'filters.' + user_id
-    console.log('fetchFilters ' + coll)
-    return db.collection(coll).find().toArray()
+    let query = {
+      user_id: user_id,
+      list: list
+    }
+    return db.collection('filters').find(query).toArray()
   },
   
   escapeRegExp: str => {

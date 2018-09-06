@@ -86,6 +86,7 @@ mongo.connect(config.mongo_url).then(db => {
     }
     
     if (req.isAuthenticated()) {
+      console.log('server.js')
       context.user = req.user
     } else {
       context.user = null

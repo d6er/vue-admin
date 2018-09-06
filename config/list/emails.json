@@ -40,7 +40,7 @@
       "type": "text"
     }
   ],
-  "filters": [
+  "defaultFilters": [
     {
       "name": "inbox",
       "queries": [
