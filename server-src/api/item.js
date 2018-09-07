@@ -119,73 +119,82 @@ const methods = {
   },
   
   fetchItem: ({ user_id, list, filter, item_id }) => {
-
-    let mergedFilter = methods.getMergedFilter(list, filter, null)
-    mergedFilter.sorting.push({ field: '_id', order: 'desc' })
     
-    let query = methods.convertQueries(mergedFilter.queries)
-    let sort = methods.convertSorting(mergedFilter.sorting)
-    let queriesForSort = []
-    let result = {}
-    let coll = list + '.' + user_id
-    
-    return db.collection(coll).findOne({ _id: item_id }).then(item => {
+    return db.collection('filters').findOne({
+      user_id: user_id,
+      list: list,
+      name: filter
+    }).then(filterObj => {
       
-      if (item.payload.mimeType == 'text/plain') {
-        item.body = Buffer.from(item.payload.body.data, 'base64').toString()
-      } else if (item.payload.mimeType == 'multipart/alternative') {
-        item.body = Buffer.from(item.payload.parts[0].body.data, 'base64').toString()
-      }
-      result.item = item
+      filterObj.sorting.push({ field: '_id', order: 'desc' })
       
-      for (let i in mergedFilter.sorting) {
+      let query = methods.convertQueries(filterObj.queries)
+      let sort = methods.convertSorting(filterObj.sorting)
+      
+      let queriesForSort = []
+      let result = {}
+      let coll = list + '.' + user_id
+      
+      return db.collection(coll).findOne({ _id: item_id }).then(item => {
         
-        let q = {}
-        for (let j = 0; j < i; j++) {
-          let f = mergedFilter.sorting[j].field
-          q[f] = item[f]
+        if (item.payload.mimeType == 'text/plain') {
+          item.body = Buffer.from(item.payload.body.data, 'base64').toString()
+        } else if (item.payload.mimeType == 'multipart/alternative') {
+          item.body = Buffer.from(item.payload.parts[0].body.data, 'base64').toString()
+        }
+        result.item = item
+        
+        for (let i in filterObj.sorting) {
+          
+          let q = {}
+          for (let j = 0; j < i; j++) {
+            let f = filterObj.sorting[j].field
+            q[f] = item[f]
+          }
+          
+          let s = filterObj.sorting[i]
+          if (s.order == 'asc') {
+            q[s.field] = { $lt: item[s.field] }
+          } else if (s.order == 'desc') {
+            q[s.field] = { $gt: item[s.field] }
+          }
+          
+          queriesForSort.push(q)
         }
         
-        let s = mergedFilter.sorting[i]
-        if (s.order == 'asc') {
-          q[s.field] = { $lt: item[s.field] }
-        } else if (s.order == 'desc') {
-          q[s.field] = { $gt: item[s.field] }
+        let positionQuery = { $and: [ query, { $or: queriesForSort } ] }
+        
+        return db.collection(coll).find(positionQuery).count()
+        
+      }).then(position => {
+        
+        result.paging = { position: position + 1 }
+        
+        let cursor = db.collection(coll).find(query, { _id: true })
+        
+        return cursor.count().then(count => {
+          result.paging.count = count
+          
+          let skip = position ? position - 1 : 0
+          let limit = position ? 3 : 2
+          return cursor.sort(sort).skip(skip).limit(limit).toArray()
+        })
+        
+      }).then(items => {
+        
+        let idx = items.findIndex(item => item._id == item_id)
+        if (items[idx - 1]) {
+          result.paging.prevId = items[idx - 1]._id
+        }
+        if (items[idx + 1]) {
+          result.paging.nextId = items[idx + 1]._id
         }
         
-        queriesForSort.push(q)
-      }
-      
-      let positionQuery = { $and: [ query, { $or: queriesForSort } ] }
-      
-      return db.collection(coll).find(positionQuery).count()
-      
-    }).then(position => {
-      
-      result.paging = { position: position + 1 }
-      
-      let cursor = db.collection(coll).find(query, { _id: true })
-      
-      return cursor.count().then(count => {
-        result.paging.count = count
-        
-        let skip = position ? position - 1 : 0
-        let limit = position ? 3 : 2
-        return cursor.sort(sort).skip(skip).limit(limit).toArray()
+        return result
       })
       
-    }).then(items => {
-      
-      let idx = items.findIndex(item => item._id == item_id)
-      if (items[idx - 1]) {
-        result.paging.prevId = items[idx - 1]._id
-      }
-      if (items[idx + 1]) {
-        result.paging.nextId = items[idx + 1]._id
-      }
-      
-      return result
     })
+    
   },
   
   fetchItems: ({ user_id, list, filter, filterForm, page }) => {
@@ -223,50 +232,6 @@ const methods = {
       })
     })
     
-  },
-  
-  fetchItems0: ({ user_id, list, filter, filterForm, page }) => {
-    
-    let mergedFilter = methods.getMergedFilter(list, filter, filterForm)
-    let query = methods.convertQueries(mergedFilter.queries)
-    let sort = methods.convertSorting(mergedFilter.sorting)
-    let limit = 30
-    let skip = page ? limit * ( page - 1 ) : 0
-    let coll = list + '.' + user_id
-    let zone = moment.tz.guess()
-    
-    const cursor = db.collection(coll).find(query)
-    
-    return cursor.count().then(count => {
-      
-      const paging = {
-        start: skip + 1,
-        end: (skip + limit < count) ? (skip + limit) : count,
-        count: count,
-        hasPrev: (page > 1),
-        hasNext: (skip + limit < count)
-      }
-      
-      return cursor.sort(sort).skip(skip).limit(limit).toArray().then(items => {
-        
-        let listConfig = config_client.lists.find(l => l.name == list)
-        
-        mergedFilter.columns.map(column => {
-          let fieldConfig = listConfig.fields.find(field => field.name == column)
-          if (fieldConfig.type == 'datetime') {
-            items.forEach(item => {
-              item[column] = moment(item[column]).tz(zone).format('MMM D HH:mm')
-            })
-          }
-        })
-        
-        return {
-          items: items,
-          paging: paging,
-          mergedFilter: mergedFilter
-        }
-      })
-    })
   },
   
   saveItem: ({ user_id, list, item }) => {
