@@ -208,6 +208,10 @@ const methods = {
       name: filter
     }).then(filterObj => {
       
+      if (filterForm) {
+        filterObj = filterForm
+      }
+      
       let query = methods.convertQueries(filterObj.queries)
       let sort = methods.convertSorting(filterObj.sorting)
       let cursor = db.collection(list + '.' + user_id).find(query)

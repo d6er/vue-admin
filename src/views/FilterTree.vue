@@ -1,7 +1,7 @@
 <template>
   <ul :class="{ 'menu-list': depth == 0 }">
     <template v-for="filter in filters">
-      <li v-if="!filter.foreach">
+      <li>
         <router-link :to="getFilterUrl(filter.name)"
                      :class="{ 'is-active': isActive(filter.name) }"
                      class="is-capitalized">
