@@ -220,6 +220,7 @@ export default {
         this.$router.replace('/' + this.list.name + '/' + this.filter.name)
       })
     },
+    
     createFilter() {
       delete this.filter._id
       let apiData = {
@@ -232,17 +233,29 @@ export default {
         this.$router.replace('/' + this.list.name + '/' + this.filter.name)
       })
     },
+    
     deleteFilter() {
+      let apiData = {
+        action: 'deleteFilter',
+        list: this.list.name,
+        filter: this.filter
+      }
+      this.$store.dispatch('callApi', apiData).then(r => {
+        this.$store.commit('toggleFilterForm')
+        this.$router.replace('/' + this.list.name + '/' + this.list.filters[0].name)
+      })
     },
     
     addQuery() {
       const idx = this.filter.queries.length
       this.$set(this.filter.queries, idx, { field: '', condition: '', value: '' })
     },
+    
     addSorting() {
       const idx = this.filter.sorting.length
       this.$set(this.filter.sorting, idx, { field: '', order: 'asc' })
     },
+    
     addColumn() {
       const idx = this.filter.columns.length
       this.$set(this.filter.columns, idx, '')
@@ -251,12 +264,15 @@ export default {
     deleteQuery(idx) {
       this.$delete(this.filter.queries, idx)
     },
+    
     deleteSorting(idx) {
       this.$delete(this.filter.sorting, idx)
     },
+    
     deleteColumn(idx) {
       this.$delete(this.filter.columns, idx)
     },
+    
     toggleFilterForm () {
       this.$store.commit('toggleFilterForm')
     }

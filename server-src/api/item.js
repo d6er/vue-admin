@@ -365,6 +365,19 @@ const methods = {
     }
   },
   
+  deleteFilter: ({ user_id, list, filter }) => {
+    console.log('item.js deleteFilter')
+    return db.collection('filters').deleteOne(
+      {
+        user_id: user_id,
+        list: list,
+        _id: filter._id
+      }
+    ).then(r => {
+      return methods.fetchFilters({ user_id: user_id, list: list })
+    })
+  },
+  
   fetchFilters: ({ user_id, list }) => {
     let query = {
       user_id: user_id,

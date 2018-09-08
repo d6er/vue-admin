@@ -57,15 +57,18 @@ export function createStore () {
         
         return api.call(data).then(result => {
           
-          result.callData = data
+          let payload = {
+            result: result,
+            callData: data
+          }
           
           // todo: map action and commit
           // https://github.com/vuejs/vuex/issues/755
           if (data.action == 'fetchItems' || data.action == 'refreshList') {
-            commit('setItems', result)
+            commit('setItems', payload)
           }
           if (data.action == 'fetchItem') {
-            commit('setItem', result)
+            commit('setItem', payload)
           }
           if (data.action == 'saveItem') {
             commit('setNotification', 'Item been sent saved.')
@@ -74,14 +77,18 @@ export function createStore () {
             commit('setNotification', 'Copied.')
           }
           if (data.action == 'uploadImage') {
-            //console.dir(result)
+            //console.dir(payload)
           }
           if (data.action == 'fetchFilters') {
-            commit('setFilters', result)
+            commit('setFilters', payload)
           }
           if (data.action == 'saveFilter') {
             commit('setNotification', 'Filter has been saved.')
-            commit('setFilters', result)
+            commit('setFilters', payload)
+          }
+          if (data.action == 'deleteFilter') {
+            commit('setNotification', 'Filter has been deleted.')
+            commit('setFilters', payload)
           }
           
           return result
@@ -103,14 +110,14 @@ export function createStore () {
       // item
       // todo: use constant for function names.
       // https://vuex.vuejs.org/en/mutations.html
-      setItems (state, data) {
+      setItems (state, payload) {
         // todo: set current list
-        state.paging = data.paging
-        state.mergedFilter = data.mergedFilter
+        state.paging = payload.result.paging
+        state.mergedFilter = payload.result.mergedFilter
         
-        let list = state.lists.find(l => l.name == data.callData.list)
+        let list = state.lists.find(l => l.name == payload.callData.list)
         list.items = []
-        data.items.forEach((item, index) => {
+        payload.result.items.forEach((item, index) => {
           Vue.set(list.items, index, item)
         })
       },
@@ -119,19 +126,16 @@ export function createStore () {
         state.items = []
       },
       
-      setItem (state, data) {
-        state.paging = data.paging
-        let list = state.lists.find(l => l.name == data.callData.list)
-        let index = list.items.findIndex(e => e._id == data.item._id)
-        Vue.set(list.items, index, data.item)
+      setItem (state, payload) {
+        state.paging = payload.result.paging
+        let list = state.lists.find(l => l.name == payload.callData.list)
+        let index = list.items.findIndex(e => e._id == payload.result.item._id)
+        Vue.set(list.items, index, payload.result.item)
       },
       
-      setFilters (state, data) {
-        console.dir(data)
-        let list = state.lists.find(l => l.name == data.callData.list)
-        data.forEach((filter, index) => {
-          Vue.set(list.filters, index, filter)
-        })
+      setFilters (state, payload) {
+        let list = state.lists.find(l => l.name == payload.callData.list)
+        list.filters = payload.result
       },
       
       // todo: delete

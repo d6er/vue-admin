@@ -110,7 +110,7 @@
           <td>
             <input type="checkbox" :value="item._id" v-model="checkedItems">
           </td>
-          <router-view v-for="column in filter.columns" :item.sync="item" :column="column" :key="item._id"></router-view>
+          <router-view v-for="column in filter.columns" :item.sync="item" :column="column" :key="item._id + '.' + column"></router-view>
         </tr>
       </tbody>
     </table>

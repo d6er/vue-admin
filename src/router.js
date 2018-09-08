@@ -107,7 +107,6 @@ export function createRouter (store) {
         beforeEnter: requireAuth,
         redirect: to => {
           let list = store.state.lists.find(e => e.name == to.params.list)
-          console.dir(list.filters)
           let path = to.fullPath
           if (list.filters[0]) {
             path += '/' + list.filters[0].name
