@@ -338,17 +338,25 @@ const methods = {
     filter.user_id = user_id
     filter.list = list
     
-    //let coll = 'filters.' + user_id
     let coll = 'filters'
     if (filter._id) {
-      return db.collection(coll).updateOne({ _id: filter._id },
-                                           { $set: filter},
-                                           { upsert: true })
+      
+      // update existing filter
+      return db.collection(coll).updateOne(
+        { _id: filter._id },
+        { $set: filter},
+        { upsert: true }
+      ).then(r => {
+        return methods.fetchFilters({ user_id: user_id, list: list })
+      })
+      
     } else {
-      // new item
+      // create a new filter
       return mongo.getNextId(coll).then(r => {
         filter._id = r.value.seq
         return db.collection(coll).insertOne(filter)
+      }).then(r => {
+        return methods.fetchFilters({ user_id: user_id, list: list })
       })
     }
   },

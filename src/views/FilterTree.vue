@@ -36,6 +36,7 @@ export default {
     }
   },
   
+  /*
   asyncData ({ store, route: { params: { list } } }) {
     let apiData = {
       action: 'fetchFilters',
@@ -44,6 +45,7 @@ export default {
     console.dir(apiData)
     return store.dispatch('callApi', apiData)
   },
+  */
   
   computed: {
     depth () {
@@ -53,11 +55,7 @@ export default {
       return this.$store.state.lists.find(list => list.name == this.$route.params.list)
     },
     filters () {
-      let parentFilterName = ''
-      if (this.arrPath.length) {
-        parentFilterName = this.arrPath[this.arrPath.length-1].replace(/:.+$/, '')
-      }
-      return this.list.filters.filter(filter => filter.parent == parentFilterName)
+      return this.list.filters
     },
     path () {
       return this.$route.params.filter.split(',')

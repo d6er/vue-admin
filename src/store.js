@@ -68,7 +68,7 @@ export function createStore () {
             commit('setItem', result)
           }
           if (data.action == 'saveItem') {
-            commit('setNotification', 'Item was saved.')
+            commit('setNotification', 'Item been sent saved.')
           }
           if (data.action == 'copyItems') {
             commit('setNotification', 'Copied.')
@@ -77,6 +77,10 @@ export function createStore () {
             //console.dir(result)
           }
           if (data.action == 'fetchFilters') {
+            commit('setFilters', result)
+          }
+          if (data.action == 'saveFilter') {
+            commit('setNotification', 'Filter has been saved.')
             commit('setFilters', result)
           }
           

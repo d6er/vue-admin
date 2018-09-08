@@ -42,7 +42,7 @@
             </button>
           </p>
         </div>
-        <a @click="addQuery" class="button is-link is-small">Add filter</a>
+        <a @click="addQuery" class="button is-text is-small">Add filter</a>
       </div>
       <div class="column field is-narrow">
         <label class="label">
@@ -78,7 +78,7 @@
             </button>
           </p>
         </div>
-        <a @click="addSorting" class="button is-link is-small">Add sorting</a>
+        <a @click="addSorting" class="button is-text is-small">Add sorting</a>
       </div>
       <div class="column field is-narrow">
         <label class="label">
@@ -99,14 +99,14 @@
             </span>
           </p>
           <p class="control">
-            <button @click="deleteColumn(idx)"class="button is-small">
+            <button @click="deleteColumn(idx)" class="button is-small">
               <span class="icon is-small">
                 <i class="fa fa-times" aria-hidden="true"></i>
               </span>
             </button>
           </p>
         </div>
-        <a @click="addColumn" class="button is-link is-small">Add column</a>
+        <a @click="addColumn" class="button is-text is-small">Add column</a>
         
       </div>
       <div class="column is-narrow">
@@ -140,6 +140,14 @@
               <i class="fa fa-save" aria-hidden="true"></i>
             </span>
             <span>Save</span>
+          </button>
+        </div>
+        <div class="level-item">
+          <button @click="createFilter" class="button is-info is-small">
+            <span class="icon is-small">
+              <i class="fa fa-save" aria-hidden="true"></i>
+            </span>
+            <span>Save as a new filter</span>
           </button>
         </div>
         <div class="level-item">
@@ -208,7 +216,20 @@ export default {
         filter: this.filter
       }
       this.$store.dispatch('callApi', apiData).then(r => {
-        
+        this.$store.commit('toggleFilterForm')
+        this.$router.replace('/' + this.list.name + '/' + this.filter.name)
+      })
+    },
+    createFilter() {
+      delete this.filter._id
+      let apiData = {
+        action: 'saveFilter',
+        list: this.list.name,
+        filter: this.filter
+      }
+      this.$store.dispatch('callApi', apiData).then(r => {
+        this.$store.commit('toggleFilterForm')
+        this.$router.replace('/' + this.list.name + '/' + this.filter.name)
       })
     },
     deleteFilter() {
