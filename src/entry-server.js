@@ -12,19 +12,26 @@ export default context => {
       //const { app, router, store } = createApp()
       const { app, router, store } = require('./app').createApp()
       
-      // fetch filter data and set to store (for redirect from / path)
-      let query = {
-        user_id: context.user._id,
-      }
-      // todo: exclude user_id from result
-      db.collection('filters').find(query).toArray().then(filters => {
-        store.state.lists.forEach(list => {
-          console.log(list.name)
-          list.filters = filters.filter(f => f.list == list.name)
-        })
+      return new Promise((resolve, reject) => {
+        
+        if (context.user) {
+          // fetch filter data and set to store (for redirect from / path)
+          let query = {
+            user_id: context.user._id,
+          }
+          // todo: exclude user_id from result
+          db.collection('filters').find(query).toArray().then(filters => {
+            store.state.lists.forEach(list => {
+              list.filters = filters.filter(f => f.list == list.name)
+            })
+            resolve()
+          })
+        } else {
+          resolve()
+        }
+        
       }).then(() => {
         
-        console.log('entry-server')
         store.state.user = context.user
         
         router.push(context.url)
