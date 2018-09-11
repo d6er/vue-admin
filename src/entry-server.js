@@ -48,7 +48,6 @@ export default context => {
               return Component.asyncData({ store, route: router.currentRoute })
             }
           })).then(() => {
-            console.log('resolve app')
             context.state = store.state
             resolve(app)
           }).catch(reject)

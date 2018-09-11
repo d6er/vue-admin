@@ -106,14 +106,12 @@ export default {
   
   methods: {
     deleteUser () {
-      this.$store.dispatch('deleteUser').then(
-        r => {
-          // todo: go to home page
-        },
-        e => {
-          
-        }
-      )
+      let apiData = {
+        action: 'deleteUser'
+      }
+      this.$store.dispatch('callApi', apiData).then(r => {
+        this.$router.push('/')
+      })
     },
     deleteAccount (provider, id) {
       

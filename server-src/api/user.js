@@ -32,7 +32,13 @@ const methods = {
   },
   
   deleteUser: function ({ user_id }) {
-    console.log('user.js deleteAccount user_id: ' + user_id)
+    return db.collection('filters').deleteMany(
+      { user_id: user_id }
+    ).then(r => {
+      return db.collection('users').deleteOne(
+        { _id: user_id }
+      )
+    })
   },
   
   getUser: function (user_id) {

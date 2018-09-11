@@ -47,17 +47,18 @@ export default {
         password: this.password
       }
       
-      this.$store.dispatch('callApi', data).then(
-        response => {
-          console.dir(response)
-          // todo: auto login
-        },
-        error => {
-          console.log('signup error')
-          console.dir(error)
-          // todo: show message to user
-        }
-      )
+      this.$store.dispatch('callApi', data).then(r => {
+        
+        // todo: auto login
+        console.dir(response)
+        
+      }).catch(error => {
+        
+        // todo: show message to user
+        console.log('signup error')
+        console.dir(error)
+        
+      })
     }
   }
 }
