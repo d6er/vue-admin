@@ -1,3 +1,5 @@
+const config_list = require('../../config/list')
+
 const mongo = require('../mongo')
 const db = mongo.getConnection()
 
@@ -50,6 +52,10 @@ const methods = {
       list: list
     }
     return db.collection('filters').find(query).toArray()
+  },
+  
+  copyDefaultFilters: ({ user_id }) => {
+    console.dir(config_list)
   }
   
 }

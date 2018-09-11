@@ -31,12 +31,14 @@
 
 <script>
 export default {
+  
   data () {
     return {
       username: '',
       password: ''
     }
   },
+  
   methods: {
     // http://stackoverflow.com/questions/40165766/returning-promises-from-vuex-actions
     signup () {
@@ -48,6 +50,11 @@ export default {
       }
       
       this.$store.dispatch('callApi', data).then(r => {
+        
+        let apiData = { action: 'copyDefaultFilter' }
+        return this.$store.dispatch('callApi', apiData)
+        
+      }).then(r => {
         
         // todo: auto login
         console.dir(response)
