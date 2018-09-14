@@ -26,7 +26,9 @@ const methods = {
         username: username,
         password: password // todo: encrypt password
       }
-      return db.collection('users').insertOne(user)
+      return db.collection('users').insertOne(user).then(r => {
+        return { insertedId: user._id }
+      })
       
     })
   },

@@ -2,17 +2,17 @@
   <div class="columns is-vcentered">
     <div class="column is-4 is-offset-4">
       <div class="box">
-        <form @submit.prevent="signup">
+        <form method="post" action="/auth/local/login" @submit="signup">
           <div class="field">
             <label class="label">Username:</label>
             <p class="control">
-              <input v-model="username" class="input" placeholder="Username" type="text">
+              <input v-model="username" class="input" placeholder="Username" type="text" name="username">
             </p>
           </div>
           <div class="field">
             <label class="label">Password:</label>
             <p class="control">
-              <input v-model="password" class="input" placeholder="Password" type="password">
+              <input v-model="password" class="input" placeholder="Password" type="password" name="password">
             </p>
           </div>
           <div class="field is-grouped">
@@ -49,7 +49,7 @@ export default {
         password: this.password
       }
       
-      this.$store.dispatch('callApi', data).then(r => {
+      return this.$store.dispatch('callApi', data).then(r => {
         
         let apiData = { action: 'copyDefaultFilter' }
         return this.$store.dispatch('callApi', apiData)
@@ -58,6 +58,8 @@ export default {
         
         // todo: auto login
         console.dir(response)
+        
+        return
         
       }).catch(error => {
         
