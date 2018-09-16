@@ -1,9 +1,9 @@
 const webpack = require('webpack');
 const merge = require('webpack-merge')
-const baseConfig = require('./webpack.base.config')
+const base = require('./webpack.base.config')
 const VueSSRClientPlugin = require('vue-server-renderer/client-plugin')
 
-const config = merge(baseConfig, {
+const config = merge(base, {
   entry: [
     'webpack-hot-middleware/client',
     './src/entry-client.js'

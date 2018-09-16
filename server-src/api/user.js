@@ -1,5 +1,6 @@
 const mongo = require('../mongo')
 const db = mongo.getConnection()
+const filter = require('./filter')
 
 const methods = {
   
@@ -27,8 +28,16 @@ const methods = {
         password: password // todo: encrypt password
       }
       return db.collection('users').insertOne(user).then(r => {
-        return { insertedId: user._id }
+        return user
       })
+      
+    }).then(user => {
+      
+      return filter.copyDefaultFilters({ user_id: user._id })
+      
+    }).then(() => {
+      
+      return
       
     })
   },

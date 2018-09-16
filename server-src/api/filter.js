@@ -55,7 +55,19 @@ const methods = {
   },
   
   copyDefaultFilters: ({ user_id }) => {
-    console.dir(config_list)
+    
+    console.log('copyDefaultFilters ' + user_id);
+    
+    let filters = []
+    config_list.forEach(list => {
+      list.defaultFilters.forEach(filter => {
+        filter.list = list.name
+        filter.user_id = user_id
+        filters.push(filter)
+      })
+    })
+    
+    return db.collection('filters').insertMany(filters)
   }
   
 }

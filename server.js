@@ -17,7 +17,6 @@ const mongo = require('./server-src/mongo')
 const wsPool = require('./server-src/websocket-pool')
 
 // Vue
-const template = fs.readFileSync('./src/index.template.html', 'utf-8')
 const { createBundleRenderer } = require('vue-server-renderer')
 
 mongo.connect(config.mongo_url).then(db => {
@@ -28,29 +27,34 @@ mongo.connect(config.mongo_url).then(db => {
   
   const app = express()
   
-  let serverBundle, clientManifest, renderer
-  let promise
+  let renderer
+  let readyPromise
+  const templatePath = './src/index.template.html'
+  
   
   // production
   if (process.env.NODE_ENV === 'production') {
-    serverBundle = require('./dist/vue-ssr-server-bundle.json')
-    clientManifest = require('./dist/vue-ssr-client-manifest.json')
-    renderer = createBundleRenderer(serverBundle, {
-      runInNewContext: false,
+    const template = fs.readFileSync(templatePath, 'utf-8')
+    const bundle = require('./dist/vue-ssr-server-bundle.json')
+    const clientManifest = require('./dist/vue-ssr-client-manifest.json')
+    renderer = createBundleRenderer(bundle, {
       template,
-      clientManifest
+      clientManifest,
+      runInNewContext: false
     })
   }  
   
   // Development
   if (process.env.NODE_ENV === 'development') {
-    promise = require('./build/setup-dev-server')(app, (serverBundle, clientManifest) => {
-      renderer = createBundleRenderer(serverBundle, {
-        runInNewContext: false,
-        template,
-        clientManifest
-      })
-    })
+    readyPromise = require('./build/setup-dev-server')(
+      app,
+      templatePath,
+      (bundle, options) => {
+        renderer = createBundleRenderer(bundle, Object.assign(options, {
+          runInNewContext: false
+        }))
+      }
+    )
     
     process.once('SIGUSR2', function () {
       process.kill(process.pid, 'SIGUSR2');
@@ -92,14 +96,29 @@ mongo.connect(config.mongo_url).then(db => {
       context.user = null
     }
     
-    promise.then(() => {
+    if (process.env.NODE_ENV === 'production') {
+      
       renderer.renderToString(context, (err, html) => {
         if (err) {
+          console.log('renderToString err')
           console.dir(err)
         }
         res.end(html)
       })
-    })
+      
+    } else if (process.env.NODE_ENV === 'development') {
+      
+      readyPromise.then(() => {
+        renderer.renderToString(context, (err, html) => {
+          if (err) {
+            console.log('renderToString err')
+            console.dir(err)
+          }
+          res.end(html)
+        })
+      })
+      
+    }
   })
   
   const server = http.createServer(app);
@@ -142,10 +161,13 @@ mongo.connect(config.mongo_url).then(db => {
   })
   
   // Start web server
-  server.listen(config.server_port, function () {
+  server.listen(config.server_port, () => {
     console.log('Listening on %d', server.address().port);
   })
   
 }).catch(err => {
+
+  console.log('server.js catch err')
   console.dir(err)
+  
 })
