@@ -90,11 +90,12 @@ mongo.connect(config.mongo_url).then(db => {
     }
     
     if (req.isAuthenticated()) {
-      console.log('server.js')
       context.user = req.user
     } else {
       context.user = null
     }
+    
+    console.log('ENV ' + process.env.NODE_ENV)
     
     if (process.env.NODE_ENV === 'production') {
       
@@ -157,6 +158,12 @@ mongo.connect(config.mongo_url).then(db => {
         r => { ws.send(JSON.stringify({ job_id: message.job_id, resolve: r })) },
         e => { ws.send(JSON.stringify({ job_id: message.job_id, reject: e })) }
       )
+    })
+    
+    // https://github.com/websockets/ws/issues/1256#issuecomment-352288884
+    ws.on('error', error => {
+      console.log('server.js ws.on error')
+      console.dir(error)
     })
   })
   
