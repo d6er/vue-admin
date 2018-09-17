@@ -7,23 +7,28 @@
   ],
   "fields": [
     {
-      "name": "subject",
+      "name": "Subject",
+      "field": "subject",
       "type": "text"
     },
     {
-      "name": "to",
+      "name": "To",
+      "field": "to",
       "type": "text"
     },
     {
-      "name": "from",
+      "name": "From",
+      "field": "from",
       "type": "text"
     },
     {
-      "name": "date",
+      "name": "Date",
+      "field": "date",
       "type": "datetime"
     },
     {
-      "name": "labelIds",
+      "name": "Label",
+      "field": "labelIds",
       "type": "array"
     },
     {
@@ -32,11 +37,13 @@
       "type": "text"
     },
     {
-      "name": "historyId",
+      "name": "History ID",
+      "field": "historyId",
       "type": "text"
     },
     {
-      "name": "account",
+      "name": "Account",
+      "field": "account",
       "type": "text"
     }
   ],

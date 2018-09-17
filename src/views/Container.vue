@@ -22,6 +22,7 @@
             {{ $route.params.list }}
           </p>
           <FilterTree/>
+          <hr/>
           <p class="menu-label">
             <span class="icon">
               <i class="fas fa-user" aria-hidden="true"></i>

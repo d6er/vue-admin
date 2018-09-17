@@ -34,12 +34,16 @@ export function createRouter (store) {
   // dynamic child component for list
   let listRoutes = []
   config.lists.map(list => {
-    let route = {
+    listRoutes.push({
+      path: '/:list(' + list.name + ')',
+      beforeEnter: requireAuth,
+      component: () => import('./components/' + list.name + '/list/Column.vue')
+    })
+    listRoutes.push({
       path: '/:list(' + list.name + ')/:filter/p:page(\\d+)?',
       beforeEnter: requireAuth,
       component: () => import('./components/' + list.name + '/list/Column.vue')
-    }
-    listRoutes.push(route)
+    })
   })
   
   // dynamic child component for detail tabs
@@ -100,20 +104,24 @@ export function createRouter (store) {
           }
         ]
       },
+      /*
       {
         path: '/:list(' + listsRegExp + ')',
         beforeEnter: requireAuth,
+        component: () => import('./views/List.vue'),
+        children: [{
+          component: () => import('./components/' + to.params.list + '/list/Column.vue')
+        }]
         redirect: to => {
           let list = store.state.lists.find(e => e.name == to.params.list)
           let path = to.fullPath
           if (list.filters[0]) {
             path += '/' + list.filters[0].name
-          } else {
-            path += '/all' // todo: this is temporary path
           }
           return path
         }
       }
+      */
     ]
   })
 }

@@ -2,7 +2,8 @@
   <nav class="navbar is-fixed-top">
     <div class="navbar-brand">
       <router-link v-for="list in $store.state.lists" :key="list.name" :to="'/' + list.name"
-                   class="navbar-item is-tab is-capitalized">
+                   class="navbar-item is-tab is-capitalized"
+                   :class="{ 'is-active': isActiveTab(list.name) }">
         <span class="icon">
           <i :class="list.icon"></i>
         </span>
@@ -33,6 +34,9 @@ export default {
         return this.$store.state.user.username
       }
     },
+    list () {
+      return this.$store.state.lists.find(list => list.name == this.$route.params.list)
+    },
     notification () {
       return this.$store.state.notification
     }
@@ -43,6 +47,9 @@ export default {
     },
     clearNotification () {
       this.$store.commit('clearNotification')
+    },
+    isActiveTab (listName) {
+      return listName == this.list.name
     }
   }
 }

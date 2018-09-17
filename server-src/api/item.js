@@ -212,8 +212,8 @@ const methods = {
         filterObj = filterForm
       }
       
-      let query = methods.convertQueries(filterObj.queries)
-      let sort = methods.convertSorting(filterObj.sorting)
+      let query = filterObj ? methods.convertQueries(filterObj.queries) : {}
+      let sort = filterObj ? methods.convertSorting(filterObj.sorting) : {}
       let cursor = db.collection(list + '.' + user_id).find(query)
       
       return cursor.sort(sort).skip(skip).limit(limit).toArray().then(items => {
@@ -232,8 +232,17 @@ const methods = {
             paging: paging,
             mergedFilter: filterObj
           }
+        }).catch(e => {
+          console.log('fetchItems2')
+          console.dir(e)
         })
+      }).catch(e => {
+        console.log('fetchItems1')
+        console.dir(e)
       })
+    }).catch(e => {
+      console.log('fetchItems0')
+      console.dir(e)
     })
     
   },
