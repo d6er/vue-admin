@@ -229,8 +229,7 @@ const methods = {
           
           return {
             items: items,
-            paging: paging,
-            mergedFilter: filterObj
+            paging: paging
           }
         }).catch(e => {
           console.log('fetchItems2')

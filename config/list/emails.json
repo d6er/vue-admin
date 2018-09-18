@@ -32,7 +32,7 @@
       "type": "array"
     },
     {
-      "name": "mimeType",
+      "name": "MIME Type",
       "field": "payload.mimeType",
       "type": "text"
     },

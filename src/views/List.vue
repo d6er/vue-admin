@@ -155,11 +155,14 @@ export default {
   },
     
   computed: {
-    items () {
-      return this.$store.state.lists.find(l => l.name == this.$route.params.list).items
+    list () {
+      return this.$store.state.lists.find(list => list.name == this.$route.params.list)
     },
     filter () {
-      return this.$store.state.mergedFilter
+      return this.list.filters.find(filter => filter.name == this.$route.params.filter)
+    },
+    items () {
+      return this.list.items
     },
     prevPage () {
       let page = this.$route.params.page ? parseInt(this.$route.params.page) : 1

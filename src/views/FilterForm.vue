@@ -14,7 +14,7 @@
             <span class="select is-small">
               <select v-model="q.field">
                 <option value="" disabled hidden>(field)</option>
-                <option v-for="field in list.fields">
+                <option v-for="field in list.fields" :value="field.field">
                   {{ field.name }}
                 </option>
               </select>
@@ -56,7 +56,7 @@
             <span class="select is-small">
               <select v-model="s.field">
                 <option value="" disabled hidden>(field)</option>
-                <option v-for="field in list.fields">
+                <option v-for="field in list.fields" :value="field.field">
                   {{ field.name }}
                 </option>
               </select>
@@ -92,7 +92,7 @@
             <span class="select is-small">
               <select v-model="filter.columns[idx]">
                 <option value="" disabled hidden>(field)</option>
-                <option v-for="field in list.fields">
+                <option v-for="field in list.fields" :value="field.field">
                   {{ field.name }}
                 </option>
               </select>

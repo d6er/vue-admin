@@ -22,8 +22,6 @@ export function createStore () {
       
       paging: [],
       
-      mergedFilter: {},
-      
       filterForm: {},
       
       currentList: {},
