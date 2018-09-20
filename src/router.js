@@ -21,6 +21,7 @@ export function createRouter (store) {
   
   function checkAuth (to, from, next) {
     if (store.state.user) {
+      console.dir(store.state.lists)
       let path = '/' + store.state.lists[0].name + '/' + store.state.lists[0].filters[0].name
       next(path)
     } else {

@@ -45,7 +45,6 @@
   "defaultFilters": [
     {
       "name": "all",
-      "parent": "",
       "foreach": "",
       "queries": [],
       "sorting": [
@@ -68,7 +67,6 @@
     },
     {
       "name": "account",
-      "parent": "",
       "foreach": "account",
       "queries": [],
       "sorting": [
@@ -91,13 +89,11 @@
     },
     {
       "name": "status",
-      "parent": "all",
       "foreach": "status",
       "queries": []
     },
     {
       "name": "status",
-      "parent": "account",
       "foreach": "status",
       "queries": []
     }

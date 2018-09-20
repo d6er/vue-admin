@@ -1,7 +1,8 @@
 <template>
   <nav class="navbar is-fixed-top">
     <div class="navbar-brand">
-      <router-link v-for="list in $store.state.lists" :key="list.name" :to="'/' + list.name"
+      <router-link v-for="list in $store.state.lists" :key="list.name"
+                   :to="'/' + list.name + (list.filters ? '/' + list.filters[0].name : '')"
                    class="navbar-item is-tab is-capitalized"
                    :class="{ 'is-active': isActiveTab(list.name) }">
         <span class="icon">
