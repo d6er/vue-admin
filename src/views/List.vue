@@ -93,7 +93,7 @@
     
     <FilterForm v-if="$store.state.isFilterFormActive"/>
     
-    <table class="table is-narrow is-fullwidth">
+    <table v-if="filter" class="table is-narrow is-fullwidth">
       <thead>
         <tr>
           <th>

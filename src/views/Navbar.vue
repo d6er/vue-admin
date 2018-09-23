@@ -2,7 +2,7 @@
   <nav class="navbar is-fixed-top">
     <div class="navbar-brand">
       <router-link v-for="list in $store.state.lists" :key="list.name"
-                   :to="'/' + list.name + (list.filters ? '/' + list.filters[0].name : '')"
+                   :to="'/' + list.name + (list.filters.length ? '/' + list.filters[0].name : '')"
                    class="navbar-item is-tab is-capitalized"
                    :class="{ 'is-active': isActiveTab(list.name) }">
         <span class="icon">
@@ -50,7 +50,7 @@ export default {
       this.$store.commit('clearNotification')
     },
     isActiveTab (listName) {
-      return listName == this.list.name
+      return this.list && listName == this.list.name
     }
   }
 }

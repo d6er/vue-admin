@@ -49,7 +49,7 @@
   ],
   "defaultFilters": [
     {
-      "name": "inbox",
+      "name": "Inbox",
       "queries": [
         {
           "field": "labelIds",
@@ -70,7 +70,7 @@
       ]
     },
     {
-      "name": "sent",
+      "name": "Sent",
       "queries": [
         {
           "field": "labelIds",
@@ -91,7 +91,7 @@
       ]
     },
     {
-      "name": "unread",
+      "name": "Unread",
       "queries": [
         {
           "field": "labelIds",
@@ -112,8 +112,7 @@
       ]
     },
     {
-      "name": "all",
-      "foreach": "",
+      "name": "All",
       "queries": [],
       "sorting": [
         {
@@ -125,6 +124,9 @@
         "from",
         "subject",
         "date"
+      ],
+      "drilldowns": [
+        "account"
       ]
     }
   ]

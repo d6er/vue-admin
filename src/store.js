@@ -12,13 +12,11 @@ export function createStore () {
     
     state: {
       
-      lists: config.lists,
-      
       user: null,
       
-      accounts: [ 'Account1', 'Account2', 'Account3' ],
+      accounts: [],
       
-      status: [ 'published', 'unpublished', 'draft', 'trash' ],
+      lists: config.lists,
       
       paging: [],
       
@@ -80,12 +78,19 @@ export function createStore () {
           if (data.action == 'fetchFilters') {
             commit('setFilters', payload)
           }
+          
           if (data.action == 'saveFilter') {
             commit('setNotification', 'Filter has been saved.')
-            commit('setFilters', payload)
           }
           if (data.action == 'deleteFilter') {
             commit('setNotification', 'Filter has been deleted.')
+          }
+          if (data.action == 'restoreDefaultFilters') {
+            commit('setNotification', 'Default filters have been restored.')
+          }
+          if (data.action == 'saveFilter'
+              || data.action == 'deleteFilter'
+              || data.action == 'restoreDefaultFilters') {
             commit('setFilters', payload)
           }
           
@@ -132,7 +137,7 @@ export function createStore () {
       },
       
       setFilters (state, payload) {
-        let list = state.lists.find(l => l.name == payload.callData.list)
+        let list = state.lists.find(l => l.name == payload.callData.listName)
         list.filters = payload.result
       },
       

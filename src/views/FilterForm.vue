@@ -107,21 +107,34 @@
           </p>
         </div>
         <a @click="addColumn" class="button is-text is-small">Add column</a>
-        
       </div>
       <div class="column is-narrow">
-        <div class="field">
-          <label class="label">Sub filter</label>
-          <div class="control">
+        <label class="label">
+          <span class="icon is-small">
+            <i class="fas fa-sitemap"></i>
+          </span>
+          Drill down
+        </label>
+        <div class="field has-addons" v-for="(c, idx) in filter.drilldowns">
+          <p class="control">
             <span class="select is-small">
-              <select v-model="filter.foreach">
-                <option value="">(field)</option>
-                <option>account</option>
-                <option>status</option>
+              <select v-model="filter.drilldowns[idx]">
+                <option value="" disabled hidden>(field)</option>
+                <option v-for="field in list.fields" :value="field.field">
+                  {{ field.name }}
+                </option>
               </select>
             </span>
-          </div>
+          </p>
+          <p class="control">
+            <button @click="deleteDrillDown(idx)" class="button is-small">
+              <span class="icon is-small">
+                <i class="fa fa-times" aria-hidden="true"></i>
+              </span>
+            </button>
+          </p>
         </div>
+        <a @click="addDrillDown" class="button is-text is-small">Add drill down</a>
       </div>
       <div class="column is-narrow">
         <div class="field">
@@ -158,6 +171,11 @@
         <div class="level-item">
           <a @click="deleteFilter" class="button is-text is-small">
             Delete this filter
+          </a>
+        </div>
+        <div class="level-item">
+          <a @click="restoreDefaultFilters" class="button is-text is-small">
+            Restore default filters
           </a>
         </div>
       </div>
@@ -202,17 +220,17 @@ export default {
   
   methods: {
     
-    handleRouteChange() {
+    handleRouteChange () {
       let path = this.$route.params.filter.split(',')
       let arr = path[path.length-1].split(/:/)
       let refFilter = this.list.filters.find(filter => filter.name == arr[0])
       this.filter = JSON.parse(JSON.stringify(refFilter)) // deep copy
     },
     
-    saveFilter() {
+    saveFilter () {
       let apiData = {
         action: 'saveFilter',
-        list: this.list.name,
+        listName: this.list.name,
         filter: this.filter
       }
       this.$store.dispatch('callApi', apiData).then(r => {
@@ -221,11 +239,11 @@ export default {
       })
     },
     
-    createFilter() {
+    createFilter () {
       delete this.filter._id
       let apiData = {
         action: 'saveFilter',
-        list: this.list.name,
+        listName: this.list.name,
         filter: this.filter
       }
       this.$store.dispatch('callApi', apiData).then(r => {
@@ -234,10 +252,10 @@ export default {
       })
     },
     
-    deleteFilter() {
+    deleteFilter () {
       let apiData = {
         action: 'deleteFilter',
-        list: this.list.name,
+        listName: this.list.name,
         filter: this.filter
       }
       this.$store.dispatch('callApi', apiData).then(r => {
@@ -246,33 +264,59 @@ export default {
       })
     },
     
-    addQuery() {
+    restoreDefaultFilters () {
+      let apiData = {
+        action: 'restoreDefaultFilters',
+        listName: this.list.name
+      }
+      this.$store.dispatch('callApi', apiData).then(r => {
+        this.$store.commit('toggleFilterForm')
+        this.$router.replace('/' + this.list.name + '/' + this.list.filters[0].name)
+      })
+    },
+    
+    addQuery () {
       const idx = this.filter.queries.length
       this.$set(this.filter.queries, idx, { field: '', condition: '', value: '' })
     },
     
-    addSorting() {
+    addSorting () {
       const idx = this.filter.sorting.length
       this.$set(this.filter.sorting, idx, { field: '', order: 'asc' })
     },
     
-    addColumn() {
+    addColumn () {
       const idx = this.filter.columns.length
       this.$set(this.filter.columns, idx, '')
     },
     
-    deleteQuery(idx) {
+    addDrillDown () {
+      if (this.filter.drilldowns) {
+        const idx = this.filter.drilldowns.length
+        this.$set(this.filter.drilldowns, idx, '')
+      } else {
+        this.$set(this.filter, 'drilldowns', [ '' ])
+      }
+      console.log('addDrillDown()')
+      console.dir(this.filter)
+    },
+    
+    deleteQuery (idx) {
       this.$delete(this.filter.queries, idx)
     },
     
-    deleteSorting(idx) {
+    deleteSorting (idx) {
       this.$delete(this.filter.sorting, idx)
     },
     
-    deleteColumn(idx) {
+    deleteColumn (idx) {
       this.$delete(this.filter.columns, idx)
     },
-    
+
+    deleteDrillDown (idx) {
+      this.$delete(this.filter.drilldowns, idx)
+    },
+
     toggleFilterForm () {
       this.$store.commit('toggleFilterForm')
     }

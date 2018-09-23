@@ -8,6 +8,7 @@ const methods = {
     
     return db.collection('users').findOne({ username: username }).then(r => {
       
+      console.log('user.js check exist')
       return new Promise((resolve, reject) => {
         if (r) {
           reject('username ' + username + ' already exists')
@@ -18,10 +19,12 @@ const methods = {
       
     }).then(() => {
       
+      console.log('user.js getNextId')
       return mongo.getNextId('users')
       
     }).then(r => {
       
+      console.log('user.js insert')
       let user = {
         _id: r.value.seq,
         username: username,
@@ -33,10 +36,12 @@ const methods = {
       
     }).then(user => {
       
-      return filter.copyDefaultFilters({ user_id: user._id })
+      console.log('user.js copyDefaultFiltersAllLists')
+      return filter.copyDefaultFiltersAllLists({ user_id: user._id })
       
     }).then(() => {
       
+      console.log('user.js createUser last')
       return
       
     })
