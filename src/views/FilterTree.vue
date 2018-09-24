@@ -33,16 +33,15 @@ export default {
       return this.$store.state.lists.find(list => list.name == this.$route.params.list)
     },
     menuItems () {
-      if (this.depth) {
-        let filter = this.list.filters.find(filter => filter.name == this.arrPath[0])
-        let drilldownField = filter.drilldowns[this.depth - 1]
-        if (drilldownField == 'account') {
-          return this.$store.state.accounts.map(account => account.emails[0].value)
-        } else {
-          return [ drilldownField ]
-        }
-      } else {
+      if (this.depth == 0) {
         return this.list.filters.map(filter => filter.name)
+      }
+      let filter = this.list.filters.find(filter => filter.name == this.arrPath[0])
+      let drilldownField = filter.drilldowns[this.depth - 1]
+      if (drilldownField == 'account') {
+        return this.$store.state.accounts.map(account => account.emails[0].value)
+      } else {
+        return [ drilldownField ]
       }
     },
     path () {
