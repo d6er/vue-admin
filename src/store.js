@@ -58,6 +58,11 @@ export function createStore () {
             callData: data
           }
           
+          // User
+          if (data.action == 'deleteUser') {
+            commit('deleteUser', payload)
+          }
+          
           // Account
           if (data.action == 'fetchAccounts') {
             commit('setAccounts', payload)
@@ -108,7 +113,12 @@ export function createStore () {
     
     mutations: {
       
-      // filter
+      // User
+      delteUser (state, payload) {
+        Vue.$delete(state, 'user')
+      },
+      
+      // Filter
       setFilterForm (state, filterForm) {
         state.filterForm = filterForm
       },
@@ -117,7 +127,7 @@ export function createStore () {
         state.currentList = list
       },
       
-      // item
+      // Item
       // todo: use constant for function names.
       // https://vuex.vuejs.org/en/mutations.html
       setItems (state, payload) {
