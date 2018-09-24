@@ -58,6 +58,31 @@ export function createStore () {
             callData: data
           }
           
+          // Account
+          if (data.action == 'fetchAccounts') {
+            commit('setAccounts', payload)
+          }
+          
+          // Filter
+          if (data.action == 'fetchFilters') {
+            commit('setFilters', payload)
+          }
+          if (data.action == 'saveFilter') {
+            commit('setNotification', 'Filter has been saved.')
+          }
+          if (data.action == 'deleteFilter') {
+            commit('setNotification', 'Filter has been deleted.')
+          }
+          if (data.action == 'restoreDefaultFilters') {
+            commit('setNotification', 'Default filters have been restored.')
+          }
+          if (data.action == 'saveFilter'
+              || data.action == 'deleteFilter'
+              || data.action == 'restoreDefaultFilters') {
+            commit('setFilters', payload)
+          }
+          
+          // Item
           // todo: map action and commit
           // https://github.com/vuejs/vuex/issues/755
           if (data.action == 'fetchItems' || data.action == 'refreshList') {
@@ -74,24 +99,6 @@ export function createStore () {
           }
           if (data.action == 'uploadImage') {
             //console.dir(payload)
-          }
-          if (data.action == 'fetchFilters') {
-            commit('setFilters', payload)
-          }
-          
-          if (data.action == 'saveFilter') {
-            commit('setNotification', 'Filter has been saved.')
-          }
-          if (data.action == 'deleteFilter') {
-            commit('setNotification', 'Filter has been deleted.')
-          }
-          if (data.action == 'restoreDefaultFilters') {
-            commit('setNotification', 'Default filters have been restored.')
-          }
-          if (data.action == 'saveFilter'
-              || data.action == 'deleteFilter'
-              || data.action == 'restoreDefaultFilters') {
-            commit('setFilters', payload)
           }
           
           return result
@@ -127,6 +134,10 @@ export function createStore () {
       
       clearItems (state) {
         state.items = []
+      },
+      
+      setAccounts (state, payload) {
+        state.accounts = payload.result
       },
       
       setItem (state, payload) {

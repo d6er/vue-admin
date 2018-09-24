@@ -67,6 +67,10 @@
         "from",
         "subject",
         "date"
+      ],
+      "drilldowns": [
+        "account",
+        "payload.mimeType"
       ]
     },
     {
@@ -112,7 +116,7 @@
       ]
     },
     {
-      "name": "All",
+      "name": "All Mail",
       "queries": [],
       "sorting": [
         {

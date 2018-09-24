@@ -45,7 +45,7 @@
                   <th></th>
                 </thead>
                 <tbody>
-                  <tr v-for="account in $store.state.user.accounts">
+                  <tr v-for="account in $store.state.accounts">
                     <td class="is-capitalized">
                       {{ account.provider }}
                     </td>
@@ -93,15 +93,18 @@ export default {
   
   computed: {
     username () {
-      if (this.$store.state.user) {
-        return this.$store.state.user.displayName
-      } else {
-        return this.$store.state.user.username
-      }
+      return this.$store.state.user.username
     },
     timezone () {
       return moment.tz.guess()
     }
+  },
+  
+  asyncData ({ store }) {
+    let apiData = {
+      action: 'fetchAccounts'
+    }
+    return store.dispatch('callApi', apiData)
   },
   
   methods: {

@@ -2,6 +2,7 @@ const moment = require('moment-timezone')
 
 const config_client = require('../../config/client')
 const apiUser = require('./user')
+const apiAccount = require('./account')
 const gmail = require('./gmail')
 const hackerNews = require('./hacker-news')
 const wsPool = require('../websocket-pool')
@@ -20,91 +21,15 @@ const methods = {
       return hackerNews.syncTopStories(user_id)
     }
     
-    if (list == 'emails') {
-    }
-    
-    return apiUser.getUser(user_id).then(user => {
+    return apiAccount.fetchAccounts(user_id).then(accounts => {
       
-      return user.accounts.filter(account => account.provider == 'google')
+      return accounts.filter(account => account.provider == 'google')
       
     }).then(googleAccounts => {
       
       return Promise.all(googleAccounts.map(account => {
         return gmail.syncItems(user_id, account)
       }))
-      
-      /*
-      return Promise.all(googleAccounts.map(account => {
-        
-        let oauth2Client = gmail.getOAuth2Client(account)
-        
-        return gmail.getMaxHistoryId(user_id, list, account).then(r => {
-          
-          if (r && r.historyId) {
-            
-            // partial sync
-            return gmail.historyList(oauth2Client, r.historyId).then(r => {
-              let message_ids = []
-              if (r.history) {
-                r.history.map(e => {
-                  if (e.messages) {
-                    e.messages.map(message => {
-                      message_ids.push(message.id)
-                    })
-                  }
-                })
-              }
-              message_ids = [...new Set(message_ids)] // note: unique array
-              return message_ids
-            })
-            
-          } else {
-            
-            // full sync
-            return gmail.messagesList(oauth2Client).then(r => {
-              let message_ids = []
-              r.messages.map(message => {
-                message_ids.push(message.id)
-              })
-              return message_ids
-            })
-          }
-          
-        }).then(message_ids => {
-          
-          if (message_ids.length == 0) {
-            return
-          }
-          
-          return Promise.all(message_ids.map((message_id, idx) => {
-            
-            return new Promise((resolve, reject) => {
-              setTimeout(() => {
-                
-                let count = '(' + idx + '/' + message_ids.length + ')'
-                wsPool.send(user_id, 'Refreshing ' + account.emails[0].value + ' ' + count)
-                
-                return gmail.messagesGet(oauth2Client, message_id).then(responseMessage => {
-                  let converted = gmail.convertMessage(responseMessage)
-                  converted.account = account.emails[0].value
-                  return methods.saveItem({ user_id: user_id,
-                                            list: list,
-                                            item: converted })
-                }).then(r => {
-                  resolve()
-                }).catch(e => {
-                  resolve()
-                })
-              }, idx * 200)
-            })
-            
-          }))
-        }).catch(e => {
-          console.dir(e)
-          return
-        })
-      }))
-      */
       
     }).then(savedResults => {
       wsPool.send(user_id, 'Refreshed.')

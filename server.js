@@ -146,6 +146,8 @@ mongo.connect(config.mongo_url).then(db => {
       
       const message = JSON.parse(json)
       
+      console.log('ws: ' + message.data.action)
+      
       if (message.data.action != 'createUser') {
         if (!req.session.passport.hasOwnProperty('user')) {
           console.log('not auth')

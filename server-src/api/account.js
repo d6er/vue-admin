@@ -3,37 +3,22 @@ const db = mongo.getConnection()
 
 const methods = {
   
-  addAccount: function (user_id, account) {
-    
-    let users = db.collection('users')
-    
-    return users.update(
-      {
-        _id: user_id,
-        accounts: {
-          $elemMatch: {
-            provider: account.provider,
-            id: account.id
-          }
-        }
-      },
-      { $set: { 'accounts.$': account } },
-      { safe: true }
-    ).then(r => {
-      console.dir(r.result)
-      if (r.result.n == 0) {
-        return users.update(
-          { _id: user_id },
-          { $addToSet: { 'accounts': account } },
-          { safe: true }
-        )
-      }
-      return r;
-    })
-    
+  addAccount: (user_id, account) => {
+    return db.collection('accounts').updateOne({ user_id: user_id,
+                                                 provider: account.provider,
+                                                 id: account.id },
+                                               { $set: account },
+                                               { upsert: true })
   },
   
-  removeAccount: function (user_id, account) {
+  fetchAccounts: ({ user_id }) => {
+    let query = {
+      user_id: user_id
+    }
+    return db.collection('accounts').find(query).toArray()
+  },
+  
+  removeAccount: (user_id, account) => {
     
   }
   

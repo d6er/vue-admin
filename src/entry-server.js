@@ -14,21 +14,25 @@ export default context => {
       
       return new Promise((resolve, reject) => {
         
-        if (context.user) {
-          // fetch filter data and set to store (for redirect from / path)
-          let query = {
-            user_id: context.user._id,
-          }
-          // todo: exclude user_id from result
-          db.collection('filters').find(query).toArray().then(filters => {
-            store.state.lists.forEach(list => {
-              list.filters = filters.filter(f => f.list == list.name)
-            })
-            resolve()
-          })
-        } else {
+        if (!context.user) {
           resolve()
         }
+
+        // fetch filter data and set to store (for redirect from / path)
+        let query = {
+          user_id: context.user._id,
+        }
+        // todo: exclude user_id from result
+        db.collection('filters').find(query).toArray().then(filters => {
+          store.state.lists.forEach(list => {
+            list.filters = filters.filter(f => f.list == list.name)
+          })
+        }).then(() => {
+          db.collection('accounts').find(query).toArray().then(accounts => {
+            store.state.accounts = accounts
+          })
+          resolve()
+        })
         
       }).then(() => {
         
