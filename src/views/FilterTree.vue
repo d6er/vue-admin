@@ -1,23 +1,12 @@
 <template>
   <ul :class="{ 'menu-list': depth == 0 }">
-    <template v-for="filter in filters">
+    <template v-for="menuItem in menuItems">
       <li>
-        <router-link :to="getFilterUrl(filter.name)"
-                     :class="{ 'is-active': isActive(filter.name) }"
-                     class="is-capitalized">
-          {{ filter.name }}
+        <router-link :to="getFilterUrl(menuItem)" :class="{ 'is-active': isActive(menuItem) }">
+          {{ menuItem }}
         </router-link>
-        <FilterTree v-if="hasChildren(filter.name) && filter.name == path[depth]"
-                    :arrPath="[...arrPath, filter.name]"/>
-      </li>
-      <li v-if="filter.foreach != ''" v-for="elm in $store.state[filter.foreach]">
-        <router-link :to="getFilterUrl(filter.name + ':' + elm)"
-                     :class="{ 'is-active': isActive(filter.name + ':' + elm) }"
-                     class="is-capitalized">
-          {{ elm }}
-        </router-link>
-        <FilterTree v-if="hasChildren(filter.name) && filter.name + ':' + elm == path[depth]"
-                    :arrPath="[...arrPath, filter.name + ':' + elm]"/>
+        <FilterTree v-if="hasDrillDowns(menuItem) && menuItem == path[depth]"
+                    :arrPath="[...arrPath, menuItem]"/>
       </li>
     </template>
   </ul>
@@ -36,17 +25,6 @@ export default {
     }
   },
   
-  /*
-  asyncData ({ store, route: { params: { list } } }) {
-    let apiData = {
-      action: 'fetchFilters',
-      list: list
-    }
-    console.dir(apiData)
-    return store.dispatch('callApi', apiData)
-  },
-  */
-  
   computed: {
     depth () {
       return this.arrPath.length
@@ -54,23 +32,39 @@ export default {
     list () {
       return this.$store.state.lists.find(list => list.name == this.$route.params.list)
     },
-    filters () {
-      return this.list.filters
+    menuItems () {
+      if (this.depth) {
+        let filter = this.list.filters.find(filter => filter.name == this.arrPath[0])
+        let drilldownField = filter.drilldowns[this.depth - 1]
+        if (drilldownField == 'account') {
+          return this.$store.state.accounts.map(account => account.emails[0].value)
+        } else {
+          return [ drilldownField ]
+        }
+      } else {
+        return this.list.filters.map(filter => filter.name)
+      }
     },
     path () {
-      return this.$route.params.filter.split(',')
+      return this.$route.params.filter.split(':')
     }
   },
   
   methods: {
-    getFilterUrl(filterName) {
-      return '/' + this.$route.params.list + '/' + [ ...this.arrPath, filterName ].join(',')
+    getFilterUrl(menuItem) {
+      return '/' + this.$route.params.list + '/' + [ ...this.arrPath, menuItem ].join(':')
     },
-    hasChildren(filterName) {
-      return this.list.filters.some(filter => filter.parent == filterName)
+    hasDrillDowns(menuItem) {
+      let filter = null
+      if (this.depth == 0) {
+        filter = this.list.filters.find(filter => filter.name == menuItem)
+      } else {
+        filter = this.list.filters.find(filter => filter.name == this.arrPath[0])
+      }
+      return filter.drilldowns && filter.drilldowns.length > this.depth
     },
-    isActive(filterName) {
-      return [ ...this.arrPath, filterName ].join(',') == this.$route.params.filter
+    isActive(menuItem) {
+      return [ ...this.arrPath, menuItem ].join(':') == this.$route.params.filter
     }
   }
 }

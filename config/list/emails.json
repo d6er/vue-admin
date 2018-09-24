@@ -70,7 +70,7 @@
       ],
       "drilldowns": [
         "account",
-        "payload.mimeType"
+        "account"
       ]
     },
     {
