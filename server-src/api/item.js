@@ -126,12 +126,23 @@ const methods = {
     
     let limit = 30
     let skip = page ? limit * ( page - 1 ) : 0
+    let filterPath = filter.split(':')
     
     return db.collection('filters').findOne({
       user_id: user_id,
       list: list,
-      name: filter
+      name: filterPath[0]
     }).then(filterObj => {
+      
+      if (filterPath.length > 1) {
+        filterObj.drilldowns.forEach((field, index) => {
+          filterObj.queries.push({
+            field: field,
+            condition: 'is equal to',
+            value: filterPath[index + 1]
+          })
+        })
+      }
       
       if (filterForm) {
         filterObj = filterForm
@@ -156,19 +167,10 @@ const methods = {
             items: items,
             paging: paging
           }
-        }).catch(e => {
-          console.log('fetchItems2')
-          console.dir(e)
         })
-      }).catch(e => {
-        console.log('fetchItems1')
-        console.dir(e)
       })
-    }).catch(e => {
-      console.log('fetchItems0')
-      console.dir(e)
+      
     })
-    
   },
   
   saveItem: ({ user_id, list, item }) => {
@@ -249,6 +251,18 @@ const methods = {
       } else if (q.condition == 'is greater than') {
         converted[q.field] = { $gt: q.value }
       } else if (q.condition == 'is greater than or equal') {
+        converted[q.field] = { $gte: q.value }
+      } else if (q.condition == '=') {
+        converted[q.field] = q.value
+      } else if (q.condition == '!=') {
+        converted[q.field] = { $ne: q.value }
+      } else if (q.condition == '<') {
+        converted[q.field] = { $lt: q.value }
+      } else if (q.condition == '<=') {
+        converted[q.field] = { $lte: q.value }
+      } else if (q.condition == '>') {
+        converted[q.field] = { $gt: q.value }
+      } else if (q.condition == '>=') {
         converted[q.field] = { $gte: q.value }
       } else if (q.condition == 'contains') {
         converted[q.field] = new RegExp(methods.escapeRegExp(q.value), 'i')

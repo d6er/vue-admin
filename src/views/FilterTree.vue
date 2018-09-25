@@ -40,6 +40,8 @@ export default {
       let drilldownField = filter.drilldowns[this.depth - 1]
       if (drilldownField == 'account') {
         return this.$store.state.accounts.map(account => account.emails[0].value)
+      } else if (drilldownField == 'labelIds') {
+        return [ 'UNREAD', 'IMPORTANT', 'CATEGORY_UPDATES', 'CATEGORY_PROMOTIONS' ]
       } else {
         return [ drilldownField ]
       }

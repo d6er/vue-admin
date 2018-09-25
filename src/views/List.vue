@@ -99,7 +99,7 @@
           <th>
             
           </th>
-          <th v-for="column in filter.columns" class="is-capitalized"
+          <th v-for="column in filter.columns"
               :class="{ 'is-hidden-mobile': column != 'subject' }">
             {{ column }}
           </th>
@@ -155,11 +155,14 @@ export default {
   },
     
   computed: {
+    filterPath () {
+      return this.$route.params.filter.split(':')
+    },
     list () {
       return this.$store.state.lists.find(list => list.name == this.$route.params.list)
     },
     filter () {
-      return this.list.filters.find(filter => filter.name == this.$route.params.filter)
+      return this.list.filters.find(filter => filter.name == this.filterPath[0])
     },
     items () {
       return this.list.items
