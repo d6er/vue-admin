@@ -13,6 +13,13 @@
     <template v-else-if="column == 'mimeType'">
       {{ item.payload.mimeType }}
     </template>
+    <template v-else-if="column == 'labelIds'">
+      <div class="tags">
+        <span v-for="labelId in item.labelIds" class="tag">
+          {{ labelId }}
+        </span>
+      </div>
+    </template>
     <template v-else>
       {{ item[column] }}
     </template>

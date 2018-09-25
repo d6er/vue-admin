@@ -66,6 +66,8 @@
       "columns": [
         "from",
         "subject",
+        "account",
+        "labelIds",
         "date"
       ],
       "drilldowns": [

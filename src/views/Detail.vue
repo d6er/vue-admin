@@ -58,7 +58,7 @@
     </nav>
     <div class="tabs">
       <ul>
-        <li v-for="tab in tabs">
+        <li v-for="tab in tabs" :class="{ 'is-active': tab == $route.params.tab }">
           <router-link :to="tab" replace>
             <span class="is-capitalized">{{ tab }}</span>
           </router-link>
