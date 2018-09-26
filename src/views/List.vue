@@ -101,7 +101,7 @@
           </th>
           <th v-for="column in filter.columns"
               :class="{ 'is-hidden-mobile': column != 'subject' }">
-            {{ column }}
+            {{ getFieldName(column) }}
           </th>
         </tr>
       </thead>
@@ -182,6 +182,10 @@ export default {
   },
   
   methods: {
+    
+    getFieldName(field) {
+      return this.list.fields.find(f => f.field == field).name
+    },
     
     checkAll() {
       if (this.checkedAll) {

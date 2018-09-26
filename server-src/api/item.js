@@ -45,11 +45,23 @@ const methods = {
   
   fetchItem: ({ user_id, list, filter, item_id }) => {
     
+    let filterPath = filter.split(':')
+    
     return db.collection('filters').findOne({
       user_id: user_id,
       list: list,
-      name: filter
+      name: filterPath[0]
     }).then(filterObj => {
+      
+      if (filterPath.length > 1) {
+        filterObj.drilldowns.forEach((field, index) => {
+          filterObj.queries.push({
+            field: field,
+            condition: 'is equal to',
+            value: filterPath[index + 1]
+          })
+        })
+      }
       
       filterObj.sorting.push({ field: '_id', order: 'desc' })
       
