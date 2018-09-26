@@ -52,17 +52,10 @@
         </div>
       </div>
     </div>
-    <div class="field is-horizontal">
-      <div class="field-label">
-        <label class="label">Body</label>
-      </div>
-      <div class="field-body">
-        <div class="field" style="max-width:1000px;">
-          {{ item.snippet }}
-          <hr/>
-          <pre>{{ item.body }}</pre>
-        </div>
-      </div>
+    <div v-if="item.html" class="content" v-html="item.html">
+    </div>
+    <div v-else class="field">
+      <pre>{{ item.body }}</pre>
     </div>
   </div>
 </template>

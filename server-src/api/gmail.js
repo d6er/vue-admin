@@ -110,6 +110,15 @@ const methods = {
     
     message.historyId = parseInt(message.historyId)
     
+    if (message.payload.parts) {
+      message.payload.parts.forEach(part => {
+        if (part.mimeType == 'text/html') {
+          let decoded = Buffer.from(part.body.data, 'base64').toString('utf8')
+          message.html = decoded
+        }
+      })
+    }
+    
     return message
   },
   
