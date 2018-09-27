@@ -21,7 +21,7 @@
         <div class="level-item" v-if="checkedItems.length">
           <button @click="copyItems" class="button is-small">
             <span class="icon is-small">
-              <i class="fa fa-files-o" aria-hidden="true"></i>
+              <i class="far fa-copy"></i>
             </span>
             <span>Copy</span>
           </button>
@@ -29,7 +29,7 @@
         <div class="level-item" v-if="checkedItems.length">
           <button @click="deleteItems" class="button is-small">
             <span class="icon is-small">
-              <i class="fa fa-trash-o" aria-hidden="true"></i>
+              <i class="far fa-trash-alt"></i>
             </span>
             <span>Delete</span>
           </button>
@@ -49,7 +49,10 @@
         </div>
         <div class="level-item is-hidden-mobile">
           <button @click="toggleFilterForm" class="button is-link is-small">
-            Search option
+            <span class="icon is-small">
+              <i class="fas fa-filter"></i>
+            </span>
+            <span>Filter option</span>
           </button>
         </div>
       </div>
@@ -188,10 +191,10 @@ export default {
     },
     
     checkAll() {
-      if (this.checkedAll) {
-        this.checkedItems = Object.keys(this.items).map(i => this.items[i]._id)
-      } else {
+      if (this.checkedAll) { // checkedAll is previous status before click
         this.checkedItems = []
+      } else {
+        this.checkedItems = Object.keys(this.items).map(i => this.items[i]._id)
       }
     },
     
