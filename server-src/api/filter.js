@@ -99,25 +99,43 @@ const methods = {
     methods.fetchFilters({ user_id: user_id, listName: listName }).then(filters => {
       return Promise.all(filters.map(methods.countFilteredItems))
     }).then(r => {
-      console.dir(r)
+      console.dir(r, { depth: null })
       return
     })
   },
   
   countFilteredItems: filter => {
     let query = apiItem.convertQueries(filter.queries)
-    let coll = filter.list + '.' + filter.user_id
-    return db.collection(coll).find(query).count().then(count => {
+    let coll = db.collection(filter.list + '.' + filter.user_id)
+    
+    if (filter.drilldowns) {
       
-      if (filter.drilldowns) {
-        // todo: mongo aggregate
-      }
+      let agg_id = {}
+      filter.drilldowns.map(field => {
+        agg_id[field] = '$' + field
+      })
+      console.dir(agg_id)
       
-      return {
-        name: filter.name,
-        count: count
-      }
-    })
+      return coll.aggregate([
+        { $match: query },
+        {
+          $group: {
+            _id: agg_id,
+            count: { $sum: 1 }
+          }
+        }
+      ]).toArray()
+      
+    } else {
+      
+      return coll.find(query).count().then(count => {
+        return {
+          name: filter.name,
+          count: count
+        }
+      })
+      
+    }
   },
   
   restoreDefaultFilters: ({ user_id, listName }) => {

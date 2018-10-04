@@ -94,6 +94,9 @@
         "from",
         "subject",
         "date"
+      ],
+      "drilldowns": [
+        "account"
       ]
     },
     {
@@ -115,6 +118,9 @@
         "from",
         "subject",
         "date"
+      ],
+      "drilldowns": [
+        "account"
       ]
     },
     {
