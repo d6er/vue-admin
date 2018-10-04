@@ -4,6 +4,7 @@
       <li>
         <router-link :to="getFilterUrl(menuItem)" :class="{ 'is-active': isActive(menuItem) }">
           {{ menuItem }}
+          <span class="tag is-rounded is-pulled-right">123</span>
         </router-link>
         <FilterTree v-if="hasDrillDowns(menuItem) && menuItem == path[depth]"
                     :arrPath="[...arrPath, menuItem]"/>

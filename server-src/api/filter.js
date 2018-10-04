@@ -1,5 +1,7 @@
 const config_list = require('../../config/list')
 
+const apiItem = require('./item')
+
 const mongo = require('../mongo')
 const db = mongo.getConnection()
 
@@ -19,7 +21,9 @@ const methods = {
         { $set: filter },
         { upsert: true }
       ).then(r => {
-        return methods.fetchFilters({ user_id: user_id, listName: listName })
+        return methods.buildFilterTree({ user_id: user_id, listName: listName }).then(r => {
+          return methods.fetchFilters({ user_id: user_id, listName: listName })
+        })
       })
       
     } else {
@@ -88,6 +92,31 @@ const methods = {
       return db.collection(coll).insertMany(copied_filters)
     }).then(r => {
       return methods.fetchFilters({ user_id: user_id, listName: listName })
+    })
+  },
+  
+  buildFilterTree: ({ user_id, listName }) => {
+    methods.fetchFilters({ user_id: user_id, listName: listName }).then(filters => {
+      return Promise.all(filters.map(methods.countFilteredItems))
+    }).then(r => {
+      console.dir(r)
+      return
+    })
+  },
+  
+  countFilteredItems: filter => {
+    let query = apiItem.convertQueries(filter.queries)
+    let coll = filter.list + '.' + filter.user_id
+    return db.collection(coll).find(query).count().then(count => {
+      
+      if (filter.drilldowns) {
+        // todo: mongo aggregate
+      }
+      
+      return {
+        name: filter.name,
+        count: count
+      }
     })
   },
   
