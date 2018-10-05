@@ -221,6 +221,7 @@ export default {
     copyItems() {
       let apiData = {
         action: 'copyItems',
+        list: this.$route.params.list,
         item_ids: this.checkedItems
       }
       this.$store.dispatch('callApi', apiData)

@@ -203,11 +203,11 @@ const methods = {
     }
   },
 
-  copyItems: ({ user_id, item_ids }) => {
+  copyItems: ({ user_id, list, item_ids }) => {
     
     console.dir(item_ids)
     const query = { _id: { $in: item_ids } }
-    const coll = 'items.' + user_id
+    const coll = list + '.' + user_id
 
     return db.collection(coll).find(query).toArray().then(docs => {
       
