@@ -97,64 +97,61 @@ const methods = {
   
   buildFilterTree: ({ user_id, listName }) => {
     
+    let list = config_list.find(list => list.name == listName)
     let coll = db.collection(listName + '.' + user_id)
     
     methods.fetchFilters({ user_id: user_id, listName: listName }).then(filters => {
       
       let facet = {}
       filters.map(filter => {
+        
+        // each filter
         facet[filter.name] = [
           { $match: apiItem.convertQueries(filter.queries) },
           { $count: 'count' }
         ]
+        
+        // drilldowns
         if (filter.drilldowns) {
           
           filter.drilldowns.map((field, idx) => {
-            console.log(idx + ' ' + field)
             
-            let stages = []
-
-            //stages.push({ $match: apiItem.convertQueries(filter.queries) })
-            
-            facet[filter.name + ':' + field] = [
-              { $match: apiItem.convertQueries(filter.queries) },
-              { $unwind: '$' + field },
-              {
-                $group: {
-                  _id: '$' + field,
-                  count: { $sum: 1 }
-                }
-              }
+            // match
+            let stages = [
+              { $match: apiItem.convertQueries(filter.queries) }
             ]
             
-          })
-          
-          let field = filter.drilldowns[0]
-          facet[filter.name + ':' + field] = [
-            { $match: apiItem.convertQueries(filter.queries) },
-            { $unwind: '$' + field },
-            {
-              $group: {
-                _id: '$' + field,
-                count: { $sum: 1 }
+            // unwind
+            for (let i = 0; i <= idx; i++) {
+              let fname = filter.drilldowns[i]
+              let fieldType = list.fields.find(f => f.field == fname).type
+              if (fieldType == 'array') {
+                stages.push({
+                  $unwind: '$' + fname
+                })
               }
             }
-          ]
+            
+            // group
+            let group_id = {}
+            for (let i = 0; i <= idx; i++) {
+              let agg_name = filter.drilldowns[i]
+              group_id[agg_name] = '$' + agg_name
+            }
+            stages.push({
+              $group: {
+                _id: group_id,
+                count: { $sum: 1 }
+              }
+            })
+            
+            facet[filter.name + ':' + field] = stages
+          })
           
         }
       })
-      console.dir(facet)
       
-      return coll.aggregate([
-        {
-          $facet: facet
-        }
-      ]).toArray()
-      
-      //return Promise.all(filters.map(methods.countFilteredItems))
-    }).then(r => {
-      console.dir(r, { depth: null })
-      return
+      return coll.aggregate([ { $facet: facet } ]).toArray()
     })
   },
   
