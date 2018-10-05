@@ -96,8 +96,62 @@ const methods = {
   },
   
   buildFilterTree: ({ user_id, listName }) => {
+    
+    let coll = db.collection(listName + '.' + user_id)
+    
     methods.fetchFilters({ user_id: user_id, listName: listName }).then(filters => {
-      return Promise.all(filters.map(methods.countFilteredItems))
+      
+      let facet = {}
+      filters.map(filter => {
+        facet[filter.name] = [
+          { $match: apiItem.convertQueries(filter.queries) },
+          { $count: 'count' }
+        ]
+        if (filter.drilldowns) {
+          
+          filter.drilldowns.map((field, idx) => {
+            console.log(idx + ' ' + field)
+            
+            let stages = []
+
+            //stages.push({ $match: apiItem.convertQueries(filter.queries) })
+            
+            facet[filter.name + ':' + field] = [
+              { $match: apiItem.convertQueries(filter.queries) },
+              { $unwind: '$' + field },
+              {
+                $group: {
+                  _id: '$' + field,
+                  count: { $sum: 1 }
+                }
+              }
+            ]
+            
+          })
+          
+          let field = filter.drilldowns[0]
+          facet[filter.name + ':' + field] = [
+            { $match: apiItem.convertQueries(filter.queries) },
+            { $unwind: '$' + field },
+            {
+              $group: {
+                _id: '$' + field,
+                count: { $sum: 1 }
+              }
+            }
+          ]
+          
+        }
+      })
+      console.dir(facet)
+      
+      return coll.aggregate([
+        {
+          $facet: facet
+        }
+      ]).toArray()
+      
+      //return Promise.all(filters.map(methods.countFilteredItems))
     }).then(r => {
       console.dir(r, { depth: null })
       return
