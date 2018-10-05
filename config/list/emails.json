@@ -32,6 +32,11 @@
       "type": "array"
     },
     {
+      "name": "Headers",
+      "field": "headerNames",
+      "type": "array"
+    },
+    {
       "name": "MIME Type",
       "field": "payload.mimeType",
       "type": "text"
@@ -68,11 +73,13 @@
         "subject",
         "account",
         "labelIds",
+        "headerNames",
         "date"
       ],
       "drilldowns": [
         "account",
-        "labelIds"
+        "labelIds",
+        "headerNames"
       ]
     },
     {

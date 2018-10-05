@@ -13,10 +13,10 @@
     <template v-else-if="column == 'mimeType'">
       {{ item.payload.mimeType }}
     </template>
-    <template v-else-if="column == 'labelIds'">
+    <template v-else-if="column == 'labelIds' || column == 'headerNames'">
       <div class="tags">
-        <span v-for="labelId in item.labelIds" class="tag">
-          {{ labelId }}
+        <span v-for="tag in item[column]" class="tag">
+          {{ tag }}
         </span>
       </div>
     </template>
