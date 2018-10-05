@@ -52,7 +52,7 @@ export function createRouter (store) {
     list.tabs.map(tab => {
       let tabName = tab.charAt(0).toUpperCase() + tab.slice(1);
       let route = {
-        path: '/:list(' + list.name + ')/:filter/:id(\\d\\w*)/:tab(' + tab + ')',
+        path: '/:list(' + list.name + ')/:filter/:id/:tab(' + tab + ')',
         beforeEnter: requireAuth,
         component: () => import('./components/' + list.name + '/detail/' + tabName + '.vue')
       }
@@ -97,7 +97,7 @@ export function createRouter (store) {
             children: listRoutes
           },
           {
-            path: ':id(\\d\\w*)',
+            path: ':id',
             beforeEnter: requireAuth,
             component: () => import('./views/Detail.vue'),
             children: tabRoutes

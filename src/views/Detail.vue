@@ -109,6 +109,9 @@ export default {
       // https://github.com/vuejs/vue/issues/1056
       // https://forum.vuejs.org/t/vuex-v-model-on-property-in-nested-object/6242/2
       // POINT: disconnect item from vuex
+      if (this.$route.params.id == 'new') {
+        return {}
+      }
       let index = this.list.items.findIndex(e => e._id == this.$route.params.id)
       return Object.assign({}, this.list.items[index])
     }
@@ -118,6 +121,7 @@ export default {
     save () {
       let apiData = {
         action: 'saveItem',
+        list: this.$route.params.list,
         item: this.item
       }
       this.$store.dispatch('callApi', apiData).then(r => {
