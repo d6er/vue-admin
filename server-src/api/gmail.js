@@ -119,6 +119,8 @@ const methods = {
       })
     }
     
+    message.headerNames = headers.map(header => header.name)
+    
     return message
   },
   
