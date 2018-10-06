@@ -21,9 +21,7 @@ const methods = {
         { $set: filter },
         { upsert: true }
       ).then(r => {
-        return methods.buildFilterTree({ user_id: user_id, listName: listName }).then(r => {
-          return methods.fetchFilters({ user_id: user_id, listName: listName })
-        })
+        return methods.fetchFilters({ user_id: user_id, listName: listName })
       })
       
     } else {
@@ -95,12 +93,12 @@ const methods = {
     })
   },
   
-  buildFilterTree: ({ user_id, listName }) => {
+  fetchFilterTree: ({ user_id, listName }) => {
     
     let list = config_list.find(list => list.name == listName)
     let coll = db.collection(listName + '.' + user_id)
     
-    methods.fetchFilters({ user_id: user_id, listName: listName }).then(filters => {
+    return methods.fetchFilters({ user_id: user_id, listName: listName }).then(filters => {
       
       let facet = {}
       filters.map(filter => {
@@ -145,13 +143,79 @@ const methods = {
               }
             })
             
-            facet[filter.name + ':' + field] = stages
+            // facet name
+            let facetName = filter.name
+            for (let i = 0; i <= idx; i++) {
+              facetName += ':' + filter.drilldowns[i]
+            }
+            
+            facet[facetName] = stages
           })
           
         }
       })
       
       return coll.aggregate([ { $facet: facet } ]).toArray()
+      
+    }).then(r => {
+      
+      return methods.fetchFilters({ user_id: user_id, listName: listName }).then(filters => {
+        
+        let filterTree = []
+        
+        filters.map(filter => {
+          
+          let node = {
+            name: filter.name,
+            count: r[0][filter.name][0].count
+          }
+          
+          if (filter.drilldowns) {
+            node.kids = []
+            
+            for (let i = 0; i < filter.drilldowns.length; i++) {
+              
+              let facetName = filter.name
+              for (let j = 0; j <= i; j++) {
+                facetName += ':' + filter.drilldowns[j]
+              }
+              
+              r[0][facetName].map(v => {
+                
+                if (i == 0) {
+                  
+                  node.kids.push({
+                    name: v._id[filter.drilldowns[i]],
+                    count: v.count
+                  })
+
+                } else {
+                  
+                  let currentNode = node
+                  for (let k = 0; k < i; k++) {
+                    let ddField = filter.drilldowns[k]
+                    currentNode = currentNode.kids.find(kid => kid.name == v._id[ddField])
+                  }
+                  
+                  if (!currentNode.kids) {
+                    currentNode.kids = []
+                  }
+                  currentNode.kids.push({
+                    name: v._id[filter.drilldowns[i]],
+                    count: v.count
+                  })
+                }
+                
+              })
+              
+            }
+          }
+          
+          filterTree.push(node)
+        })
+        
+        return filterTree
+      })
     })
   },
   

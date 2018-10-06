@@ -20,6 +20,11 @@
               <i class="fa fa-list" aria-hidden="true"></i>
             </span>
             {{ $route.params.list }}
+            <button @click="fetchFilterTree" class="button is-small is-pulled-right">
+               <span class="icon is-small">
+                 <i class="fa fa-sync"></i>
+               </span>
+            </button>
           </p>
           <FilterTree/>
           <hr/>
@@ -88,6 +93,13 @@ export default {
   methods: {
     toggleDropdown () {
       this.$store.commit('toggleDropdown')
+    },
+    fetchFilterTree () {
+      let apiData = {
+        action: 'fetchFilterTree',
+        listName: this.$route.params.list,
+      }
+      this.$store.dispatch('callApi', apiData)
     }
   }
 }

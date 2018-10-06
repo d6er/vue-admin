@@ -86,6 +86,9 @@ export function createStore () {
               || data.action == 'restoreDefaultFilters') {
             commit('setFilters', payload)
           }
+          if (data.action == 'fetchFilterTree') {
+            commit('setFilterTree', payload)
+          }
           
           // Item
           // todo: map action and commit
@@ -159,6 +162,11 @@ export function createStore () {
       setFilters (state, payload) {
         let list = state.lists.find(l => l.name == payload.callData.listName)
         list.filters = payload.result
+      },
+      
+      setFilterTree (state, payload) {
+        let list = state.lists.find(l => l.name == payload.callData.listName)
+        Vue.set(list, 'filterTree', payload.result)
       },
       
       // todo: delete
