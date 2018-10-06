@@ -2,12 +2,15 @@
   <ul :class="{ 'menu-list': depth == 0 }">
     <template v-for="menuItem in menuItems">
       <li>
-        <router-link :to="getFilterUrl(menuItem)" :class="{ 'is-active': isActive(menuItem) }">
-          {{ menuItem }}
-          <span class="tag is-rounded is-pulled-right">123</span>
+        <router-link :to="getFilterUrl(menuItem.name)" :class="{ 'is-active': isActive(menuItem.name) }">
+          {{ menuItem.name }}
+          <span class="tag is-rounded is-pulled-right">
+            {{ menuItem.count }}
+          </span>
         </router-link>
-        <FilterTree v-if="hasDrillDowns(menuItem) && menuItem == path[depth]"
-                    :arrPath="[...arrPath, menuItem]"/>
+        <FilterTree v-if="menuItem.kids && menuItem.name == path[depth]"
+                    :arrKids="menuItem.kids"
+                    :arrPath="[...arrPath, menuItem.name]"/>
       </li>
     </template>
   </ul>
@@ -20,6 +23,9 @@ export default {
   
   // https://vuejs.org/v2/guide/components.html#Prop-Validation
   props: {
+    arrKids: {
+      type: Array
+    },
     arrPath: {
       type: Array,
       default: () => []
@@ -35,16 +41,9 @@ export default {
     },
     menuItems () {
       if (this.depth == 0) {
-        return this.list.filters.map(filter => filter.name)
-      }
-      let filter = this.list.filters.find(filter => filter.name == this.arrPath[0])
-      let drilldownField = filter.drilldowns[this.depth - 1]
-      if (drilldownField == 'account') {
-        return this.$store.state.accounts.map(account => account.emails[0].value)
-      } else if (drilldownField == 'labelIds') {
-        return [ 'UNREAD', 'IMPORTANT', 'CATEGORY_UPDATES', 'CATEGORY_PROMOTIONS' ]
+        return this.list.filterTree
       } else {
-        return [ drilldownField ]
+        return this.arrKids
       }
     },
     path () {
