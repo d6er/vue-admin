@@ -10,7 +10,7 @@
         {{ item[column] }}
       </router-link>
     </template>
-    <template v-else-if="column == 'mimeType'">
+    <template v-else-if="column == 'payload.mimeType'">
       {{ item.payload.mimeType }}
     </template>
     <template v-else-if="column == 'labelIds' || column == 'headerNames'">

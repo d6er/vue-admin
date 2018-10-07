@@ -134,7 +134,7 @@ const methods = {
             let group_id = {}
             for (let i = 0; i <= idx; i++) {
               let agg_name = filter.drilldowns[i]
-              group_id[agg_name] = '$' + agg_name
+              group_id[agg_name.replace(/\./g, '_')] = '$' + agg_name
             }
             stages.push({
               $group: {
@@ -155,6 +155,7 @@ const methods = {
             for (let i = 0; i <= idx; i++) {
               facetName += ':' + filter.drilldowns[i]
             }
+            facetName = facetName.replace(/\./g, '_')
             
             facet[facetName] = stages
           })
@@ -190,6 +191,7 @@ const methods = {
               for (let j = 0; j <= i; j++) {
                 facetName += ':' + filter.drilldowns[j]
               }
+              facetName = facetName.replace(/\./g, '_')
               
               r[0][facetName].map(v => {
                 
@@ -204,7 +206,7 @@ const methods = {
                   
                   let currentNode = node
                   for (let k = 0; k < i; k++) {
-                    let ddField = filter.drilldowns[k]
+                    let ddField = filter.drilldowns[k].replace(/\./g, '_')
                     currentNode = currentNode.kids.find(kid => kid.name == v._id[ddField])
                   }
                   
@@ -212,7 +214,7 @@ const methods = {
                     currentNode.kids = []
                   }
                   currentNode.kids.push({
-                    name: v._id[filter.drilldowns[i]],
+                    name: v._id[filter.drilldowns[i].replace(/\./g, '_')],
                     count: v.count
                   })
                 }
@@ -227,6 +229,8 @@ const methods = {
         
         return filterTree
       })
+    }).catch(e => {
+      console.dir(e)
     })
   },
   

@@ -53,7 +53,7 @@ export default {
   
   methods: {
     getFilterUrl(menuItem) {
-      return '/' + this.$route.params.list + '/' + [ ...this.arrPath, menuItem ].join(':')
+      return '/' + this.$route.params.list + '/' + encodeURIComponent([ ...this.arrPath, menuItem ].join(':'))
     },
     hasDrillDowns(menuItem) {
       let filter = null

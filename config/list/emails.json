@@ -141,10 +141,12 @@
       "columns": [
         "from",
         "subject",
+        "payload.mimeType",
         "date"
       ],
       "drilldowns": [
-        "account"
+        "account",
+        "payload.mimeType"
       ]
     }
   ]
