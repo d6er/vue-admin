@@ -143,6 +143,13 @@ const methods = {
               }
             })
             
+            // sort
+            stages.push({
+              $sort: {
+                _id: 1
+              }
+            })
+            
             // facet name
             let facetName = filter.name
             for (let i = 0; i <= idx; i++) {
@@ -161,7 +168,7 @@ const methods = {
       
     }).then(r => {
       
-      console.dir(r, { depth: null })
+      //console.dir(r, { depth: null })
       
       return methods.fetchFilters({ user_id: user_id, listName: listName }).then(filters => {
         

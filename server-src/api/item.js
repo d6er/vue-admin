@@ -298,9 +298,7 @@ const methods = {
       expressions.push(expression)
     }
     
-    let converted = {
-      $and: expressions
-    }
+    let converted = expressions.length ? { $and: expressions } : {}
     
     return converted
   },
