@@ -179,7 +179,7 @@ const methods = {
           
           let node = {
             name: filter.name,
-            count: r[0][filter.name][0].count
+            count: r[0][filter.name].length ? r[0][filter.name][0].count : 0
           }
           
           if (filter.drilldowns) {

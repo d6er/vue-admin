@@ -130,6 +130,30 @@
       ]
     },
     {
+      "name": "Zero",
+      "queries": [
+        {
+          "field": "labelIds",
+          "condition": "is equal to",
+          "value": "Zero"
+        }
+      ],
+      "sorting": [
+        {
+          "field": "date",
+          "order": "desc"
+        }
+      ],
+      "columns": [
+        "from",
+        "subject",
+        "date"
+      ],
+      "drilldowns": [
+        "account"
+      ]
+    },
+    {
       "name": "All Mail",
       "queries": [],
       "sorting": [
