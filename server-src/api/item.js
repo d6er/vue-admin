@@ -167,6 +167,11 @@ const methods = {
       let sort = filterObj ? methods.convertSorting(filterObj.sorting) : {}
       let cursor = db.collection(list + '.' + user_id).find(query)
       
+      console.log('filterObj')
+      console.dir(filterObj.queries)
+      console.log('query')
+      console.dir(query)
+      
       return cursor.sort(sort).skip(skip).limit(limit).toArray().then(items => {
         return cursor.count().then(count => {
           
@@ -248,43 +253,55 @@ const methods = {
   },
 
   convertQueries: queries => {
-    let converted = {}
+    
+    let expressions = []
+    
     for (var i in queries) {
+      
       var q = queries[i]
       if (!q.field) continue
       if (!q.value) continue
       
+      let expression = {}
+      
       // todo: AND for multiple queries
       if (q.condition == 'is equal to') {
-        converted[q.field] = q.value
+        expression[q.field] = q.value
       } else if (q.condition == 'is not equal to') {
-        converted[q.field] = { $ne: q.value }
+        expression[q.field] = { $ne: q.value }
       } else if (q.condition == 'is less than') {
-        converted[q.field] = { $lt: q.value }
+        expression[q.field] = { $lt: q.value }
       } else if (q.condition == 'is less than or equal') {
-        converted[q.field] = { $lte: q.value }
+        expression[q.field] = { $lte: q.value }
       } else if (q.condition == 'is greater than') {
-        converted[q.field] = { $gt: q.value }
+        expression[q.field] = { $gt: q.value }
       } else if (q.condition == 'is greater than or equal') {
-        converted[q.field] = { $gte: q.value }
+        expression[q.field] = { $gte: q.value }
       } else if (q.condition == '=') {
-        converted[q.field] = q.value
+        expression[q.field] = q.value
       } else if (q.condition == '!=') {
-        converted[q.field] = { $ne: q.value }
+        expression[q.field] = { $ne: q.value }
       } else if (q.condition == '<') {
-        converted[q.field] = { $lt: q.value }
+        expression[q.field] = { $lt: q.value }
       } else if (q.condition == '<=') {
-        converted[q.field] = { $lte: q.value }
+        expression[q.field] = { $lte: q.value }
       } else if (q.condition == '>') {
-        converted[q.field] = { $gt: q.value }
+        expression[q.field] = { $gt: q.value }
       } else if (q.condition == '>=') {
-        converted[q.field] = { $gte: q.value }
+        expression[q.field] = { $gte: q.value }
       } else if (q.condition == 'contains') {
-        converted[q.field] = new RegExp(methods.escapeRegExp(q.value), 'i')
+        expression[q.field] = new RegExp(methods.escapeRegExp(q.value), 'i')
       } else if (q.condition == 'does not contain') {
-        converted[q.field] = { $ne: new RegExp(methods.escapeRegExp(q.value), 'i') }
+        expression[q.field] = { $ne: new RegExp(methods.escapeRegExp(q.value), 'i') }
       }
+      
+      expressions.push(expression)
     }
+    
+    let converted = {
+      $and: expressions
+    }
+    
     return converted
   },
   

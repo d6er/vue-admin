@@ -155,9 +155,13 @@ const methods = {
         }
       })
       
+      console.dir(facet, { depth: null })
+      
       return coll.aggregate([ { $facet: facet } ]).toArray()
       
     }).then(r => {
+      
+      console.dir(r, { depth: null })
       
       return methods.fetchFilters({ user_id: user_id, listName: listName }).then(filters => {
         

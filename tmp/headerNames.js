@@ -1,11 +1,11 @@
-db['emails.1'].find().forEach(doc => {
+db['emails.31'].find().forEach(doc => {
   
   let headerNames = doc.payload.headers.map(h => h.name)
   headerNames = headerNames.filter((n,i) => {
     return headerNames.indexOf(n) == i
   })
   
-  db['emails.1'].updateOne(
+  db['emails.31'].updateOne(
     {
       _id: doc._id
     },
