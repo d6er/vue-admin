@@ -163,7 +163,7 @@ const methods = {
         }
       })
       
-      console.dir(facet, { depth: null })
+      //console.dir(facet, { depth: null })
       
       return coll.aggregate([ { $facet: facet } ]).toArray()
       
@@ -244,7 +244,6 @@ const methods = {
       filter.drilldowns.map(field => {
         agg_id[field] = '$' + field
       })
-      console.dir(agg_id)
       
       return coll.aggregate([
         { $match: query },

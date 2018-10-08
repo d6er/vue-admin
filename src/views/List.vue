@@ -172,11 +172,11 @@ export default {
     },
     prevPage () {
       let page = this.$route.params.page ? parseInt(this.$route.params.page) : 1
-      return '/' + this.$route.params.list + '/' + this.$route.params.filter + '/p' + (page - 1)
+      return '/' + this.$route.params.list + '/' + this.$route.params.filter.replace(/\//g, '%2F') + '/p' + (page - 1)
     },
     nextPage () {
       let page = this.$route.params.page ? parseInt(this.$route.params.page) : 1
-      return '/' + this.$route.params.list + '/' + this.$route.params.filter + '/p' + (page + 1)
+      return '/' + this.$route.params.list + '/' + this.$route.params.filter.replace(/\//g, '%2F') + '/p' + (page + 1)
     }
   },
   
@@ -215,7 +215,15 @@ export default {
         filter: this.$route.params.filter,
         page: this.$route.params.page
       }
-      this.$store.dispatch('callApi', apiData)
+      this.$store.dispatch('callApi', apiData).then(() => {
+        
+        let apiData = {
+          action: 'fetchFilterTree',
+          listName: this.$route.params.list,
+        }
+        this.$store.dispatch('callApi', apiData)
+        
+      })
     },
     
     copyItems() {

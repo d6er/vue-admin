@@ -32,6 +32,10 @@ export default {
     }
   },
   
+  asyncData ({ store, route: { params: { list, filter } } }) {
+    console.dir('async FilterTree')
+  },
+  
   computed: {
     depth () {
       return this.arrPath.length
@@ -53,7 +57,9 @@ export default {
   
   methods: {
     getFilterUrl(menuItem) {
-      return '/' + this.$route.params.list + '/' + encodeURIComponent([ ...this.arrPath, menuItem ].join(':'))
+      // todo: should use encodeURIComponent but ugly
+      let filterPath = [ ...this.arrPath, menuItem ].join(':').replace(/\//g, '%2F')
+      return '/' + this.$route.params.list + '/' + filterPath
     },
     hasDrillDowns(menuItem) {
       let filter = null

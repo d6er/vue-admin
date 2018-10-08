@@ -167,11 +167,6 @@ const methods = {
       let sort = filterObj ? methods.convertSorting(filterObj.sorting) : {}
       let cursor = db.collection(list + '.' + user_id).find(query)
       
-      console.log('filterObj')
-      console.dir(filterObj.queries)
-      console.log('query')
-      console.dir(query)
-      
       return cursor.sort(sort).skip(skip).limit(limit).toArray().then(items => {
         return cursor.count().then(count => {
           
@@ -210,7 +205,6 @@ const methods = {
 
   copyItems: ({ user_id, list, item_ids }) => {
     
-    console.dir(item_ids)
     const query = { _id: { $in: item_ids } }
     const coll = list + '.' + user_id
 
