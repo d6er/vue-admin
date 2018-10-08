@@ -198,7 +198,7 @@ const methods = {
                 if (i == 0) {
                   
                   node.kids.push({
-                    name: v._id[filter.drilldowns[i]],
+                    name: v._id[filter.drilldowns[i].replace(/\./g, '_')],
                     count: v.count
                   })
 
