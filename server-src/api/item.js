@@ -21,6 +21,8 @@ const methods = {
       return hackerNews.syncTopStories(user_id)
     }
     
+    if (list != 'emails') return
+    
     return apiAccount.fetchAccounts({ user_id: user_id }).then(accounts => {
       
       return accounts.filter(account => account.provider == 'google')

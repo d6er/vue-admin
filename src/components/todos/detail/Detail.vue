@@ -30,9 +30,13 @@
       </div>
       <div class="field-body">
         <div class="field is-narrow">
-          <p class="control">
-            <input v-model="item.account" type="text" name="account" class="input">
-          </p>
+          <div class="select is-fullwidth">
+            <select v-model="item.account">
+              <option v-for="account in $store.state.accounts">
+                {{ account.emails[0].value }}
+              </option>
+            </select>
+          </div>
         </div>
       </div>
     </div>
