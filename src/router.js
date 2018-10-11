@@ -93,35 +93,24 @@ export function createRouter (store) {
             path: 'p:page(\\d+)?',
             alias: '', // alias for page 1
             beforeEnter: requireAuth,
-            component: () => import('./views/List.vue'),
+            // https://router.vuejs.org/guide/essentials/named-views.html
+            components: {
+              default: () => import('./views/List.vue'),
+              filterTree: () => import('./views/FilterTree.vue')
+            },
             children: listRoutes
           },
           {
             path: ':id',
             beforeEnter: requireAuth,
-            component: () => import('./views/Detail.vue'),
+            components: {
+              default: () => import('./views/Detail.vue'),
+              filterTree: () => import('./views/FilterTree.vue')
+            },
             children: tabRoutes
           }
         ]
       },
-      /*
-      {
-        path: '/:list(' + listsRegExp + ')',
-        beforeEnter: requireAuth,
-        component: () => import('./views/List.vue'),
-        children: [{
-          component: () => import('./components/' + to.params.list + '/list/Column.vue')
-        }]
-        redirect: to => {
-          let list = store.state.lists.find(e => e.name == to.params.list)
-          let path = to.fullPath
-          if (list.filters[0]) {
-            path += '/' + list.filters[0].name
-          }
-          return path
-        }
-      }
-      */
     ]
   })
 }

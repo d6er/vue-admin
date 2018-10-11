@@ -33,7 +33,11 @@ export default {
   },
   
   asyncData ({ store, route: { params: { list, filter } } }) {
-    console.dir('async FilterTree')
+    let apiData = {
+      action: 'fetchFilterTree',
+      listName: list
+    }
+    return store.dispatch('callApi', apiData)
   },
   
   computed: {

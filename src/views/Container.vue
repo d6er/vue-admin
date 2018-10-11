@@ -21,7 +21,7 @@
             </span>
             {{ $route.params.list }}
           </p>
-          <FilterTree/>
+          <router-view name="filterTree"></router-view>
           <hr/>
           <p class="menu-label">
             <span class="icon">
@@ -57,21 +57,7 @@
 </template>
 
 <script>
-import FilterTree from './FilterTree.vue'
-
 export default {
-
-  components: {
-    FilterTree: FilterTree
-  },
-
-  asyncData ({ store, route: { params: { list } } }) {
-    let apiData = {
-      action: 'fetchFilterTree',
-      listName: list
-    }
-    return store.dispatch('callApi', apiData)
-  },
 
   computed: {
     username () {
