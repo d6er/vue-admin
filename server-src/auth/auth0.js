@@ -15,11 +15,11 @@ passport.use(new Auth0Strategy(
     passReqToCallback: true
   },
   function(req, accessToken, refreshToken, extraParams, profile, cb) {
-    console.dir(req)
     // accessToken is the token to call Auth0 API (not needed in the most cases)
     // extraParams.id_token has the JSON Web Token
     // profile has all the information from the user
     if (req.user) {
+      profile.user_id = req.user._id // overwrite
       apiAccount.addAccount(req.user._id, profile).then(r => {
         cb(null, req.user)
       })

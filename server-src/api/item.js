@@ -165,9 +165,14 @@ const methods = {
         filterObj = filterForm
       }
       
+      let projection = {}
+      filterObj.columns.map(field => {
+        projection[field] = true
+      })
+      
       let query = filterObj ? methods.convertQueries(filterObj.queries) : {}
       let sort = filterObj ? methods.convertSorting(filterObj.sorting) : {}
-      let cursor = db.collection(list + '.' + user_id).find(query)
+      let cursor = db.collection(list + '.' + user_id).find(query, projection)
       
       return cursor.sort(sort).skip(skip).limit(limit).toArray().then(items => {
         return cursor.count().then(count => {
