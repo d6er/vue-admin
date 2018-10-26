@@ -1,9 +1,9 @@
-const fs = require('fs')
-const path = require('path')
-const webpack = require('webpack')
-const MFS = require('memory-fs')
-const clientConfig = require('./webpack.client.development.config')
-const serverConfig = require('./webpack.server.config')
+import fs from 'fs'
+import path from 'path'
+import webpack from 'webpack'
+import MFS from 'memory-fs'
+import clientConfig from './webpack.client.development.config'
+import serverConfig from './webpack.server.config'
 
 const readFile = (fs, file) => {
   try {
@@ -11,7 +11,7 @@ const readFile = (fs, file) => {
   } catch (e) {}
 }
 
-module.exports = function setupDevServer (app, templatePath, cb) {
+const setupDevServer = async (app, templatePath, cb) => {
   let bundle
   let template
   let clientManifest
@@ -33,7 +33,8 @@ module.exports = function setupDevServer (app, templatePath, cb) {
 
   // dev middleware
   const clientCompiler = webpack(clientConfig)
-  const devMiddleware = require('webpack-dev-middleware')(clientCompiler, {
+  const webpackDevMiddleware = await import('webpack-dev-middleware')
+  const devMiddleware = webpackDevMiddleware.default(clientCompiler, {
     publicPath: clientConfig.output.publicPath,
     noInfo: true
   })
@@ -51,7 +52,8 @@ module.exports = function setupDevServer (app, templatePath, cb) {
   })
 
   // hot middleware
-  app.use(require('webpack-hot-middleware')(clientCompiler, { heartbeat: 5000 }))
+  const webpackHotMiddleware = await import('webpack-hot-middleware')
+  app.use(webpackHotMiddleware.default(clientCompiler, { heartbeat: 5000 }))
 
   // watch and update server renderer
   const serverCompiler = webpack(serverConfig)
@@ -69,3 +71,5 @@ module.exports = function setupDevServer (app, templatePath, cb) {
 
   return readyPromise
 }
+
+export { setupDevServer }
