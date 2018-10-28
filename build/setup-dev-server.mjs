@@ -1,14 +1,13 @@
 import fs from 'fs'
 import path from 'path'
-import webpack from 'webpack'
 import MFS from 'memory-fs'
+import webpack from 'webpack'
 import clientConfig from './webpack.client.development.config'
 import serverConfig from './webpack.server.config'
 
 const readFile = (fs, file) => {
   try {
     let files = fs.readdirSync(clientConfig.output.path)
-    console.dir(files)
     return fs.readFileSync(path.join(clientConfig.output.path, file), 'utf-8')
   } catch (e) {
     console.log('readFile error')
@@ -45,8 +44,14 @@ const setupDevServer = async (app, templatePath, cb) => {
   app.use(devMiddleware)
   clientCompiler.plugin('done', stats => {
     stats = stats.toJson()
-    stats.errors.forEach(err => console.error(err))
-    stats.warnings.forEach(err => console.warn(err))
+    stats.errors.forEach(err => {
+      console.log('clientCompiler error')
+      console.error(err)
+    })
+    stats.warnings.forEach(err => {
+      console.log('clientCompiler warn')
+      console.warn(err)
+    })
     if (stats.errors.length) return
     clientManifest = JSON.parse(readFile(
       devMiddleware.fileSystem,

@@ -8,8 +8,6 @@ passport.serializeUser(function(user, done) {
 passport.deserializeUser(function(id, done) {
   apiUser.getUser(id).then(doc => {
     // todo: remove secret data (accessToken, etc)
-    console.log('passport.mjs')
-    console.dir(doc)
     return done(null, doc)
   })
 })

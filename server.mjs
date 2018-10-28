@@ -39,7 +39,6 @@ import createBundleRenderer from 'vue-server-renderer'
       app,
       templatePath,
       (bundle, options) => {
-        console.log('setupDevServer callback')
         renderer = createBundleRenderer.createBundleRenderer(bundle, Object.assign(options, {
           basedir: '/home/nabe/work/vue-admin/dist',
           runInNewContext: false
@@ -83,8 +82,6 @@ import createBundleRenderer from 'vue-server-renderer'
       context.user = null
     }
     
-    console.log('ENV ' + process.env.NODE_ENV)
-
     if (process.env.NODE_ENV === 'production') {
       
       renderer.renderToString(context, (err, html) => {
@@ -99,8 +96,6 @@ import createBundleRenderer from 'vue-server-renderer'
       readyPromise.then(() => {
         renderer.renderToString(context, (err, html) => {
           if (err) {
-            console.log('ERROR ' + req.url)
-            console.log(err)
             next(err)
           } else {
             res.end(html)
