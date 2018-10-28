@@ -18,7 +18,7 @@ const config = {
       {
         test: /\.sass$/,
         use: [
-          { loader: 'style-loader' },
+          { loader: 'vue-style-loader' },
           { loader: 'css-loader' },
           { loader: 'sass-loader' }
         ]

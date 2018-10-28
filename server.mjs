@@ -70,7 +70,7 @@ import createBundleRenderer from 'vue-server-renderer'
 
   app.get('/favicon.ico', (req, res) => { res.end() })
   
-  app.get('*', (req, res) => {
+  app.get('*', (req, res, next) => {
     
     const context = {
       title: 'vue-admin',
@@ -100,9 +100,11 @@ import createBundleRenderer from 'vue-server-renderer'
         renderer.renderToString(context, (err, html) => {
           if (err) {
             console.log('ERROR ' + req.url)
-            console.dir(err)
+            console.log(err)
+            next(err)
+          } else {
+            res.end(html)
           }
-          res.end(html)
         })
       })
       
