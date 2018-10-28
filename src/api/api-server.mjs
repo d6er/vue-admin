@@ -1,4 +1,4 @@
-import api from '../../server-src/api/index.js'
+import api from '../../server-src/api/index.mjs'
 
 export default {
   call (data) {

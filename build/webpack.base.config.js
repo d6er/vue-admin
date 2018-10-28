@@ -1,4 +1,7 @@
 const path = require('path')
+const { VueLoaderPlugin } = require('vue-loader')
+
+console.log('dir ' + path.resolve(__dirname, '../dist'))
 
 const config = {
   output: {
@@ -8,9 +11,23 @@ const config = {
   },
   module: {
     rules: [
-      { test: /\.vue$/, loader: 'vue-loader' }
+      {
+        test: /\.vue$/,
+        loader: 'vue-loader'
+      },
+      {
+        test: /\.sass$/,
+        use: [
+          { loader: 'style-loader' },
+          { loader: 'css-loader' },
+          { loader: 'sass-loader' }
+        ]
+      }
     ]
-  }
+  },
+  plugins: [
+    new VueLoaderPlugin()
+  ]
 }
 
 module.exports = config

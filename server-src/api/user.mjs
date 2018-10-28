@@ -1,6 +1,7 @@
-const mongo = require('../mongo')
+import filter from './filter'
+import mongo from '../mongo'
+
 const db = mongo.getConnection()
-const filter = require('./filter')
 
 const methods = {
   
@@ -61,4 +62,4 @@ const methods = {
   }
 }
 
-module.exports = methods
+export default methods

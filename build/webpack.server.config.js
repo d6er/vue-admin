@@ -4,6 +4,7 @@ const nodeExternals = require('webpack-node-externals')
 const VueSSRServerPlugin = require('vue-server-renderer/server-plugin')
 
 module.exports = merge(base, {
+  mode: 'production',
   target: 'node',
   entry: './src/entry-server.js',
   output: {
@@ -12,7 +13,7 @@ module.exports = merge(base, {
   },
   resolve: {
     alias: {
-      'api': './api/api-server.js'
+      'api': './api/api-server.mjs'
     }
   },
   externals: nodeExternals({

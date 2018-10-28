@@ -1,7 +1,8 @@
-const express = require('express')
-const passport = require('passport')
-const mongo = require('../mongo')
-const LocalStrategy = require('passport-local').Strategy
+import express from 'express'
+import passport from 'passport'
+import mongo from '../mongo'
+import passportLocal from 'passport-local'
+const LocalStrategy = passportLocal.Strategy
 
 // Passport
 passport.use(new LocalStrategy(
@@ -30,4 +31,4 @@ router.get('/logout', (req, res) => {
   res.redirect('/')
 })
 
-module.exports = router
+export default router

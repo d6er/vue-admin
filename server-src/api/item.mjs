@@ -1,13 +1,12 @@
-const moment = require('moment-timezone')
+import moment from 'moment-timezone'
+import config_client from '../../config/client'
+import apiUser from './user'
+import apiAccount from './account'
+import gmail from './gmail'
+import hackerNews from './hacker-news'
+import wsPool from '../websocket-pool'
+import mongo from '../mongo'
 
-const config_client = require('../../config/client')
-const apiUser = require('./user')
-const apiAccount = require('./account')
-const gmail = require('./gmail')
-const hackerNews = require('./hacker-news')
-const wsPool = require('../websocket-pool')
-
-const mongo = require('../mongo')
 const db = mongo.getConnection()
 
 const methods = {
@@ -324,4 +323,4 @@ const methods = {
 
 }
 
-module.exports = methods
+export default methods

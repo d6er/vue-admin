@@ -3,6 +3,7 @@ const base = require('./webpack.base.config')
 const VueSSRClientPlugin = require('vue-server-renderer/client-plugin')
 
 const config = merge(base, {
+  mode: 'development',
   entry: './src/entry-client.js',
   resolve: {
     alias: {
