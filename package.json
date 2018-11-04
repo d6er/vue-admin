@@ -53,6 +53,7 @@
   },
   "scripts": {
     "dev": "NODE_ENV=development nodemon --ignore logs/ server",
+    "esm": "NODE_ENV=development nodemon --ignore logs/ --experimental-modules server.js",
     "start": "cross-env NODE_ENV=production node server",
     "build": "rimraf dist && npm run build:client && npm run build:server",
     "build:client": "cross-env NODE_ENV=production webpack --config build/webpack.client.production.config.js --progress --hide-modules",
